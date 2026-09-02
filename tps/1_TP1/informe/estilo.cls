@@ -77,7 +77,7 @@
 
 \renewcommand{\headrulewidth}{1pt}
 \renewcommand{\footrulewidth}{1pt}
-\rhead{\footnotesize \textsc {Trabajo práctico 0\\ Teoría de Algoritmos}} % Trabajo práctico
+\rhead{\footnotesize \textsc {Trabajo práctico 1\\ Teoría de Algoritmos}} % Trabajo práctico
 \lhead{\includegraphics[width=2.5cm]{logo}}
 \cfoot{\small \textsc {Página \thepage\ de \pageref*{LastPage}}}
 
@@ -104,17 +104,17 @@
 \\[1cm]
 	\textsc{\Large Teoría de Algoritmos}\\           % Materia
 	\textsc{\small (75.29) Curso Buchwald - Genender}\\[0.4cm]    % Subtítulo materia
-	{ \huge \bfseries Trabajo Práctico 0 \\ Lineamientos sobre informes}\\[0.3cm]      % Título
+	{ \Huge \bfseries Trabajo Práctico 1: \\ Los Algoritmos Greedy \\ son juegos de niños}\\[0.3cm]      % Título
 	\andreasline \\[0.2cm]
 	{\large \today  \\[0.4cm]}                          % Fecha
 	\begin{minipage}{0.4\textwidth}
 		\begin{flushleft}
-            \large{Alan Turing \\ 101010}                   % Integrante 1
+            \large{Lucio Romero Mascaró \\ 113091}                   % Integrante 1
 		\end{flushleft}
 	\end{minipage}
 	\begin{minipage}{0.4\textwidth}
 		\begin{flushright}
-            \large{Barbara Liskov \\ 111111}                % Integrante 2
+            \large{Valentín Raunic \\ 114081}                % Integrante 2
 		\end{flushright}
 	\end{minipage}
  \end{center}
