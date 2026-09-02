@@ -1,0 +1,1 @@
+El TP0 consta de la implementación de un par de algoritmos en la plataforma de RPL.

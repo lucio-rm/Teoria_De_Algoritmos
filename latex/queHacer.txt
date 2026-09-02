@@ -1,0 +1,61 @@
+HACER INFORMES EN LATEX:
+
+(instalarse latexmk) ?
+
+visualizador de pdf - zathura ¿? podemos usar otro editor.
+
+rubber - se parece a latexmk - diferencias ¿?
+
+
+00:00 - Introducción
+02:00 - Comenzamos
+04:01 - Instalación de texlive-full
+04:53 - Instalación de zathura, latexmk y rubber
+05:35 - Configurando variables via xdg-mime
+06:48 - Creando archivo de configuración latexmkrc
+09:08 - Creando documento en LaTeX básico para validar que todo esté correctamente configurado
+09:21 - Creación de fichero nanorc para mejorar el manejo en nano
+12:12 - Definición del formato de plantilla a usar
+13:56 - Compilación básica con latexmk sin previsualizado
+14:19 - Uso de zathura para visualizar el documento PDF
+15:02 - Capturando con xprop el valor WM_CLASS de zathura para ajustar la transparencia
+15:20 - Configurando transparencia desde compton
+16:32 - Explicando la distribución básica principal de los archivos creados por latexmk 
+17:19 - Compilación con latexmk con previsualizado
+19:33 - Uso de rubber y diferencias con respecto a latexmk
+21:04 - Uso de codium como forma alternativa para crear nuestros documentos
+21:21 - Instalación de la extensión LaTeX Workshop
+23:55 - Definiendo el titlepage
+24:54 - Uso de la paquetería graphicx para la inserción de imágenes en el documento
+25:34 - Explicando diferencias entre el textwidth y el paperwidth
+29:25 - Insertando una imagen en el documento a modo de ejemplo
+29:46 - Ajustando las proporciones de la imagen en la portada
+32:07 - Declaración de variables en LaTeX
+34:37 - Gestión de colores en LaTeX a través de variables
+41:46 - Uso del keepaspectratio para ajustar el escalado de una imagen
+48:18 - Inserción de cuadros via tcolorbox
+50:55 - Uso de la paquetería de gestión de geometría para ajustar las proporciones del documento
+53:48 - Uso de vfill para aprovechar al máximo el espacio del documento
+56:03 - Portada del documento creada
+57:46 - Gestión del TOC (Table of Contents)
+59:56 - Uso del fancyhdr para definir el estilo de la página
+1:00:47 - Configuración de la cabecera del documento
+1:02:50 - Inserción de imágenes en la cabecera
+1:06:14 - Renombramiento de variables
+1:09:30 - Creación de secciones en el documento
+1:10:17 - Gestión de hipervínculos y de eventos clickeables en el índice
+1:16:06 - Gestión del indentado en el documento
+1:19:40 - Inserción de imágenes bajo el concepto de una figura
+1:21:18 - Uso de captions en figuras
+1:24:50 - Creación de recuadro vía tcolorbox
+1:32:28 - Creación de diagramas en el documento vía smartdiagram
+1:37:53 - Ajuste de imágenes en el documento
+1:41:31 - Uso de listing para la inserción de código fuente en el documento
+1:48:52 - Creación de esquemas vía zed-csp
+1:52:02 - Caso práctico para toquetear el paperwidth mediante makebox
+1:53:51 - Uso de labels para referenciar figuras
+1:55:18 - Ejemplo de documento finalizado
+1:57:24 - Mostrando la magia de LaTeX a la hora de documentar una nueva máquina
+1:59:02 - Terminando
+
+
