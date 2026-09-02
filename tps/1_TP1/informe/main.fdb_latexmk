@@ -1,13 +1,13 @@
 # Fdb version 4
-["biber main"] 0 "main.bcf" "main.bbl" "main" 0 -1
-  "main.bcf" 1788380701.92954 107310 44c5f0f359c2f2f31fe3b9a601a07c9e "pdflatex"
+["biber main"] 1788381510.052 "main.bcf" "main.bbl" "main" 1788382153.90084 0
+  "main.bcf" 1788382153.81505 107310 44c5f0f359c2f2f31fe3b9a601a07c9e "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1788380700.97196 "/home/lucio_romero_m/Documents/materias_fiuba/3_año3_Cuatri1/tda/tps/1_TP1/informe/main.tex" "main.pdf" "main" 1788380702.03879 2
+["pdflatex"] 1788382152.81543 "/home/lucio_romero_m/Documents/materias_fiuba/3_año3_Cuatri1/tda/tps/1_TP1/informe/main.tex" "main.pdf" "main" 1788382153.90105 0
   "/etc/texmf/web2c/texmf.cnf" 1752067120.59328 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/lucio_romero_m/Documents/materias_fiuba/3_año3_Cuatri1/tda/tps/1_TP1/informe/main.tex" 1788380699.58075 2476 64f57c2963a33ce55e90daa996e39611 ""
+  "/home/lucio_romero_m/Documents/materias_fiuba/3_año3_Cuatri1/tda/tps/1_TP1/informe/main.tex" 1788382152.63423 2477 df5fefefea24e9ac8c87bce9390e7404 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1246382020 916 f87d7c45f9c908e672703b83b72241a3 ""
@@ -17,14 +17,12 @@
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm5.tfm" 1246382020 940 75ac932a52f80982a9f8ea75d03a34cf ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm" 1246382020 940 228d6584342e91276bf566bcf9716b83 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1136768653 1324 c910af8c371558dc20f2d7822f66fe64 ""
-  "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm" 1136768653 1328 5442e22a7072966dbaf88ca900acf3f0 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmcsc10.tfm" 1136768653 1300 63a6111ee6274895728663cf4b4e7e81 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr12.tfm" 1136768653 1288 655e228510b4c2a1abe905c368440826 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr17.tfm" 1136768653 1292 296a67155bdbfc32aa9c636f21e91433 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr8.tfm" 1136768653 1292 21c1c5bfeaebccffdb478fd231a0997d ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr9.tfm" 1136768653 1292 6b21b9c2c7bebb38aa2273f7ca0fb3af ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1248133631 32080 340ef9bf63678554ee606688e7b5339d ""
-  "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb" 1248133631 32298 c6d25bb16d1eac01ebdc6d7084126a1e ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb" 1248133631 32001 6aeea3afe875097b1eb0da29acd61e28 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb" 1248133631 32722 d7379af29a190c3f453aba36302ff5a9 ""
   "/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
@@ -220,12 +218,13 @@
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1788379884.07272 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1788379991 8214533 a53e2d78c220a8e6497ca4be9b34b17f ""
   "estilo.cls" 1788380206.10071 3866 d57e5e1af6f8cf1f8e19b79a7b3bc0eb ""
-  "logo" 0 -1 0 ""
-  "main.atfi" 1788380701.93091 23 33e109ecf84d2ac55814cb2442ea01dc "pdflatex"
-  "main.aux" 1788380701.92654 525 b2dc178766029ae299df52c70c1e013a "pdflatex"
-  "main.bbl" 0 -1 0 "biber main"
-  "main.out" 1788380701.73255 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "main.tex" 1788380699.58075 2476 64f57c2963a33ce55e90daa996e39611 ""
+  "logo.png" 1788381474.51536 11142 07536327668b76313e32897d3195e72e ""
+  "main.atfi" 1788382153.81572 23 33e109ecf84d2ac55814cb2442ea01dc "pdflatex"
+  "main.aux" 1788382153.81119 528 05462cd4f15b1e04e7102d1033389003 "pdflatex"
+  "main.bbl" 1788381510.53685 0 d41d8cd98f00b204e9800998ecf8427e "biber main"
+  "main.out" 1788382153.62079 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "main.run.xml" 1788382153.81572 2274 3c9efbcb7467da793e6933a55675e6bc "pdflatex"
+  "main.tex" 1788382152.63423 2477 df5fefefea24e9ac8c87bce9390e7404 ""
   "secciones/00_resumen.tex" 1788379131.75159 0 d41d8cd98f00b204e9800998ecf8427e ""
   "secciones/01_introduccion.tex" 1788379123.43786 0 d41d8cd98f00b204e9800998ecf8427e ""
   "secciones/02_teoria_greedy.tex" 1788379141.31828 0 d41d8cd98f00b204e9800998ecf8427e ""
