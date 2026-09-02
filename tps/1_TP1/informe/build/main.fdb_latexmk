@@ -1,13 +1,13 @@
 # Fdb version 4
-["biber main"] 1788381510.052 "main.bcf" "main.bbl" "main" 1788382987.07473 0
-  "main.bcf" 1788382986.99425 107310 44c5f0f359c2f2f31fe3b9a601a07c9e "pdflatex"
+["biber build/main"] 1788385733.76046 "build/main.bcf" "build/main.bbl" "build/main" 1788385736.32213 0
+  "build/main.bcf" 1788385736.24321 107310 44c5f0f359c2f2f31fe3b9a601a07c9e "pdflatex"
   (generated)
-  "main.bbl"
-  "main.blg"
+  "build/main.bbl"
+  "build/main.blg"
   (rewritten before read)
-["pdflatex"] 1788382986.07333 "/home/lucio_romero_m/Documents/materias_fiuba/3_año3_Cuatri1/tda/tps/1_TP1/informe/main.tex" "main.pdf" "main" 1788382987.07496 0
+["pdflatex"] 1788385735.31848 "/home/lucio_romero_m/Documents/materias_fiuba/3_año3_Cuatri1/tda/tps/1_TP1/informe/main.tex" "build/main.pdf" "main" 1788385736.32236 0
   "/etc/texmf/web2c/texmf.cnf" 1752067120.59328 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/lucio_romero_m/Documents/materias_fiuba/3_año3_Cuatri1/tda/tps/1_TP1/informe/main.tex" 1788382152.63423 2477 df5fefefea24e9ac8c87bce9390e7404 ""
+  "/home/lucio_romero_m/Documents/materias_fiuba/3_año3_Cuatri1/tda/tps/1_TP1/informe/main.tex" 1788385732.40504 2477 df5fefefea24e9ac8c87bce9390e7404 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1246382020 916 f87d7c45f9c908e672703b83b72241a3 ""
@@ -217,24 +217,24 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1788379884.07272 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1788379991 8214533 a53e2d78c220a8e6497ca4be9b34b17f ""
+  "build/main.atfi" 1788385736.24368 23 33e109ecf84d2ac55814cb2442ea01dc "pdflatex"
+  "build/main.aux" 1788385736.23992 528 05462cd4f15b1e04e7102d1033389003 "pdflatex"
+  "build/main.bbl" 1788385734.25498 0 d41d8cd98f00b204e9800998ecf8427e "biber build/main"
+  "build/main.out" 1788385736.05262 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "build/main.run.xml" 1788385736.24368 2274 3c9efbcb7467da793e6933a55675e6bc "pdflatex"
   "estilo.cls" 1788382985.90576 3897 f14262c2a12b8f687cb0beb3822d9a02 ""
   "logo.png" 1788381474.51536 11142 07536327668b76313e32897d3195e72e ""
-  "main.atfi" 1788382986.99474 23 33e109ecf84d2ac55814cb2442ea01dc "pdflatex"
-  "main.aux" 1788382986.99035 528 05462cd4f15b1e04e7102d1033389003 "pdflatex"
-  "main.bbl" 1788381510.53685 0 d41d8cd98f00b204e9800998ecf8427e "biber main"
-  "main.out" 1788382986.80549 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "main.run.xml" 1788382986.99474 2274 3c9efbcb7467da793e6933a55675e6bc "pdflatex"
-  "main.tex" 1788382152.63423 2477 df5fefefea24e9ac8c87bce9390e7404 ""
+  "main.tex" 1788385732.40504 2477 df5fefefea24e9ac8c87bce9390e7404 ""
   "secciones/00_resumen.tex" 1788379131.75159 0 d41d8cd98f00b204e9800998ecf8427e ""
   "secciones/01_introduccion.tex" 1788379123.43786 0 d41d8cd98f00b204e9800998ecf8427e ""
   "secciones/02_teoria_greedy.tex" 1788379141.31828 0 d41d8cd98f00b204e9800998ecf8427e ""
   "secciones/06_conclusion.tex" 1788379192.09162 0 d41d8cd98f00b204e9800998ecf8427e ""
   (generated)
-  "main.atfi"
-  "main.aux"
-  "main.bcf"
-  "main.log"
-  "main.out"
-  "main.pdf"
-  "main.run.xml"
+  "build/main.atfi"
+  "build/main.aux"
+  "build/main.bcf"
+  "build/main.log"
+  "build/main.out"
+  "build/main.pdf"
+  "build/main.run.xml"
   (rewritten before read)
