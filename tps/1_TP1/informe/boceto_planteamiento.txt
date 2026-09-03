@@ -41,3 +41,42 @@ CONCLUSION
 
 
 fin
+
+
+
+
+
+
+
+
+
+
+
+Tesis -> Hipotesis
+Elijo siempre el que me convenga -> gano siempre
+
+.
+
+Para cada (i, j), i >= j
+
+siendo
+X: elige primero
+Y: elige después de X
+
+# no se admiten empates (todo el arr. par de igual valor)
+
+A: decide qué elegir para X , y para Y
+
+.
+
+- A decide que X gane siempre, por lo que para cada par de elección (i, j) , X = sum(i)
+
+- para Y, como A quiere que gane X, para cada (i, j), Y = sum(j)
+
+.
+
+con el arreglo de valores tenemos 2 casos:
+- par: como no se admiten valores iguales X > Y para todo (i, j)
+- impar: si ya para el arr-1, X > Y, el valor (i) que queda solo siempre va a ir para X, ya que elige primero. X > Y.
+# arr-1 es para saber que es par 
+
