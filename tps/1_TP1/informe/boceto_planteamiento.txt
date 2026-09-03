@@ -1,0 +1,43 @@
+caratula
+indice
+
+- RESUMEN
+	. hago resumen de la consigna
+	. resumo la logica del algoritmo creado
+	. resumo de qué voy a hablar en el informe
+
+introduccion
+	. Empiezo a hablar como fue el aproach del problema
+	. planteo preguntas, que voy a responder despues
+	. hago un analisis del problema
+
+teoria greedy
+	. explico que es un algoritmo greedy
+	. explico la regla greedy aplicada a este ejercicio
+	. explico el estado actual, el optimo local, el optimo global y la sucesion
+	. digo que la demostracion va a estar al final
+
+implementacion
+	. explico la logica del algoritmo y como llegamos a eso
+	. muestro el codigo (entero? entra/me sirve? si es corto ponerlo, y si no vemos.)
+	. explico el por qué hago la implementacion de esa manera
+
+complejidad
+	. explico la complejidad
+	. la demuestro
+	. pongo ejemplos
+	. pongo mediciones en tiempo de distintos casos (hago el grafico y pongo la foto.png)
+		. tiempos del algoritmo. 
+		. optimalidad del algoritmo. (que es optimalidad ¿?)
+DEMOSTRACION
+	. hago la demostracion matematica del por qué es optimo. demostracion por induccion. que sea precisa y clara.
+	. hago la demostracion del empate.
+	. mostrar ejemplos (5 creo que esta bien, 3 bordes, 2 normales) y como funciona
+
+CONCLUSION
+	. en sí hablemos de la dificultad
+	. escribir que aprendimos
+	. escribir el trayecto del tp
+
+
+fin
