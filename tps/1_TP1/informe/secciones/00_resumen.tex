@@ -1,16 +1,295 @@
 \section*{Resumen}
+%\graphicspath{{images/}}
 ENTENDIENDO como funciona esta shit
 hola
-dejando un enter
 
-dejando un espacio
+aaaa dejando un espacio de por medio va a otro parrafo
+
+osea suponete que yo digo muchas veces: TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA TDA 
+
+deja sangria y todo esto. tremendo
+tremendo.
+
+Y ESTO:
+
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=0.75\textwidth]{mesh}
+%     \caption{A nice plot.}
+%     \label{fig:mesh1}
+% \end{figure}
+ 
+% As you can see in figure \ref{fig:mesh1}, the function grows near the origin. This example is on page \pageref{fig:mesh1}.
 
 
-dejando dos espacios
+LISTA
+%lista?
+\begin{itemize}
+  \item The individual entries are indicated with a black dot, a so-called bullet.
+  \item The text in the entries may be of any length.
+\end{itemize}
+
+
+ENUMERADA
+%enumerada
+\begin{enumerate}
+  \item This is the first entry in our list.
+  \item The list numbers increase with each entry we add.
+\end{enumerate}
+
+
+%probando math
+
+MATHS
+
+In physics, the mass-energy equivalence is stated 
+by the equation $E=mc^2$, discovered in 1905 by Albert Einstein.
+
+
+MAS
+
+\begin{math}
+E=mc^2
+\end{math} is typeset in a paragraph using inline math mode---as is $E=mc^2$, and so too is \(E=mc^2\).
+
+
+
+MAS
+
+The mass-energy equivalence is described by the famous equation
+\[ E=mc^2 \] discovered in 1905 by Albert Einstein. 
+
+In natural units ($c = 1$), the formula expresses the identity
+\begin{equation}
+E=m
+\end{equation}
+
+
+
+
+
+% mas chiches math.
+MAS
+
+Subscripts in math mode are written as $a_b$ and superscripts are written as $a^b$. These can be combined and nested to write expressions such as
+
+\[ T^{i_1 i_2 \dots i_p}_{j_1 j_2 \dots j_q} = T(x^{i_1},\dots,x^{i_p},e_{j_1},\dots,e_{j_q}) \]
+ 
+We write integrals using $\int$ and fractions using $\frac{a}{b}$. Limits are placed on integrals using superscripts and subscripts:
+
+\[ \int_0^1 \frac{dx}{e^x} =  \frac{e-1}{e} \]
+
+Lower case Greek letters are written as $\omega$ $\delta$ etc. while upper case Greek letters are written as $\Omega$ $\Delta$.
+
+Mathematical operators are prefixed with a backslash as $\sin(\beta)$, $\cos(\alpha)$, $\log(x)$ etc.
+
+
+
+MAS
+
+\section{First example}
+
+The well-known Pythagorean theorem \(x^2 + y^2 = z^2\) was proved to be invalid for other exponents, meaning the next equation has no integer solutions for \(n>2\):
+
+\[ x^n + y^n = z^n \]
+
+\section{Second example}
+
+This is a simple math expression \(\sqrt{x^2+1}\) inside text. 
+And this is also the same: 
+\begin{math}
+\sqrt{x^2+1}
+\end{math}
+but by using another command.
+
+This is a simple math expression without numbering
+\[\sqrt{x^2+1}\] 
+separated from text.
+
+This is also the same:
+\begin{displaymath}
+\sqrt{x^2+1}
+\end{displaymath}
+
+\ldots and this:
+\begin{equation*}
+\sqrt{x^2+1}
+\end{equation*}
+
+
+
+
+\begin{abstract}
+This is a simple paragraph at the beginning of the 
+document. A brief introduction about the main subject.
+\end{abstract}
+
+After our abstract we can begin the first paragraph, then press ``enter'' twice to start the second one.
+
+This line will start a second paragraph.
+
+I will start the third paragraph and then add \\ a manual line break which causes this text to start on a new line but remains part of the same paragraph. Alternatively, I can use the \verb|\newline|\newline command to start a new line, which is also part of the same paragraph.
+
+
+
+
+y si hago \\ pinki \\ \\ pinki \\ \\ \\ y asi? \\\\\\\\ y ahora?
+
+
+% \chapter{First Chapter}
+
+\section{Introduction}
+
+This is the first section.
+
+Lorem  ipsum  dolor  sit  amet,  consectetuer  adipiscing  
+elit. Etiam  lobortisfacilisis sem.  Nullam nec mi et 
+neque pharetra sollicitudin.  Praesent imperdietmi nec ante. 
+Donec ullamcorper, felis non sodales...
+
+\section{Second Section}
+
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit.  
+Etiam lobortis facilisissem.  Nullam nec mi et neque pharetra 
+sollicitudin.  Praesent imperdiet mi necante...
+
+\subsection{First Subsection}
+Praesent imperdietmi nec ante. Donec ullamcorper, felis non sodales...
+
+\section*{Unnumbered Section}
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit.  
+Etiam lobortis facilisissem...
 
 
 
 
 
 
-dejando muchos espacios (no hace nada je)
+
+
+
+
+\section*{TABLAS}
+\begin{center}
+\begin{tabular}{c c c}
+ cell1 & cell2 & cell3 \\ 
+ cell4 & cell5 & cell6 \\  
+ cell7 & cell8 & cell9    
+\end{tabular}
+\end{center}
+
+
+\section*{TABLAS CON BORDE}
+\begin{center}
+\begin{tabular}{|c|c|c|} 
+ \hline
+ cell1 & cell2 & cell3 \\ 
+ cell4 & cell5 & cell6 \\ 
+ cell7 & cell8 & cell9 \\ 
+ \hline
+\end{tabular}
+\end{center}
+
+
+
+
+
+
+\section* {Tablas mas avanzadas}
+\begin{center}
+ \begin{tabular}{||c c c c||} 
+ \hline
+ Col1 & Col2 & Col2 & Col3 \\ [0.5ex] 
+ \hline\hline
+ 1 & 6 & 87837 & 787 \\ 
+ \hline
+ 2 & 7 & 78 & 5415 \\
+ \hline
+ 3 & 545 & 778 & 7507 \\
+ \hline
+ 4 & 545 & 18744 & 7560 \\
+ \hline
+ 5 & 88 & 788 & 6344 \\ [1ex] 
+ \hline
+\end{tabular}
+\end{center} 
+
+SIGUE:
+
+Table \ref{table:data} shows how to add a table caption and reference a table.
+\begin{table}[h!]
+\centering
+\begin{tabular}{||c c c c||} 
+ \hline
+ Col1 & Col2 & Col2 & Col3 \\ [0.5ex] 
+ \hline\hline
+ 1 & 6 & 87837 & 787 \\ 
+ 2 & 7 & 78 & 5415 \\
+ 3 & 545 & 778 & 7507 \\
+ 4 & 545 & 18744 & 7560 \\
+ 5 & 88 & 788 & 6344 \\ [1ex] 
+ \hline
+\end{tabular}
+\caption{Table to test captions and labels.}
+\label{table:data}
+\end{table}
+
+
+
+
+aaa
+
+
+
+
+
+
+
+
+
+
+
+\section*{Tipo Artículo}
+
+
+\title{Sections and Chapters}
+\author{Gubert Farnsworth}
+\date{August 2022}
+
+\maketitle
+  
+\tableofcontents
+
+\section{Introduction}
+   
+This is the first section.
+      
+Lorem  ipsum  dolor  sit  amet,  consectetuer  adipiscing  
+elit.   Etiam  lobortisfacilisis sem.  Nullam nec mi et 
+neque pharetra sollicitudin.  Praesent imperdietmi nec ante. 
+Donec ullamcorper, felis non sodales...
+       
+\section*{Unnumbered Section}
+\addcontentsline{toc}{section}{Unnumbered Section}
+
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit.  
+Etiam lobortis facilisissem.  Nullam nec mi et neque pharetra 
+sollicitudin.  Praesent imperdiet mi necante...
+
+\section{Second Section}
+       
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit.  
+Etiam lobortis facilisissem.  Nullam nec mi et neque pharetra 
+sollicitudin.  Praesent imperdiet mi necante... \\\\\\\\
+
+
+
+
+
+
+
+
+no olvidarme de: \\\\\\\\
+
+\section*{Hacer Mediciones}
+
