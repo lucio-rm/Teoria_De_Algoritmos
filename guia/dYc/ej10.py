@@ -4,3 +4,10 @@ Enunciado ejercicio 10:
 Justificar la complejidad de la solución.
 
 """
+
+"""
+planteo:
+
+
+
+"""
