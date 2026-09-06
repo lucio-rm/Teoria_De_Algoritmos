@@ -17,3 +17,43 @@ En dicha notación, ¿cuántos tests se estarán utilizando?
 Pueden considerar que habrá una única persona contagiada, pero esto no cambiará el análisis a realizar.
 
 """
+"""
+planteo:
+es como que el que haya un duplicado, pero el duplicado es el que tiene covid y tenemos que devolver la posicion.
+
+Voy al medio dl arreglo.
+si el arr[ini, medio] tiene UN covid, descarto la mitad derecha.
+en caso contrario, descarto mitad izquierda. (ya habiendo analizado que hay uno con covid).
+
+
+Mi pregunta va, si hay más de una persona contagiada, mi resolución cambiaria. tengo que verificar que en la otra mitad también haya y hasta hacer 2 llamados recursivos.
+"""
+def pcr(arreglo):
+    tienen_covid = True
+    return tienen_covid # xd, no nos importa. es para que no me tire error y asumir que estamos  yendo por un camino correcto.
+def contagiado(grupo):
+    if not pcr(grupo):
+        return None # no hay ninguno con covid, valueError.
+    cantidad = len(grupo)
+    return _contagiado_rec(grupo, 0, cantidad)
+
+
+def _contagiado_rec(grupo, ini, fin):
+    if ini <= fin:
+        # si me quedo un elemento o menos, me fijo en ese
+        return grupo[ini] if pcr(grupo[ini:fin]) == True else None
+
+    medio = (ini + fin) // 2
+
+    if pcr(grupo[ini:medio]):
+        return _contagiado_rec(grupo, ini, medio)
+    else:
+        return _contagiado_rec(grupo, medio+1, fin)
+
+"""
+Complejidad:
+temporal: teorema maestro bla bla bla
+
+espacial: mucha mucha muchas copias, asiq ue mucho cmucucuhcuhcuhcu O(N)N enenenenenene
+
+"""
