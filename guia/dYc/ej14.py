@@ -8,75 +8,47 @@ Justificar la complejidad de la función implementada.
 
 """
 """
-planteo:
-raiz:
-la raiz seria cuando en el intervalo [a, b], f(num) = 0, 
-
-tengo una idea.
-caso borde: (f(a) > 0 && f(b) > 0) || (f(a) < 0 && f(b) < 0) { return None, o 0? } 
-caso base: 
-- (f(a) == f(b) && f(a) == 0) return a
-- f(a) == 0 return a
-- f(b) == 0 return b
-
-
-pienso en ir al medio de 
-mid: (a + b) // 2.
-
-si f(mid) == 0: return mid
-
-si f(mid) > 0:
-    - si f(a) < 0, la raiz esta en [a, mid]
-    - si f(a) > 0, la raiz esta en [mid, b]
-si f(mid) < 0:
-    - si f(a) < 0, la raiz esta en [mid, b]
-    - si f(a) > 0, la raiz esta en [a, mid]
+pplanteo:
+- El Teorema de Bolzano establece que si f(a) y f(b) tienen signos opuestos, 
+  hay una raíz entre ellos.
+- Encontramos el punto medio: mid = (a + b) // 2.
+- Evaluamos f(mid). Si es 0, terminamos.
+- Para saber con qué mitad quedarnos, evaluamos los signos. Si f(a) y f(mid) 
+  tienen el mismo signo, la cruzaron sin tocar el cero, entonces el cambio de 
+  signo ocurre entre mid y b. Si tienen signos opuestos, el cambio está entre a y mid.
+- La forma más ingenieril de comprobar "signos opuestos" sin if/else anidados 
+  es verificar si f(a) * f(mid) < 0 (aunque con floats y números enormes podría 
+  haber overflow, con enteros lógicos es una regla limpia. Para evitar overflow, 
+  evaluamos comparaciones puras).
 """
-def raiz(funcion, a, b):
-    if (funcion(a) > 0 and funcion(b) > 0) or (funcion(a) < 0 and funcion(b) < 0):
-        return None
 
-    if (funcion(a) == funcion(b) and funcion(a) == 0):
+def raiz(f, a, b):
+    # Caso base: el intervalo se cerró sobre sí mismo.
+    if a == b:
         return a
-    elif funcion(a) == 0:
-        return a
-    elif funcion(b) == 0:
-        return b
 
     mid = (a + b) // 2
-    if funcion(mid) == 0:
+    f_mid = f(mid)
+    
+    if f_mid == 0:
         return mid
-    elif funcion(mid) > 0:
-        if funcion(a) < 0:
-            return raiz(funcion, a, mid)
-        else:
-            return raiz(funcion, mid, b)
+        
+    f_a = f(a)
+    
+    # Comprobación de cambio de signo lógica
+    # Si f(a) es negativo y f(mid) positivo, o viceversa, el signo cambió acá.
+    if (f_a < 0 < f_mid) or (f_a > 0 > f_mid):
+        return raiz(f, a, mid)
     else:
-        if funcion(a) < 0:
-            return raiz(funcion, mid, b)
-        else:
-            return raiz(funcion, a, mid)
-
+        # El cambio de signo debe estar en la otra mitad
+        # Hacemos mid + 1 porque ya sabemos que mid no es la raíz exacta
+        return raiz(f, mid + 1, b)
 
 """
-Complejidad: siendo n la cantidad de elementos
-
-temporal:
-Al ser un ejercicio de División y Conquista, puedo utilizar el Teorema Maestro para justificar la complejidad temporal:
-T(n) = A.T(n/B) + f(n)
-siendo:
-- A: cantidad de llamados recursivos = 1. siempre se ejecuta 1 llamado recursivo por vez. nunca 2.
-- B: en cuánto se parte el problema = 2. en el peor de los casos, se parte en [a,mid] y [mid,b]
-- f(n): el costo de partir y combinar = O(n^C), C = 0. ya que el costo de todo lo que no es recursivo es constante (O(1)).
-
-la ecuación de recurrencia queda como:
-T(n) = T(n/2) + O(n⁰) -> T(n) = T(n/2) + O(1)
-
-Teniendo logB(A) = log2(1) = 0, y logB(A) = C.
-f(n) = θ(n^C.log^k(n)) , con C = logB(A) y k = 0, la ecuacion queda como: T(n) = θ(n^C.log^(k+1)(n)) 
-
-complejidad temporal: T(n) = θ(log(n))
-
-complejidad espacial: O(1), ya que manejamos solo variables (complejidad constante).
-
+Justificacion de complejidad:
+- Temporal: T(n) = T(n/2) + O(1), donde 'n' es la longitud del intervalo [a, b].
+  Aplicando Teorema Maestro: A=1, B=2, f(n)=O(1). 
+  log_b(A) = log_2(1) = 0. C = 0. Estamos en el Caso 2.
+  La complejidad es Θ(log n).
+- Espacial: Θ(log n) debido al overhead de la pila de recursión (call stack).
 """

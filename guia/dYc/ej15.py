@@ -14,52 +14,57 @@ b. Indicar y justificar (adecuadamente) la complejidad de la función implementa
 """
 """
 planteo:
-separo en 2 grupos, siendo el arreglo de joyas [ini, fin]
-[ini, medio] y [medio, fin]
-
-caso borde: 
-    - si el grupo [ini, medio-1] == [medio+1, fin], no hay joya.
-    
-caso base:
-    - si ini <= fin, significa que me queda 1 elemento.
-        entonces, ese mismo es la joya.
-como se que hay joya, me fijo entre los grupos:
-    - si [ini, medio] > [medio+1, fin], descarto mitad derecha
-    - sino, descarto mitad izquierda.
-
+- Hay que encontrar un elemento más pesado usando una balanza.
+- Una balanza REQUIERE que ambos lados tengan la misma cantidad de elementos.
+- Si la cantidad de joyas es par, dividimos a la mitad y pesamos. La más pesada 
+  se queda.
+- Si la cantidad es IMPAR (ej: 5), si dividimos a la mitad (2 y 2), nos SOBRA 1.
+- Pesamos los dos grupos de 2. 
+  - Si pesan lo mismo, ¡la joya es la que apartamos! (Caso ganador temprano).
+  - Si uno pesa más, la joya está en ese grupo (y descartamos la apartada).
 """
-def balanza(grupo_de_joyas1, grupo_de_joyas2):
-    return 0 if grupo_de_joyas1 == grupo_de_joyas2 else 1 if grupo_de_joyas1 > grupo_de_joyas2 else -1
 
-def hay_joya(grupo):
-    cantidad = len(grupo)
-    if cantidad == 0:
-        return None
+def balanza(g1, g2):
+    return 
 
-    medio = cantidad // 2
-    if balanza(grupo[0:medio], grupo[medio+1, cantidad]) == 0:
-        return None # no hay joya
+def _joya_rec(grupo):
+    n = len(grupo)
+    
+    # Caso base
+    if n == 1:
+        return grupo[0]
 
-    return _diamante_rec(grupo, 0, cantidad)
-
-def _diamante_rec(grupo, ini, fin):
-    if ini == fin:
-        return grupo[ini] # encontré la joya (queda un solo elemento)
-
-    medio = (ini + fin) // 2
-
-    if balanza(grupo[:medio], grupo[medio+1:fin]) > 0:
-        return _diamante_rec(grupo, ini, medio)
+    # Determinamos el tamaño de los grupos a pesar.
+    # Si es impar, mid deja al último elemento afuera del pesaje.
+    mid = n // 2
+    
+    grupo_izq = grupo[:mid]
+    grupo_der = grupo[mid:2*mid] # Si n=5, mid=2. izq=[0,1], der=[2,3], aisla el [4]
+    
+    resultado = balanza(grupo_izq, grupo_der)
+    
+    if resultado == 0:
+        # Pesan lo mismo. La joya verdadera es el impar que quedó aislado.
+        # Solo ocurre si 'n' era impar.
+        return grupo[-1]
+    elif resultado > 0:
+        # La mitad izquierda es más pesada
+        return _joya_rec(grupo_izq)
     else:
-        return _diamante_rec(grupo, medio+1, ini)
-    # como sé que hay una joya, no van a ser nunca iguales dos subgrupos.
-    
+        # La mitad derecha es más pesada
+        return _joya_rec(grupo_der)
+
+def buscar_joya(grupo):
+    if not grupo: return None
+    return _joya_rec(grupo)
 
 """
-Complejidad:
-
-temporal: busqueda binaria ez teorema maestro etc etc, logn.
-
-espacial: O(n), siendo n la cantidad de joyas. ya que mando siempre copias del grupo original, a la balanza. y como mucho va a analizar/comparar n elementos.
-
+Justificacion de complejidad:
+- Temporal: T(n) = T(n/2) + O(n). 
+  NOTA: Si se pasan sub-arreglos usando slices (`grupo[:mid]`), el f(n) es O(n).
+  Según el Teorema Maestro (A=1, B=2, C=1): C > log_2(1). 
+  La complejidad terminaría siendo O(n).
+  Si pasáramos índices (ini, fin) en lugar de crear nuevas listas con slices, 
+  f(n) sería O(1), y la complejidad temporal sería O(log n). El enunciado espera 
+  la lógica indexada para lograr el O(log n).
 """

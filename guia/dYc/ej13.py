@@ -19,41 +19,47 @@ Pueden considerar que habrá una única persona contagiada, pero esto no cambiar
 """
 """
 planteo:
-es como que el que haya un duplicado, pero el duplicado es el que tiene covid y tenemos que devolver la posicion.
-
-Voy al medio dl arreglo.
-si el arr[ini, medio] tiene UN covid, descarto la mitad derecha.
-en caso contrario, descarto mitad izquierda. (ya habiendo analizado que hay uno con covid).
-
-
-Mi pregunta va, si hay más de una persona contagiada, mi resolución cambiaria. tengo que verificar que en la otra mitad también haya y hasta hacer 2 llamados recursivos.
+- El objetivo primario es MINIMIZAR LA CANTIDAD DE TESTS (llamadas a pcr()).
+- Sabemos por enunciado que hay un único contagiado (esto es vital, si hubiese más 
+  de uno, este D&C no garantiza encontrarlos a todos en O(log n)).
+- Dividimos el grupo en dos mitades: Izquierda y Derecha.
+- Regla de oro: TESTEAMOS SOLO UNA MITAD. Si le hacemos el test a la mitad 
+  Izquierda y da positivo, el contagiado está ahí. 
+- La magia matemática: Si la mitad Izquierda da negativo, ¡NO NECESITAMOS 
+  TESTEAR LA DERECHA! Por descarte absoluto, el contagiado DEBE estar en la Derecha.
+  Nos ahorramos un test por nivel de recursión.
 """
-def pcr(arreglo):
-    tienen_covid = True
-    return tienen_covid # xd, no nos importa. es para que no me tire error y asumir que estamos  yendo por un camino correcto.
-def contagiado(grupo):
-    if not pcr(grupo):
-        return None # no hay ninguno con covid, valueError.
-    cantidad = len(grupo)
-    return _contagiado_rec(grupo, 0, cantidad)
 
+def pcr(grupo):
+    return True 
 
 def _contagiado_rec(grupo, ini, fin):
-    if ini <= fin:
-        # si me quedo un elemento o menos, me fijo en ese
-        return grupo[ini] if pcr(grupo[ini:fin]) == True else None
+    # caso base: Si queda 1 sola persona, la encontramos. Cero tests requeridos aquí.
+    if ini == fin:
+        return grupo[ini]
 
-    medio = (ini + fin) // 2
-
-    if pcr(grupo[ini:medio]):
-        return _contagiado_rec(grupo, ini, medio)
+    mid = (ini + fin) // 2
+    
+    # Hacemos un solo test por nivel recursivo.
+    # El slicing aquí genera O(n) temporal, pero el problema evalúa 
+    # la cantidad de tests = llamadas a pcr().
+    if pcr(grupo[ini:mid + 1]):
+        # Dio positivo, buscamos en esta mitad.
+        return _contagiado_rec(grupo, ini, mid)
     else:
-        return _contagiado_rec(grupo, medio+1, fin)
+        # Dio negativo. Por inferencia, está en la otra mitad. No gastamos test.
+        return _contagiado_rec(grupo, mid + 1, fin)
+
+def buscar_contagiado(grupo):
+    if not grupo:
+        return None
+    return _contagiado_rec(grupo, 0, len(grupo) - 1)
 
 """
-Complejidad:
-temporal: teorema maestro bla bla bla
-
-espacial: mucha mucha muchas copias, asiq ue mucho cmucucuhcuhcuhcu O(N)N enenenenenene
-
+Justificacion de complejidad:
+- Operaciones (Tests): En cada llamado recursivo, partimos el problema a la mitad 
+  y realizamos EXACTAMENTE 1 test. 
+  La cantidad de tests está dada por: T(n) = T(n/2) + 1. 
+  Por Teorema Maestro (A=1, B=2, C=0), esto es O(log n) tests.
+- Complejidad Espacial: O(log n) por la pila de llamadas recursivas.
 """

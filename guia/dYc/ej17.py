@@ -74,10 +74,10 @@ def _calculo_rec(a, b, n):
         return a, b
 
     if n % 2 == 0:
-        # AYUDA 1: Si n es par, calculamos f^{n/2}
+        #si n es par, calculo f^{n/2}
         a_medio, b_medio = _calculo_rec(a, b, n // 2)
-        # Componemos f^{n/2} consigo misma -> f_1(x) = f_2(x) = f^{n/2}(x)
-        # Fórmula: (a_1 * a_2)x + (a_1 * b_2 + b_1)
+        #compongo f^{n/2} consigo misma -> f_1(x) = f_2(x) = f^{n/2}(x)
+        # formula: (a_1 * a_2)x + (a_1 * b_2 + b_1)
         a_final = a_medio * a_medio
         b_final = a_medio * b_medio + b_medio
         return a_final, b_final
