@@ -105,17 +105,19 @@
 	\textsc{\Large Teoría de Algoritmos}\\           % Materia
 	\textsc{\small (75.29) Curso Buchwald - Genender}\\[0.4cm]    % Subtítulo materia
 	{ \Huge \bfseries Trabajo Práctico 1: \\ Los Algoritmos Greedy \\ son juegos de niños}\\[0.3cm]      % Título
-	\andreasline \\[0.2cm]
-	{\large \today  \\[0.4cm]}                          % Fecha
-	\begin{minipage}{0.4\textwidth}
-		\begin{flushleft}
-            \large{Lucio Romero Mascaró \\ 113091}                   % Integrante 1
-		\end{flushleft}
-	\end{minipage}
-	\begin{minipage}{0.4\textwidth}
-		\begin{flushright}
-            \large{Valentín Raunic \\ 114081}                % Integrante 2
-		\end{flushright}
-	\end{minipage}
+    \rule{0.7\textwidth}{1pt} \\[0.3cm]
+
+
+	{\large \today  \\[0.8cm]}                          % Fecha 
+	
+	
+	\large
+	\begin{tabular}{c @{\hskip 1.5cm} c @{\hskip 1.5cm} c}
+		Lucio Romero Mascaró & joel joel joel & Valentín Raunic \\
+		113091               & 111111         & 114081
+	\end{tabular}
+	
+	
  \end{center}
+
 }
