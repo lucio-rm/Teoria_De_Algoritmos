@@ -1,30 +1,57 @@
 \section{El Problema}
-. presento el problema
 . Empiezo a hablar como fue el aproach del problema
 . planteo preguntas, que voy a responder despues
 
 . hago un analisis del problema
 . explico como llegamos a la mejor solucion y como pudimos mostrar que sea optimo (NO MOSTRAR, solo explicar, NO SPOILEAR ¿?)
 
-\subsection{Introducción}
-
-
-
-El problema trataba de
-Introducción y primeros años
 Cuando Mateo nació, Sophia estaba muy contenta. Finalmente tendría un hermano con quien jugar. Sophi tenía 3 años cuando Mateo nació. Ya desde muy chicos, ella jugaba mucho con su hermano.
 
-Pasaron los años, y fueron cambiando los juegos. Cuando Mateo cumplió 4 años, el padre de ambos le explicó un juego a Sophia: Se dispone una fila de 
-n
-n monedas, de diferentes valores. En cada turno, un jugador debe elegir alguna moneda. Pero no puede elegir cualquiera: sólo puede elegir o bien la primera de la fila, o bien la última. Al elegirla, la remueve de la fila, y le toca luego al otro jugador, quien debe elegir otra moneda siguiendo la misma regla. Siguen agarrando monedas hasta que no quede ninguna. Quien gane será quien tenga el mayor valor acumulado (por sumatoria).
+Pasaron los años, y fueron cambiando los juegos. Cuando Mateo cumplió 4 años, el padre de ambos le explicó un juego a Sophia: Se dispone una fila de \textit{n} monedas, de diferentes valores. En cada turno, un jugador debe elegir alguna moneda. Pero no puede elegir cualquiera: \textit{sólo puede elegir o bien la primera de la fila, o bien la última}. Al elegirla, la remueve de la fila, y le toca luego al otro jugador, quien debe elegir otra moneda siguiendo la misma regla. Siguen agarrando monedas hasta que no quede ninguna. Quien gane será quien tenga el mayor valor acumulado (por sumatoria).
 
 El problema es que Mateo es aún pequeño para entender cómo funciona esto, por lo que Sophia debe elegir las monedas por él. Digamos, Mateo está “jugando”. Aquí surge otro problema: Sophia es muy competitiva. Será buena hermana, pero no se va a dejar ganar (consideremos que tiene 7 nada más). Todo lo contrario. En la primaria aprendió algunas cosas sobre algoritmos greedy, y lo va a aplicar.
 
-Consigna
-[Obligatorio] Hacer un análisis del problema, y proponer un algoritmo greedy que obtenga la solución óptima al problema planteado: Dados los 
-n
-n valores de todas las monedas, indicar qué monedas debe ir eligiendo Sophia para si misma y para Mateo, de tal forma que se asegure de ganar siempre. Considerar que Sophia siempre comienza (para sí misma).
+Para transformar esta situación en un problema algorítmico concreto, el desafío es el siguiente:
+Hacer un análisis del problema, y proponer un algoritmo greedy que obtenga la solución óptima al problema planteado: Dados los \textbf{n} valores de todas las monedas, indicar qué monedas debe ir eligiendo Sophia para si misma y para Mateo, de tal forma que se asegure de ganar siempre. Considerar que Sophia siempre comienza (para sí misma).
+
+\subsection{Introducción}
+
+Tranquilamente, se puede observar que el objetivo es uno solo: que \textit{Sophia gane}. A eso sumemosle que juega "para los dos lados", siempre por beneficio suyo y Mateo está mas de \textit{observador}.
+
+\vspace{0.425cm}
+Por último, lo más importante es que la elección va a ser si o sí entre 2 monedas y el valor entre ellas. 
+
+¿Cómo se podría hacer que eligiendo $x$ moneda, no haya otra próxima (mayor a $x$) que otro la elija? 
+
+¿Cómo es posible crear un algoritmo Greedy en el cual sea óptimo para cualquier caso de monedas? 
+
+¿Existe un contraejemplo para ese supuesto algoritmo "óptimo"?
+
+
+Una vez propuesto eso, sigamos pensando para ahora empezar con el planteo.
 
 \subsection{Planteamiento}
 
+Hacer que gane siempre Sophia, y tenemos la suerte de que Sophia es la que elige por Mateo también. Entonces, cómo podemos aconsejar a sofia de tal forma que siempre haga lo que le digamos, gane siempre?
+
+Lo primero que se tiene que ocurrir es que entre las dos monedas a elegir agarre siempre la mayor en valor. Eso va a garantizar que siempre termine con una suma mayor que Mateo. O no?
+
+¿Qué tiene que elegir Mateo? ¿Qué tiene que elegir Sophia por Mateo?
+
+Para que Sophia gane tiene que tener mayor valor total a Mateo, entonces si Sophia agarra por cada par siempre la mayor, Sophia va a agarrar \textit{por Mateo} la menor. Siempre para cada par de monedas, Sophia agarra la mayor para ella y para Mateo va a agarrar la menor entre ellas.
+
+Sophia gana siempre?
+
 \subsection{Confirmar la optimalidad}
+
+Si gana siempre, significa que:
+
+\begin{itemize}
+    \item Las indicaciones propuestas fueron óptimas.
+    \item Si pasamos las instrucciones un algoritmo, ese mismo es óptimo.
+    \item Si es posible demostrar un solo contraejemplo, significa que no era óptimo.
+    \item Va a haber que demostrar matemáticamente que es óptimo.
+    \item Se va a hablar en otro momento sobre el caso borde de un posible empate entre Sophia y Mateo.
+\end{itemize}
+
+

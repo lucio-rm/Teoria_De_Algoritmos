@@ -8,3 +8,39 @@
 
 \subsection{Código}
 
+
+
+
+\begin{lstlisting}[language=Python]
+import sys
+
+PRIMERO = 0
+ULTIMO = -1
+
+def juego(monedas: list[int]):
+    pts_mateo = pts_sophia = 0
+    
+    turno = True
+    
+    while len(monedas) > 0:
+        if turno:
+            if monedas[PRIMERO] > monedas[ULTIMO]:
+                pts_sophia += monedas[PRIMERO]
+                monedas[:] = monedas[PRIMERO+1:]
+                sys.stdout.write("Primera moneda para Sophia;")
+            else:
+                pts_sophia += monedas[ULTIMO]
+                monedas[:] = monedas[:ULTIMO]
+                sys.stdout.write("Ultima moneda para Sophia;")
+        else:
+            if monedas[PRIMERO] > monedas[ULTIMO]:
+                pts_mateo += monedas[ULTIMO]
+                monedas[:] = monedas[:ULTIMO]
+                sys.stdout.write("Ultima moneda para Mateo;")
+            else:
+                pts_mateo += monedas[PRIMERO]
+                monedas[:] = monedas[PRIMERO+1:]
+                sys.stdout.write("Primera moneda para Mateo;")
+        turno = not turno
+        
+\end{lstlisting}
