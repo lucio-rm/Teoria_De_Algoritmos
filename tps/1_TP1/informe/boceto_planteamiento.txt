@@ -1,6 +1,8 @@
 caratula
 indice
-
+The problem
+Designing the algorithm
+Analizing the algorithm
 - RESUMEN
 	. hago resumen de la consigna
 	. resumo la logica del algoritmo creado
