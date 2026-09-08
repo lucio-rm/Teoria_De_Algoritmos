@@ -6,6 +6,12 @@ Implementar un algoritmo greedy que nos indique el precio mínimo al que podemos
 Nota sobre RPL: en este ejercicio se pide cumplir la tarea "con un algoritmo Greedy". Por las características de la herramienta, no podemos verificarlo de forma automática, pero se busca que se implemente con dicha restricción
 
 """
+"""
+Modificación para deflación: Si los precios caen constantemente (deflación), 
+queremos que los productos más caros caigan durante más tiempo para ahorrar 
+más dinero. La regla se invierte: ordenamos de menor a mayor (`R.sort()`), 
+comprando lo más barato primero y lo más caro al final.
 
+"""
 def precios_deflacion(R):
     return 0
