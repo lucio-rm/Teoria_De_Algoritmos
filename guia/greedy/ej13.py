@@ -21,20 +21,31 @@ parecido al de los patrulleros, tengo que poner una antena que cubra lo máximo 
 """
 
 def cobertura(casas, R, K):
-    casas.sort() #ordeno de menor a mayor en base a la posicion en la recta K
-
-    dist_min = casas[0] + R # sabemos que el mejor optimo local primero va a ser el de la posicion minima de la primer casa. y el rango va a cubrir todo eso.
+    if not casas:
+        return []
+        
+    casas_ordenadas = sorted(casas) # ordeno de menor a mayor y hago una copia
+    
     pos_antenas = []
-    pos_antenas.append(dist_min - (R//2)) # la posicion de la antena != distancia cubierta por el rango.
-    for pos in range(casas):
-        if casas[pos] <= dist_min:
-            continue # si ya esta cubierta por el rango, sigo.
-        else:
-            dist_min = casas[pos] + R # actualizo la distancia minima de donde llega el rango.
-            pos_antenas.append(casas[pos] - (R//2)) # agrego la posicion de la antena puesta.
-
+    fila = 0
+    cantidad_casas = len(casas_ordenadas)
+    
+    while fila < cantidad_casas:
+        # 'fila' representa la primera casa a la izquierda que todavía NO tiene cobertura.
+        #pongo la antena exactamente R kilómetros adelante de esta casa para exprimir 
+        # su rango de cobertura hacia atrás al máximo posible.
+        posicion_antena = min(casas_ordenadas[fila] + R, K)
+        pos_antenas.append(posicion_antena)
+        
+        # como la antena tiene un radio de cobertura de R kilómetros, su alcance
+        # máximo hacia la derecha de la ruta llega hasta posicion_antena + R
+        cobertura_maxima = posicion_antena + R
+        
+        # sigo con el índice saltando todas las casas que caigan dentro de esta zona protegida
+        while fila < cantidad_casas and casas_ordenadas[fila] <= cobertura_maxima:
+            fila += 1
+            
     return pos_antenas
-
 
 """
 Justificación:
