@@ -18,6 +18,13 @@ adyacentes(self, v)
 str
 
 """
+"""
+planteo:
+
+
+
+"""
+
 
 def independent_set(grafo):
     return []

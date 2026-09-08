@@ -18,6 +18,13 @@ adyacentes(self, v)
 str
 
 """
+"""
+planteo:
+
+
+
+"""
+
 
 def hay_isomorfismo(g1, g2):
     return False
