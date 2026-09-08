@@ -25,6 +25,13 @@ adyacentes(self, v)
 str
 
 """
+"""
+planteo:
+
+
+
+"""
+
 
 def resolver_sudoku(matriz):
     return matriz

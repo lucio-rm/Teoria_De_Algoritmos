@@ -21,6 +21,13 @@ adyacentes(self, v)
 str
 
 """
+"""
+planteo:
+
+
+
+"""
+
 
 
 def knight_tour(n):

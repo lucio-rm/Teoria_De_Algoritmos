@@ -19,6 +19,13 @@ adyacentes(self, v)
 str
 
 """
+"""
+planteo:
+
+
+
+"""
+
 
 def camino_hamiltoniano(grafo):
     return []

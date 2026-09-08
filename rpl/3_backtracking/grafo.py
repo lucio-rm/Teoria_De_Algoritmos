@@ -1,8 +1,4 @@
 """
-Enunciado 01:
-
-Implementar por backtracking un algoritmo que, dado un grafo no dirigido y un numero n menor a #V, devuelva si es posible obtener un subconjunto de n vertices tal que ningun par de vertices sea adyacente entre si.
-
 Métodos del grafo:
 Grafo(dirigido = False, vertices_init= []) para crear (hacer 'from grafo import Grafo')
 agregar_vertice(self, v)
@@ -19,13 +15,3 @@ adyacentes(self, v)
 str
 
 """
-"""
-planteo:
-
-
-
-"""
-def no_adyacentes(grafo, n):
-    'Devolver una lista con los n vértices, o None de no ser posible'
-    pass
-

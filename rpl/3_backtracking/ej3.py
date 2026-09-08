@@ -21,5 +21,12 @@ adyacentes(self, v)
 str
 
 """
+"""
+planteo:
+
+
+
+"""
+
 def nreinas(n):
     return [(0, 0)]
