@@ -7,58 +7,61 @@ Aclaración: Este ejercicio puede resolverse, casi trivialmente, utilizando una 
 Nota sobre RPL: en este ejercicio se pide cumplir la tarea "por división y conquista, en O(n)". Por las características de la herramienta, no podemos verificarlo de forma automática, pero se busca que se implemente con dicha restricción
 """
 
-
 """
 planteo:
-
-como lo haces O(n) ¿?
-siendo D&C, sabes que tenes que hacer 2 llamados y 2 particiones (o 3 y 3, o 4 y 4, etc.) asi me queda logB(A) = 1. con C = 0. entonces, no tengo que hacer un recorrido mas.
+- Para bajar la complejidad a O(n), no podemos dividir el arreglo en dos y 
+  hacer dos llamadas recursivas, porque T(n) = 2T(n/2) + O(n) da O(n log n).
+- Necesitamos una sola llamada recursiva: T(n) = T(n/2) + O(n).
+- La estrategia es el emparejamiento (Tournament). Si un elemento aparece más de 
+  la mitad de las veces, al agrupar los elementos de a pares adyacentes, al 
+  menos un par debe estar formado por dos copias de ese elemento ganador.
+- Descartamos los pares donde los elementos son distintos. De los pares iguales, 
+  guardamos solo un representante y llamamos a la recursión sobre este nuevo 
+  arreglo (que mide a lo sumo n/2). 
+- El candidato que sobrevive se cuenta linealmente en todo el arreglo original 
+  para confirmar si superó la mitad.
 
 """
 
-def mas_de_la_mitad(arr):
-    return False
+def _candidato_mayoritario(arr):
+    if len(arr) == 0:
+        return None
+    if len(arr) == 1:
+        return arr[0]
 
+    pares_iguales = []
+    # Emparejamos de a dos. Si son iguales, sobrevive uno a la siguiente ronda.
+    for i in range(0, len(arr) - 1, 2):
+        if arr[i] == arr[i+1]:
+            pares_iguales.append(arr[i])
 
-def mas_de_la_mitad(arr):
-    if not arr:
-        return False
+    # Una ÚNICA llamada recursiva sobre un arreglo de tamaño <= n/2
+    candidato = _candidato_mayoritario(pares_iguales)
 
-    candidato_final = _dyc_ganador(arr, 0, len(arr)-1)
+    # Verificamos si el candidato de las rondas superiores es mayoría aquí
+    if candidato is not None and arr.count(candidato) > len(arr) // 2:
+        return candidato
     
-    return candidato_final is not None
+    # Caso borde: si el arreglo es impar, el último elemento quedó sin pelear
+    if len(arr) % 2 != 0 and arr.count(arr[-1]) > len(arr) // 2:
+        return arr[-1]
 
-def _dyc_ganador(arr, ini, fin):
-    if ini == fin:
-        # queda 1 elemento, es el mayoría
-        return arr[ini]
+    return None
 
-    medio = (ini + fin) // 2
+def mas_de_la_mitad(arr):
+    return _candidato_mayoritario(arr) is not None
 
-    candidato_izq = _dyc_ganador(ini, medio)
-    candidato_der = _dyc_ganador(medio+1, fin)
+"""
+Justificación de la complejidad:
+Utilizando el Teorema Maestro: 
+Ecuación: T(n) = A.T(n/B) + O(n^C)
+- A = 1 (Se realiza una sola llamada recursiva hacia 'pares_iguales').
+- B = 2 (El nuevo arreglo tiene como máximo la mitad de los elementos).
+- f(n) = O(n). Recorrer el arreglo para armar los pares cuesta O(n), y contar 
+  el candidato con `arr.count()` cuesta O(n). Por ende C = 1.
 
-    # las dos mitades tienen el mismo ganador, devuelvo ese
-    if candidato_izq == candidato_der:
-        return candidato_izq
-
-    # tengo que saber como contar cual aparecemas veces en O(1).
-    # # si no, cuento cuantas veces aparecen en el arr actual
-    # conteo_izq = conteo_der = 0
-
-    # for i in range(ini, fin+1):
-    #     if arr[i] == candidato_izq:
-    #         conteo_izq += 1
-    #     elif arr[i] == candidato_der:
-    #         conteo_der += 1
-
-    #me fijo cual es mayoria del segmento
-    mitad = (fin - (ini+1)) // 2 # cuento todos los elementos
-
-    if candidato_izq is not None and conteo_izq > mitad:
-        return candidato_izq
-    elif candidato_der is not None and conteo_der > mitad:
-        return candidato_der
-    else:
-        return None # no consiguieron pasar a la mitad.
-
+Calculamos log_B(A) = log_2(1) = 0.
+Como C > log_B(A) (es decir, 1 > 0), estamos en el caso donde el esfuerzo de 
+dividir y combinar domina.
+La ecuación tiende a O(n^C) = O(n^1) = O(n).
+"""
