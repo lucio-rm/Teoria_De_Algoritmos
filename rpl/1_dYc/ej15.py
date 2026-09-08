@@ -13,6 +13,45 @@ Si el segundo platillo es más pesado, balanza devuelve -1.
 
 from balanza import *
 
-def encontrar_joya(joyas):
-    balanza(joyas[:2], joyas[2:4])
-    return 0
+"""
+cambio el planteo.
+"""
+def encontrar_joya(grupo):
+    if not grupo: 
+        return None
+    return _joya_rec(grupo, 0, len(grupo) - 1)
+
+def _joya_rec(grupo, ini, fin):
+    # caso base: queda una sola joya
+    if ini == fin:
+        return ini
+
+    #cantidad de elementos en el rango actual
+    n = fin - ini + 1
+    
+    # cuantos elementos van a ir a cada lado de la balanza
+    mitad = n // 2
+    
+    # armo los grupos recortando el arreglo original para pasárselos a la balanza
+    #lado izquierdo: desde 'ini' hasta 'ini + mitad' (sin incluir)
+    grupo_izq = grupo[ini : ini + mitad]
+    # lado derecho: los siguientes 'mitad' elementos
+    grupo_der = grupo[ini + mitad : ini + 2 * mitad]
+    
+    resultado = balanza(grupo_izq, grupo_der)
+    
+    if resultado == 0:
+        # pesan igual: la joya verdadera es la que quedó afuera (el último elemento del rango)
+        return fin
+    elif resultado > 0:
+        # el grupo izquierdo es más pesado: la joya está entre 'ini' y 'ini + mitad - 1'
+        return _joya_rec(grupo, ini, ini + mitad - 1)
+    else:
+        # el grupo derecho es más pesado: la joya está entre 'ini + mitad' y 'ini + 2*mitad - 1'
+        return _joya_rec(grupo, ini + mitad, ini + 2 * mitad - 1)
+
+"""
+Complejidad:
+teorema maestro, bla bla bla
+
+"""
