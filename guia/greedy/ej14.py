@@ -26,3 +26,9 @@ NO es óptimo. peudo encontrqar un caso que en vez de poner 4 faros pone 5.
 
 
 """
+
+
+# devolver una lista de faros. Cada faro debe ser una tupla con su posición en (x,y)
+# matriz booleana, indica True en las posiciones con submarinos
+def submarinos(matriz):
+    return [(0,0)]
