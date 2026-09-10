@@ -28,7 +28,7 @@ Por último, los algoritmos greedy poseen una propiedad de \textit{subestructura
 
 \subsection{Regla Greedy buscada}
 
-En el contexto del problema, el estado del juego queda determinado por la fila remanente de monedas y por el jugador de turno. Dado que Sophia juega su turno y además decide la jugada de Mateo, se propone la siguiente regla greedy: maximizar su propio beneficio inmediato y minimizar el asignado a su hermano.
+En el contexto del problema, el estado del juego queda determinado por la fila remanente de monedas y por el jugador de turno. Dado que Sophia juega su turno y además decide la jugada de Mateo, se propone la siguiente regla greedy: maximizar su propio beneficio inmediato y minimizar el asignado a su hermano. Esto lleva a \textit{maximizar la distancia entre ellos dos}, en todo momento.
 \begin{itemize}
     \item \textbf{En el turno de Sophia:} Elegir la moneda de mayor valor entre los dos extremos disponibles.
     \item \textbf{En el turno de Mateo:} Sophia elige para él la moneda de menor valor entre los dos extremos disponibles.
