@@ -34,12 +34,13 @@ Recordar la regla de: Sucesión de óptimos locales -> óptimo global. Esa misma
 
 . digo que la demostracion va a estar al final
 \subsection{Pensamiento Greedy}
-JEE 
 
-Filosófico:
-algoritmo greedy = Liberalismo?
+Para entender mejor la naturaleza del pensamiento Greedy, vamos a analizarlo desde una perspectiva económica y filosófica.
 
-Consecuencialismo / Utilitarismo vs Deontologismo.
+Del lado económico, un algoritmo \textit{Greedy} se comporta de manera muy similar al liberalismo clásico. Este sistema dice que si cada individuo busca maximizar de forma aislada su propio beneficio inmediato, la suma de egoísmos locales va a llevar de manera natural a un beneficio o bienestar óptimo global para \textit{toda} la sociedad. En los algoritmos Greedy se aplica esto mismo: se espera que una sucesión de elecciones óptimas locales nos guíe hacia la solución óptima global.
 
+Otra forma de plantearlo, desde el puntod e vista filosófico, podemos contrastar este enfoque mediante el dilema del \textit{Consecuencialismo (o Utilitarismo) contra el Deontologismo}. El consecuencialismo clásico busca maximizar el bienestar general pensando el impacto a largo plazo, asumiendo que a veces es necesario aceptar una pérdiad momentánea o local para alcanzar un bien mayor en el futuro. El Deontologismo , va por el lado del cumplimiento estricto de una regla fija sin importar las consecuencias futuras. (Hobbes y Kant).
 
-Frase Greedy Kleinberg Tardos.
+A partir de esto, se puede decir que el pensamiento Greedy actúa como un utilitarismo ''ciego'' o de corto plazo. El algoritmo no es capaz de ''empeorar'' su estado local actual para beneficiarse en el futuro. En cada iteración piensa las consecuencias inmediatas y elige si o si la opción que maximiza su ganancia en ese instante, omitiendo el impacto que tiene en futuras decisiones/iteraciones.
+
+Teniendo en cuenta esta filosofía, pasemos ahora al diseo del algoritmo, manteniendo este enfoque Greedy en cada paso.
