@@ -1,19 +1,46 @@
 \section{Teoría Greedy}
 
-. explico que es un algoritmo greedy
-. explico la regla greedy aplicada a este ejercicio
-. explico el estado actual, el optimo local, el optimo global y la sucesion
-. digo que la demostracion va a estar al final
+''La codicia...es buena. La codicia es correcta. La codicia funciona.'' - Michael Douglas (película Wall Street 1987).
+Codicia = Greed. 
+
+Es difícil de explicar bien qué es esta terminología. Pero estamos hablando de un razonamiento \textit{sin} visión general, sin la visión del ''Big Picture'' del problema o planteamiento.
+
+Se asocia a la \textit{avaricia} de la razón por la acción tomada. Y ahora piensen en Sophia, que quiere ganar siempre, que siempre agarra las monedas que a ella le convenga con tal de ganar en todo momento. Eso es avaricia.
+
+Esa acción, ese pensamiento, esa \textit{secuencia} de acciones se puede denominar como una acción Greedy. Siempre, en el momento en el que estoy y donde estoy, busco lo mejor para mí. Sin importar lo que viene después.
+
+Ahora más formalizado, se aplica una regla sencilla que nos permite obtener el/un \textbf{óptimo local} a mi \textbf{estado actual}. Aplicamos iterativamente esa regla, esperando que nos lleve al óptimo global (que sería, la mejor solución).
+
+Un algoritmo es greedy cuando tenemos dicha regla sencilla que sólo mira el estado actual y que busca un óptimo local. Si no podemos enunciar cuál es el óptimo local, el algoritmo no es greedy o lo \textit{estamos pensando mal}.
+
+Pensar de esta manera, como veníamos diciendo sin la visión general del problema, \textit{esperando} que nos lleve al óptimo global, los algoritmos Greedy nos pueden indicar varias cosas:
+\begin{itemize}
+    \item No siempre dan el resultado óptimo.
+    \item Demostrar que dan el resultado óptimo puede no ser fácil.
+    \item Son intuitivos de pensar. Son fáciles de entender.
+    \item Suelen funcionar rápido.
+    \item Para problemas complejos pueden ser buenas aproximaciones.
+\end{itemize}
+
+Recordar la regla de: Sucesión de óptimos locales -> óptimo global. Esa misma nos va a permitir explicar el por qué un algoritmo es greedy. 
+
 
 \subsection{Regla Greedy buscada}
+. explico que es un algoritmo greedy
 
+. explico la regla greedy aplicada a este ejercicio
+
+. explico el estado actual, el optimo local, el optimo global y la sucesion
+
+. digo que la demostracion va a estar al final
 \subsection{Pensamiento Greedy}
-JEE 
 
-Filosófico:
-algoritmo greedy = Liberalismo?
+Para entender mejor la naturaleza del pensamiento Greedy, vamos a analizarlo desde una perspectiva económica y filosófica.
 
-Consecuencialismo / Utilitarismo vs Deontologismo.
+Del lado económico, un algoritmo \textit{Greedy} se comporta de manera muy similar al liberalismo clásico. Este sistema dice que si cada individuo busca maximizar de forma aislada su propio beneficio inmediato, la suma de egoísmos locales va a llevar de manera natural a un beneficio o bienestar óptimo global para \textit{toda} la sociedad. En los algoritmos Greedy se aplica esto mismo: se espera que una sucesión de elecciones óptimas locales nos guíe hacia la solución óptima global.
 
+Otra forma de plantearlo, desde el puntod e vista filosófico, podemos contrastar este enfoque mediante el dilema del \textit{Consecuencialismo (o Utilitarismo) contra el Deontologismo}. El consecuencialismo clásico busca maximizar el bienestar general pensando el impacto a largo plazo, asumiendo que a veces es necesario aceptar una pérdiad momentánea o local para alcanzar un bien mayor en el futuro. El Deontologismo , va por el lado del cumplimiento estricto de una regla fija sin importar las consecuencias futuras. (Hobbes y Kant).
 
-Frase Greedy Kleinberg Tardos.
+A partir de esto, se puede decir que el pensamiento Greedy actúa como un utilitarismo ''ciego'' o de corto plazo. El algoritmo no es capaz de ''empeorar'' su estado local actual para beneficiarse en el futuro. En cada iteración piensa las consecuencias inmediatas y elige si o si la opción que maximiza su ganancia en ese instante, omitiendo el impacto que tiene en futuras decisiones/iteraciones.
+
+Teniendo en cuenta esta filosofía, pasemos ahora al diseo del algoritmo, manteniendo este enfoque Greedy en cada paso.
