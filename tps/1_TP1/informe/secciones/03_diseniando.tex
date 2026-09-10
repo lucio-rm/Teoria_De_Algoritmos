@@ -1,46 +1,54 @@
-\section{Diseño del Algoritmo}
+\section{Diseñando del Algoritmo}
 
 . explico la logica del algoritmo y como llegamos a eso
+
 . muestro el codigo (entero? entra/me sirve? si es corto ponerlo, y si no vemos.)
+
 . explico el por qué hago la implementacion de esa manera
+
+¿Por qué se elige para Sophia la mayor de las monedas y para Mateo la menor entre cada par?
+Si la regla hubiera sido: ''Para cada par, se elige la mayor.'', se le está dando la opción a Mateo de tener mayor puntaje, y el riesgo de Sophia de que eligiendo la mayor puede seguir después de esa una mayor a la elegida.
+
+A veces la intuición falla, por eso hubo que pensar bien la técnica a realizar. Habiendo ya hablado de la secuencia de elecciones que se realizan para llegar a la solución del problema (Sophia gana), hay que pasar esa parte a la \textit{lógica algorítmica}. ¿Cuál es el paso a paso en cualquier caso de monedas? ¿Cuál puede ser el peor caso posible? ¿Cómo interactúa el algoritmo con los datos del problema? ¿Cómo se pasan los datos del problema al idioma computacional?
 
 \subsection{Lógica}
 
+Una fila de $n$ monedas, se puede implementar con un simple arreglo de enteros. Siendo cada elemento una moneda, con su valor asociado.
+El turno va a empezar siendo de Sophia, y es donde va a empezar la elección. 
+
+Se mira cada par de monedas, la primera y la última del arreglo. Se calcula cuál es mayor, o igual, y se selecciona una. Después de la selección, se hace una copia del mismo arreglo pero \textit{sin} esa moneda elegida (así no circula en próximas elecciones).
+
+Al terminar el turno de Sophia y su elección, automáticamente hay que indicar que se cambia el turno a Mateo. Así se sabe que el proceso de selección y pensamiento cambia, para elegir la moneda de menor (o en el peor de los casos de igual) valor entre cada par.
+
+Volviendo al marco teórico Greedy, esta secuencia de elecciones tiene que seguir hasta que termine el juego. El juego termina claramente cuando ya no hay monedas para elegir, se traduce a que el arreglo esté vacío.
+
 \subsection{Código}
 
+% \begin{lstlisting}[language=Python]
+% PRIMERO = 0
+% ULTIMO = -1
 
-
-
-\begin{lstlisting}[language=Python]
-import sys
-
-PRIMERO = 0
-ULTIMO = -1
-
-def juego(monedas: list[int]):
-    pts_mateo = pts_sophia = 0
+% def juego(monedas):
+%     pts_mateo = pts_sophia = 0
     
-    turno = True
+%     turno = True
     
-    while len(monedas) > 0:
-        if turno:
-            if monedas[PRIMERO] > monedas[ULTIMO]:
-                pts_sophia += monedas[PRIMERO]
-                monedas[:] = monedas[PRIMERO+1:]
-                sys.stdout.write("Primera moneda para Sophia;")
-            else:
-                pts_sophia += monedas[ULTIMO]
-                monedas[:] = monedas[:ULTIMO]
-                sys.stdout.write("Ultima moneda para Sophia;")
-        else:
-            if monedas[PRIMERO] > monedas[ULTIMO]:
-                pts_mateo += monedas[ULTIMO]
-                monedas[:] = monedas[:ULTIMO]
-                sys.stdout.write("Ultima moneda para Mateo;")
-            else:
-                pts_mateo += monedas[PRIMERO]
-                monedas[:] = monedas[PRIMERO+1:]
-                sys.stdout.write("Primera moneda para Mateo;")
-        turno = not turno
+%     while len(monedas) > 0:
+%         if turno:
+%             if monedas[PRIMERO] > monedas[ULTIMO]:
+%                 pts_sophia += monedas[PRIMERO]
+%                 monedas[:] = monedas[PRIMERO+1:]
+%             else:
+%                 pts_sophia += monedas[ULTIMO]
+%                 monedas[:] = monedas[:ULTIMO]
+%         else:
+%             if monedas[PRIMERO] > monedas[ULTIMO]:
+%                 pts_mateo += monedas[ULTIMO]
+%                 monedas[:] = monedas[:ULTIMO]
+%             else:
+%                 pts_mateo += monedas[PRIMERO]
+%                 monedas[:] = monedas[PRIMERO+1:]
+%         turno = not turno
         
-\end{lstlisting}
+% \end{lstlisting}
+
