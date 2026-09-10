@@ -21,8 +21,23 @@ str
 """
 """
 planteo:
+parecido al coloreo de grafos, no?
+
+me tengo que curtir con backtracking. es importante. lleva mas codigo que dificultad conceptual.
+
+tengo:
+- grafo no dirigido
+- numero n < a len(grafo.obtener_vertices())
+devuelvo:
+- subconjunto de n
+    - lista de vertices
+    - esa misma lista, entre cada par de vertices no tienen que ser adyacentes entre sí.
+    
+resolución:
+- para conseguir la lista, pienso primero en las hojas del grafo. sé que esas mismas van a ser
 
 
+Backtracking es siempre recursivo?
 
 """
 def no_adyacentes(grafo, n):
