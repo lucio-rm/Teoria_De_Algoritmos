@@ -9,9 +9,10 @@ Se asocia a la \textit{avaricia} de la razón por la acción tomada. Y ahora pie
 
 Esa acción, ese pensamiento, esa \textit{secuencia} de acciones se puede denominar como una acción Greedy. Siempre, en el momento en el que estoy y donde estoy, busco lo mejor para mí. Sin importar lo que viene después.
 
-Ahora más formalizado, se aplica una regla sencilla que nos permite obtener el/un \textbf{óptimo local} a mi \textbf{estado actual}. Aplicamos iterativamente esa regla, esperando que nos lleve al óptimo global (que sería, la mejor solución).
+Ahora formalizandolo, se aplica una regla sencilla que nos permite obtener el/un \textbf{óptimo local} a mi \textbf{estado actual}. Aplicamos iterativamente esa regla, esperando que nos lleve al óptimo global (que sería, la mejor solución).
 
 Un algoritmo es greedy cuando tenemos dicha regla sencilla que sólo mira el estado actual y que busca un óptimo local. Si no podemos enunciar cuál es el óptimo local, el algoritmo no es greedy o lo \textit{estamos pensando mal}.
+Dicho de otra manera, el algoritmo construye una solución paso a paso mediante una secuencia \textit{finita} de estados. En cada estado, el algoritmo selecciona la alternativa que parece ser la mejor en ese intante (la elección del óptimo local), sin reconsiderar decisiones pasadas ni pensar en las consecuencias de pasos futuros.
 
 Pensar de esta manera, como veníamos diciendo sin la visión general del problema, \textit{esperando} que nos lleve al óptimo global, los algoritmos Greedy nos pueden indicar varias cosas:
 \begin{itemize}
@@ -23,16 +24,44 @@ Pensar de esta manera, como veníamos diciendo sin la visión general del proble
 \end{itemize}
 
 Recordar la regla de: Sucesión de óptimos locales -> óptimo global. Esa misma nos va a permitir explicar el por qué un algoritmo es greedy. 
-
+Por último, los algoritmos greedy poseen una propiedad de \textit{subestructura óptima}: Una solución óptima al problema general contiene en su interior soluciones óptimas a los subproblemas derivados de la elección voraz.
 
 \subsection{Regla Greedy buscada}
-. explico que es un algoritmo greedy
 
-. explico la regla greedy aplicada a este ejercicio
+En el contexto del problema, el estado del juego queda determinado por la fila remanente de monedas y por el jugador de turno. Dado que Sophia juega su turno y además decide la jugada de Mateo, se propone la siguiente regla greedy: maximizar su propio beneficio inmediato y minimizar el asignado a su hermano.
+\begin{itemize}
+    \item \textbf{En el turno de Sophia:} Elegir la moneda de mayor valor entre los dos extremos disponibles.
+    \item \textbf{En el turno de Mateo:} Sophia elige para él la moneda de menor valor entre los dos extremos disponibles.
+\end{itemize}
 
-. explico el estado actual, el optimo local, el optimo global y la sucesion
+\textbf{¿Es óptimo?}
 
-. digo que la demostracion va a estar al final
+Para demostrar brevemente que Sophia nunca pierde aplicando esta regla, se analiza el progreso del juego en rondas compuestas por dos turnos consecutivos: el turno de Sophia seguido inmediatamente por el de Mateo.
+
+Sean $c_i$ y $c_j$ las monedas ubicadas en los extremos izquierdo y derecho de la fila al inicio de la ronda $k$, respectivamente ($i < j$). Por simetría, suponer que $c_i \ge c_j$:
+\begin{enumerate}
+    \item Sophia aplica la regla \textit{greedy} sobre su propia jugada y selecciona:
+    \[
+    S_k = \max(c_i, c_j) = c_i
+    \]
+    \item Se remueve $c_i$, los nuevos extremos disponibles para Mateo pasan a ser $c_{i+1}$ y $c_j$.
+    \item Sophia aplica la regla greedy sobre el turno de Mateo y elige para él:
+    \[
+    M_k = \min(c_{i+1}, c_j)
+    \]
+    \item Por definición de la función mínimo\footnote{La función mínimo, en el ámbito de matemáticas y programación, simplemente toma un grupo de números y devuelve el más pequeño de todos.}, se cumple que $M_k \le c_j$. Dado que por la elección inicial de Sophia se cumple $c_j \le c_i = S_k$, se puede concluit que:
+    \[
+    M_k \le c_j \le S_k \implies S_k \ge M_k
+    \]
+\end{enumerate}
+
+De este modo, en cada ronda $k$, la ganancia obtenida por Sophia es mayor o igual a la asignada a Mateo ($S_k \ge M_k$). Sumando a lo largo de las $\lfloor n/2 \rfloor$ rondas completas del juego, el puntaje acumulado de Sophia siempre se mantendrá por encima o igual al de Mateo:
+\[
+\sum_{k=1}^{\lfloor n/2 \rfloor} S_k \ge \sum_{k=1}^{\lfloor n/2 \rfloor} M_k
+\]
+
+En caso de que el número inicial de monedas $n$ sea impar, la última moneda que queda es retirada por Sophia en un turno final individual, sumando un valor no negativo que va a mejorar su ventaja. En consecuencia, la regla greedy garantiza formalmente que Sophia gane la partida (del caso del empate se va a hablar en la demostración oficial).
+
 \subsection{Pensamiento Greedy}
 
 Para entender mejor la naturaleza del pensamiento Greedy, vamos a analizarlo desde una perspectiva económica y filosófica.
