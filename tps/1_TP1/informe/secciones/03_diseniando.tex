@@ -1,46 +1,53 @@
-\section{Diseño del Algoritmo}
+\section{Diseñando del Algoritmo}
 
-. explico la logica del algoritmo y como llegamos a eso
-. muestro el codigo (entero? entra/me sirve? si es corto ponerlo, y si no vemos.)
-. explico el por qué hago la implementacion de esa manera
+¿Por qué se elige para Sophia la mayor de las monedas y para Mateo la menor entre cada par?
+Si la regla hubiera sido: ''Para cada par, se elige la mayor.'', se le está dando la opción a Mateo de tener mayor puntaje, y el riesgo de Sophia de que eligiendo la mayor puede seguir después de esa una mayor a la elegida.
+
+A veces la intuición falla, por eso hubo que pensar bien la técnica a realizar. Habiendo ya hablado de la secuencia de elecciones que se realizan para llegar a la solución del problema (Sophia gana), hay que pasar esa parte a la \textit{lógica algorítmica}. ¿Cuál es el paso a paso en cualquier caso de monedas? ¿Cuál puede ser el peor caso posible? ¿Cómo interactúa el algoritmo con los datos del problema? ¿Cómo se pasan los datos del problema al idioma computacional?
 
 \subsection{Lógica}
 
+Una fila de $n$ monedas, se puede implementar con un simple arreglo de enteros. Donde cada posición representa una moneda, con su valor asociado.
+El turno va a empezar siendo de Sophia, y es donde va a empezar la elección. 
+
+La lógica se gestiona de manera eficiente utilizando dos punteros que delimitan los extremos disponibles de la fila  \texttt{inicio} (inicializado en la primera posición) y \texttt{fin} (inicializado en la última). En cada turno, se evalúan los valores apuntados por los dos extremos. Después de cada elección, el puntero correspondiente se desplaza hacia el centro de la fila, reduciendo el espacio de búsqueda (porque ya seleccionamos dicha moneda).
+
+Una vez que termina las selecciones de una ronda, el control se alterna de forma automática. Siguiendo el marco teórico \textit{greedy}, esta secuencia iterativa sigue hasta que el juego termina, escenario que ocurre de forma cuando los punteros se cruzan, indicando que ya no quedan monedas disponibles en la mesa para seleccionar. Cada valor de la moneda seleccionada fue guardada en \texttt{puntos} para ir guardando los resultados obtenidos.
+
+
+
+
 \subsection{Código}
 
-
-
-
-\begin{lstlisting}[language=Python]
-import sys
-
-PRIMERO = 0
-ULTIMO = -1
-
-def juego(monedas: list[int]):
-    pts_mateo = pts_sophia = 0
-    
+\begin{lstlisting}[mathescape=true]
+JuegoMonedas(monedas[1, 2, 3,..., n]):
+    puntos_sophia = 0
+    puntos_mateo = 0
+    inicio = 1
+    fin = n
     turno = True
     
-    while len(monedas) > 0:
-        if turno:
-            if monedas[PRIMERO] > monedas[ULTIMO]:
-                pts_sophia += monedas[PRIMERO]
-                monedas[:] = monedas[PRIMERO+1:]
-                sys.stdout.write("Primera moneda para Sophia;")
-            else:
-                pts_sophia += monedas[ULTIMO]
-                monedas[:] = monedas[:ULTIMO]
-                sys.stdout.write("Ultima moneda para Sophia;")
-        else:
-            if monedas[PRIMERO] > monedas[ULTIMO]:
-                pts_mateo += monedas[ULTIMO]
-                monedas[:] = monedas[:ULTIMO]
-                sys.stdout.write("Ultima moneda para Mateo;")
-            else:
-                pts_mateo += monedas[PRIMERO]
-                monedas[:] = monedas[PRIMERO+1:]
-                sys.stdout.write("Primera moneda para Mateo;")
-        turno = not turno
+    While inicio $\le$ fin:
+        If turno:
+            // Turno de Sophia (maximiza su ganancia local)
+            If monedas[inicio] > monedas[fin]:
+                puntos_sophia = puntos_sophia + monedas[inicio]
+                inicio = inicio + 1
+            Else:
+                puntos_sophia = puntos_sophia + monedas[fin]
+                fin = fin - 1
+    
+        Else:
+            // Turno de Mateo (Sophia minimiza la ganancia de el)
+            If monedas[inicio] > monedas[fin]:
+                puntos_mateo = puntos_mateo + monedas[fin]
+                fin = fin - 1
+            Else:
+                puntos_mateo = puntos_mateo + monedas[inicio]
+                inicio = inicio + 1
         
+        turno = no turno // alternar el control del juego
+    
+    Devuelvo (puntos_sophia, puntos_mateo)
+
 \end{lstlisting}

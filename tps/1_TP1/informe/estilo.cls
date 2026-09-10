@@ -73,7 +73,7 @@
 %	HEADERS, FOOTERS EN SECCIONES
 %------------------------------------------------------------------------------
 \pagestyle{fancy}
-\setlength{\headheight}{27pt}
+\setlength{\headheight}{30pt}
 
 \renewcommand{\headrulewidth}{1pt}
 \renewcommand{\footrulewidth}{1pt}
