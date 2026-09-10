@@ -1,10 +1,5 @@
 \section{Analizando el Algoritmo}
 
-complejidad
-	. explico la complejidad
-	. la demuestro
-	. pongo ejemplos
-
 Para analizar el algoritmo propuesto anteriormente, se puede ocurrir la manera de poner un ejemplo para analizar el comportamiento:
 Siendo monedas = [1, 3, 4, 9, 6, 2]
 \begin{enumerate}
@@ -12,14 +7,19 @@ Siendo monedas = [1, 3, 4, 9, 6, 2]
 	\item Entonces, si se suman los valores de todas las monedas seleccionadas para cada uno: Puntos de Sophia = 2 + 6 + 9 = 17. Puntos de Mateo = 1 + 3 + 4 = 8. 
 	\item Sophia gana.
 \end{enumerate}
-	
-	
-	
+
+Se puede analizar el algoritmo implementado de varias formas, que vamos a estar explicando a continuación. Entre ellas, se va a hablar de la complejidad temporal y espacial algorítmica del algoritmo, el por qué tiene esos valores y si es posible mejorarla.
+
+También se habla de la optimalidad del algoritmo, anteriormente se hizo una breve presentación de ésta la cual ahora se va a explayar más y se va a demostrar matemáticamente por el método inductivo.
+
+Por último se van a realizar experimentos sobre el mismo algoritmo, poniendolo sobre arreglos de distintos tamaños para hacer mediciones de tiempo distintos.
+
+
 \subsection{Complejidad}
 
-Cuando hablamos de \textit{complejidad algorítmica},
+Cuando se habla de \textit{complejidad algorítmica},
 
-\subsection{Demostración}
+\subsection{Demostración de la Optimalidad}
 POR INDUCCION
 
 DEMOSTRACION
@@ -27,9 +27,28 @@ DEMOSTRACION
 	. hago la demostracion del empate.
 	. mostrar ejemplos (5 creo que esta bien, 3 bordes, 2 normales) y como funciona
 
+¿Por qué el algoritmo es óptimo? ¿Que significa que sea óptimo? ¿Qué demostración es necesaria para considerarse óptimo? ¿Cuál es el peor caso posible de monedas a elegir?
+
+Que un algoritmo sea \textit{óptimo} significa que para cualquier caso o ejemplo de ejecución del problema, devuelva la mejor solución posible. Cuando se habla de algoritmos \textit{greedy}, su demostración de que sean óptimos puede ser un tanto difícil. Una vez demostrada y habiendo justificado que sea óptimo, se puede asumir que el mismo algoritmo lleva una de las mejores soluciones de ''manera'' greedy.
+
+Las demostraciones matemáticas son las mas concisas cuando hablamos de optimalidad, a continuación se va a realizar la demostración por \textbf{método inductivo}. Va a consistir de 3 pasos: proponer el caso base, proponer el caso inductivo y demostrar que se cumple en todo momento.
+
+Para el caso base, se puede proponer el conjunto de monedas de una sola: [$c_i$] con $c_i > 0$. Pero como Sophia siempre va a empezar, va a agarrar la que queda y para todo $c_i$ va a ser mayor a los puntos sumados por Mateo, que son = 0.
+
+Entonces se propone el caso base con $M_1$ = [$c_i$, $c_j$], $c_i \ge c_j > 0$
+
+Acá es donde entra la discución del empate, la única manera de que Sophia y Mateo hayan empatado aplicando el algoritmo greedy, es en la que la cantidad de monedas $n$ sea par y todas de mismo valor. Es el único caso borde que exista que puedan empatar (con $n > 0$) y no se va a asumir que ocurra en ningún momento.
+
+Ya habiendo descartado ese caso, se puede hablar con tranquilidad sobre cada caso par con límites entre Sophia y Mateo. Por ejemplo, monedas = [2, 2, 3, 2]. Si se aplica el algoritmo, Sophia va a terminar ganando por 1 punto. Entonces, ¿Gana siempre?
+
+Para el caso base, se demostró que gana Sophia. Para el caso inductivo, vamos a demostrar otro conjunto de monedas $M_2$ = [$c_{i+1}$, $c_{j+1}$], que cumple con: 
+
+\[
+M_1, M_2, no tengo idea
+\]
+
 
 \subsection{Experimentos}
 
 	. pongo mediciones en tiempo de distintos casos (hago el grafico y pongo la foto.png)
 		. tiempos del algoritmo. 
-		. optimalidad del algoritmo. (que es optimalidad ¿?)
