@@ -1,7 +1,12 @@
 \section{Conclusión}
 
-El análisis interdisciplinario presentado en este trabajo permite trazar un paralelismo formal entre la teoría de algoritmos y los modelos clásicos de la filosofía moral y la economía. Se demostró que la estrategia \textit{Greedy} implementada para resolver el problema de Sophia y Mateo se rige bajo una lógica estrictamente deontológica y de liberalismo clásico: la ejecución sistemática de decisiones óptimas a nivel local.
+El desarrollo de este trabajo práctico permitió analizar de forma compleja las capacidades y limitaciones del paradigma \textit{Greedy} aplicado al problema explicado. 
+La implementación de una regla greedy asimétrica, donde Sophia maximiza su beneficio local inmediato y minimiza el de Mateo, demostró ser una solución óptima, logrando una complejidad temporal lineal $\mathcal{O}(n)$ y espacial constante $\mathcal{O}(1)$ que fue corroborada usando el ajuste de Cuadrados Mínimos.
 
-A través de las mediciones empíricas y el ajuste por cuadrados mínimos, se corroboró que la eficiencia temporal del algoritmo se mantiene asintóticamente ligada a su complejidad teórica, independientemente de la variabilidad o dispersión en las denominaciones de las monedas. No obstante, el hallazgo más relevante radica en los límites del propio paradigma. Si bien en este escenario particular la estructura del problema (la alternancia de turnos y las reglas de selección en los extremos) garantiza un óptimo global ineludible, en la informática general el pensamiento voraz actúa como un utilitarismo cortoplacista. La incapacidad de aceptar pérdidas locales en pos de un beneficio futuro condena a este enfoque a fallar ante problemas de mayor complejidad estructural, donde se vuelve mandatorio migrar hacia paradigmas más robustos como la Programación Dinámica.
+Igualmente, el análisis más relevante de este escenario se basa en comprender las condiciones estrictas que habilitan la optimalidad del enfoque greedy. La estrategia implementada garantiza la victoria absoluta de Sophia únicamente por una restricción crucial de la consigna: ella tiene el control total sobre las decisiones de Mateo, anulando su capacidad de contrajuego. 
 
-En síntesis, los algoritmos \textit{Greedy} demuestran que, bajo las restricciones matemáticas adecuadas, la "suma de egoísmos locales" puede conducir al bienestar global del sistema, consolidando un puente conceptual donde la ingeniería del software y la estructura económica clásica convergen en una misma solución óptima.
+En conclusión, el problema propuesto muestra con precisión los fundamentos teóricos en el diseño de algoritmos: las soluciones greedy son herramientas ''poderosas'', elegantes y rápidas, pero su éxito está vinculado a la estructura del entorno. 
+Una leve modificación en las reglas del juego o en el comportamiento de los actores puede llegar a transformar un algoritmo lineal óptimo en una estrategia deficiente por el problema de no tener la visión del ''Big Picture''. 
+
+Algoritmos greedy, gran diseño, gran solución, peligroso pensamiento. 
+
