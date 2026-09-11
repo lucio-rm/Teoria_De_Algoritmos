@@ -19,6 +19,22 @@ Por último se van a realizar experimentos sobre el mismo algoritmo, poniendolo 
 
 Cuando se habla de \textit{complejidad algorítmica},
 
+
+La complejidad del algoritmo diseñado para representar la sesión de juego de Sophia y Mateo es de $\mathcal{O}(n)$, esto debido a que se recorre todo el arreglo y por cada iteración lo único que se hace es comparar el elemento del principio con el del final, en basea eso y segun de quien sea el turno, se elige el más alto o el más bajo. Por cada pasada el arreglo se achica por izquierda o por derecha según se elija un elemento.
+
+Una demostracion de esto seria:
+\begin{itemize}
+    \item Comparar \verb|monedas[inicio]| con \verb|monedas[fin]| es $\mathcal{O}(1)$.
+    \item Elegir el mayor o el menor según el turno es $\mathcal{O}(1)$.
+    \item Mover los punteros de \verb|inicio| y \verb|fin| sumando o restando es $\mathcal{O}(1)$.
+\end{itemize}
+
+Todo esto termina derivando en una ecuación de recurrencia
+\begin{equation*} 
+    \mathcal{T}(n) = \sum_{i=1}^{n-1} \mathcal{O}(1) = \mathcal{O}(n)
+\end{equation*}
+
+
 \subsection{Demostración de la Optimalidad}
 POR INDUCCION
 
@@ -50,5 +66,19 @@ M_1, M_2, no tengo idea
 
 \subsection{Experimentos}
 
-	. pongo mediciones en tiempo de distintos casos (hago el grafico y pongo la foto.png)
-		. tiempos del algoritmo. 
+
+Se realizaron distintos experimentos en funcion a crear veinte arreglos de distintos tamaños, cada uno con una cantidad de elementos que van desde cien hasta diez millones de elementos equiespaciados, por lo que la separacion entre cada numero es de aproximadamente 526.310 numeros. Luego cada arreglo va a recibir numeros psudoaleatorios que van desde el cero hasta cien mil (módulo \texttt{random}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/Tiempo_y_ajuste.png}
+\end{figure}
+
+Se puede observar que el algoritmo es $\mathcal{O}(n)$, debido a que se puede observar como el ajuste es minimo, presentando una superposición prácticamente exacta con la recta de ajuste en todo el rango evaluado y sigue la linealidad del incremento de elementos en el arreglo.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/Error_ajuste.png}
+\end{figure}
+
+En este otro gráfico se refuerzan los argumentos de antes, donde se puede ver un \texttt{error cuadrático medio} despreciable y se mantiene acotado en todo el rango, validando que el algoritmo cuenta con una complejidad temporal $\mathcal{O}(n)$.
