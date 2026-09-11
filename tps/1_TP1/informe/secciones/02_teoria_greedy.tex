@@ -34,33 +34,11 @@ En el contexto del problema, el estado del juego queda determinado por la fila r
     \item \textbf{En el turno de Mateo:} Sophia elige para él la moneda de menor valor entre los dos extremos disponibles.
 \end{itemize}
 
-\subsubsection{Demostración de victoria}
+\noindent\textbf{Demostración de victoria:} \\
+Para ir pensando en la idea del por qué esta regla garantiza que Sophia nunca pierda, se puede analizar como avanza el juego en bloques de rondas formadas por dos turnos consecutivos (el de Sophia seguido por el de Mateo), cada dos turnos se eligen 2 monedas del total. 
+Como Sophia gestiona las dos decisiones, su estrategia la ejecuta pensandolo como la regla greedy: maximiza su propia ganancia eligiendo el valor más alto de los dos extremos, y después, minimiza la elección de Mateo eligiendole el menor valor que quede.
 
-Para demostrar brevemente que Sophia nunca pierde aplicando esta regla, se analiza el progreso del juego en rondas compuestas por dos turnos consecutivos: el turno de Sophia seguido inmediatamente por el de Mateo.
-
-Sean $c_i$ y $c_j$ las monedas ubicadas en los extremos izquierdo y derecho de la fila al inicio de la ronda $k$, respectivamente ($i < j$). Por simetría, suponer que $c_i \ge c_j$:
-\begin{enumerate}
-    \item Sophia aplica la regla \textit{greedy} sobre su propia jugada y selecciona:
-    \[
-    S_k = \max(c_i, c_j) = c_i
-    \]
-    \item Se remueve $c_i$, los nuevos extremos disponibles para Mateo pasan a ser $c_{i+1}$ y $c_j$.
-    \item Sophia aplica la regla greedy sobre el turno de Mateo y elige para él:
-    \[
-    M_k = \min(c_{i+1}, c_j)
-    \]
-    \item Por definición de la función mínimo\footnote{La función mínimo, en el ámbito de matemáticas y programación, simplemente toma un grupo de números y devuelve el más pequeño de todos.}, se cumple que $M_k \le c_j$. Dado que por la elección inicial de Sophia se cumple $c_j \le c_i = S_k$, se puede concluir que:
-    \[
-    M_k \le c_j \le S_k \implies S_k \ge M_k
-    \]
-\end{enumerate}
-
-De este modo, en cada ronda $k$, la ganancia obtenida por Sophia es mayor o igual a la asignada a Mateo ($S_k \ge M_k$). Sumando a lo largo de las $\lfloor n/2 \rfloor$ rondas completas del juego, el puntaje acumulado de Sophia siempre se mantendrá por encima o igual al de Mateo:
-\[
-\sum_{k=1}^{\lfloor n/2 \rfloor} S_k \ge \sum_{k=1}^{\lfloor n/2 \rfloor} M_k
-\]
-
-En caso de que el número inicial de monedas $n$ sea impar, la última moneda que queda es retirada por Sophia en un turno final individual, sumando un valor no negativo que va a mejorar su ventaja. En consecuencia, la regla greedy garantiza formalmente que Sophia gane la partida (del caso del empate se va a hablar en la demostración oficial).
+Más adelante se va a detallar en la sección de optimalidad, esta relación que asegura que en cada ronda, el valor que va a ir sumando Sophia va a ser mayor o igual a la que recibe su hermano (terminando siempre mayor, ganandole a Mateo). 
 
 \subsection{Pensamiento Greedy}
 

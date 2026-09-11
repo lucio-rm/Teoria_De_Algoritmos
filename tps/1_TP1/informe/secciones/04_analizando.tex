@@ -36,49 +36,73 @@ Todo esto termina derivando en una ecuación de recurrencia
 
 
 \subsection{Demostración de la Optimalidad}
-POR INDUCCION
 
-DEMOSTRACION
-	. hago la demostracion matematica del por qué es optimo. demostracion por induccion. que sea precisa y clara.
-	. hago la demostracion del empate.
-	. mostrar ejemplos (5 creo que esta bien, 3 bordes, 2 normales) y como funciona
+Que el algoritmo planteado sea \textit{óptimo} implica que la estrategia \textit{greedy} es suficiente para garantizar que Sophia gane siempre matemáticamente (obtener una sumatoria de valores mayor o igual a la de Mateo) en cualquier escenario posible, independientemente de la distribución de los valores. 
+Se va a sacar de esta demostración el caso borde de un arreglo de tamaño $n$ par donde todos los elementos son iguales, ya que va a resultar en un empate. Cuando se habla de algoritmos greedy, su demostración de que sean óptimos puede ser un tanto difícil. Una vez demostrada y habiendo justificado que sea óptimo, se puede asumir que el mismo algoritmo lleva una de las mejores soluciones de ''manera'' greedy.
 
-¿Por qué el algoritmo es óptimo? ¿Que significa que sea óptimo? ¿Qué demostración es necesaria para considerarse óptimo? ¿Cuál es el peor caso posible de monedas a elegir?
+Para demostrar que funcione siempre la regla greedy propuesta, se va utilizar la \textit{Demostración por Inducción Matemática}. Se define nuestra variable de inducción $k$ como la cantidad de \textit{rondas} del juego. En cada ronda, se extraen exactamente 2 monedas (la elección de Sophia y la elección subsecuente de Mateo). Por lo tanto, un juego con $2k$ monedas equivale a $k$ rondas.
 
-Que un algoritmo sea \textit{óptimo} significa que para cualquier caso o ejemplo de ejecución del problema, devuelva la mejor solución posible. Cuando se habla de algoritmos \textit{greedy}, su demostración de que sean óptimos puede ser un tanto difícil. Una vez demostrada y habiendo justificado que sea óptimo, se puede asumir que el mismo algoritmo lleva una de las mejores soluciones de ''manera'' greedy.
+\textbf{Hipótesis Inductiva $P(k)$:} 
+Dada una fila de $2k$ monedas, la estrategia greedy garantiza que la ganancia acumulada de Sophia ($S_{total}$) será mayor o igual a la ganancia acumulada de Mateo ($M_{total}$). Es decir, $S_{total} \ge M_{total}$.
 
-Las demostraciones matemáticas son las mas concisas cuando hablamos de optimalidad, a continuación se va a realizar la demostración por \textbf{método inductivo}. Va a consistir de 3 pasos: proponer el caso base, proponer el caso inductivo y demostrar que se cumple en todo momento.
+\vspace{1ex}
+\noindent\textbf{Paso Base ($k = 1$):} \\
+El juego contiene $2(1) = 2$ monedas, guardadas en el arreglo $A = [c_1, c_2]$. 
+Sophia, de manera avariciosa bajo su regla greedy, elegirá el máximo de los extremos. Su ganancia será $S_1 = \max(c_1, c_2)$.
+En consecuencia, el arreglo se reduce a una sola moneda, la cual Mateo está obligado a tomar. Su ganancia será $M_1 = \min(c_1, c_2)$.
+Al descartar el caso del empate (que esas mismas 2 monedas sean de igual valor), se cumple que:
+\[ \max(c_1, c_2) > \min(c_1, c_2) \implies S_1 > M_1 \]
+El caso base $P(1)$ es verdadero.
 
-Para el caso base, se puede proponer el conjunto de monedas de una sola: [$c_i$] con $c_i > 0$. Pero como Sophia siempre va a empezar, va a agarrar la que queda y para todo $c_i$ va a ser mayor a los puntos sumados por Mateo, que son = 0.
+\vspace{1ex}
+\noindent\textbf{Paso Inductivo:} \\
+Se asume que $P(k)$ es verdadero. Eso significa que, para cualquier arreglo de $2k$ monedas, la estrategia garantiza que $S_{k\_rondas} > M_{k\_rondas}$.
+Ahora se tiene que demostrar que $P(k+1)$ también es verdadero para un arreglo inicial de $2(k+1) = 2k + 2$ monedas.
 
-Entonces se propone el caso base con $M_1$ = [$c_i$, $c_j$], $c_i \ge c_j > 0$
+En la primera ronda del juego con $2k + 2$ monedas, los extremos disponibles son $c_1$ y $c_{2k+2}$.
+Sophia aplica su regla y elige $S_{ronda\_1} = \max(c_1, c_{2k+2})$. 
+Supongamos que elige $c_1$. El arreglo se reduce a los elementos desde $c_2$ hasta $c_{2k+2}$.
 
-Acá es donde entra la discución del empate, la única manera de que Sophia y Mateo hayan empatado aplicando el algoritmo greedy, es en la que la cantidad de monedas $n$ sea par y todas de mismo valor. Es el único caso borde que exista que puedan empatar (con $n > 0$) y no se va a asumir que ocurra en ningún momento.
+Después, Sophia ejecuta el turno de Mateo aplicando la regla greedy para él: elegir el mínimo de los nuevos extremos disponibles ($c_2$ y $c_{2k+2}$).
+Mateo gana $M_{ronda\_1} = \min(c_2, c_{2k+2})$.
 
-Ya habiendo descartado ese caso, se puede hablar con tranquilidad sobre cada caso par con límites entre Sophia y Mateo. Por ejemplo, monedas = [2, 2, 3, 2]. Si se aplica el algoritmo, Sophia va a terminar ganando por 1 punto. Entonces, ¿Gana siempre?
+Por la definición de la función mínimo\footnote{La función mínimo, en el ámbito de matemáticas y programación, simplemente toma un grupo de números y devuelve el más pequeño de todos.}, sabemos que $M_{ronda\_1} \le c_{2k+2}$. 
+A su vez, como Sophia eligió $c_1$ por ser el máximo inicial, sabemos que $c_1 > c_{2k+2}$.
+Se puede deducir que:
+\[ S_{ronda\_1} = c_1 \ge c_{2k+2} \ge \min(c_2, c_{2k+2}) = M_{ronda\_1} \]
+\[ S_{ronda\_1} \ge M_{ronda\_1} \]
 
-Para el caso base, se demostró que gana Sophia. Para el caso inductivo, vamos a demostrar otro conjunto de monedas $M_2$ = [$c_{i+1}$, $c_{j+1}$], que cumple con: 
+Luego de esta primera ronda, quedan exactamente $2k$ monedas en la mesa. Por nuestra \textbf{Hipótesis Inductiva}, se sabe que si ambos jugadores continúan aplicando la misma estrategia sobre estas $2k$ monedas restantes, se cumplirá que la ganancia de las rondas subsecuentes será $S_{resto} \ge M_{resto}$.
 
-\[
-M_1, M_2, no tengo idea
-\]
+La ganancia total del juego será la suma de la primera ronda más el resto de las rondas:
+\[ S_{total} = S_{ronda\_1} + S_{resto} \]
+\[ M_{total} = M_{ronda\_1} + M_{resto} \]
 
+Y como se ha demostrado que $S_{ronda\_1} \ge M_{ronda\_1}$, que no existe la opción de empate y asumido que $S_{resto} \ge M_{resto}$, al sumar ambas desigualdades se concluye que:
+\[ S_{total} > M_{total} \]
+
+Por lo tanto, si $P(k)$ es verdadero, $P(k+1)$ también lo es. Queda demostrado por inducción que Sophia siempre va a obtener un puntaje mayor l al de Mateo. En caso de que el tamaño inicial del arreglo $N$ sea impar, después de $\lfloor N/2 \rfloor$ rondas completas, Sophia tendrá el turno final para tomar la moneda restante $c_{final} \ge 0$, lo que incrementará aún más su puntaje final, manteniendo la desigualdad $S_{total} > M_{total}$.
 
 \subsection{Experimentos}
 
 
 Se realizaron distintos experimentos en funcion a crear veinte arreglos de distintos tamaños, cada uno con una cantidad de elementos que van desde cien hasta diez millones de elementos equiespaciados, por lo que la separacion entre cada numero es de aproximadamente 526.310 numeros. Luego cada arreglo va a recibir numeros psudoaleatorios que van desde el cero hasta cien mil (módulo \texttt{random}).
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=1\textwidth]{images/Tiempo_y_ajuste.png}
+    \includegraphics[width=0.75\textwidth]{images/Tiempo_y_ajuste.png}
+	\caption{Tiempo de ejecución en función de la cantidad de elementos ($N$).}
+	\label{fig:tiempo}
 \end{figure}
 
-Se puede observar que el algoritmo es $\mathcal{O}(n)$, debido a que se puede observar como el ajuste es minimo, presentando una superposición prácticamente exacta con la recta de ajuste en todo el rango evaluado y sigue la linealidad del incremento de elementos en el arreglo.
+Como se observa en la Figura \ref{fig:tiempo}, la medición presenta un una superposición prácticamente exacta con la recta de ajuste de Cuadrados Mínimos\footnote{La técnica de Cuadrados Mínimos es un método de optimización matemática que, en este análisis, permite encontrar la función lineal que mejor se ajusta al conjunto de datos experimentales, \textit{minimizando} la suma de los errores al cuadrado entre los \textit{tiempos de ejecución} medidos y la recta $\mathcal{O}(N)$.}. Esto evidencia un comportamiento lineal respecto al incremento de elementos en el arreglo, confirmando que la complejidad temporal es $\mathcal{O}(N)$.
 
-\begin{figure}[H]
+
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=1\textwidth]{images/Error_ajuste.png}
+    \includegraphics[width=0.75\textwidth]{images/Error_ajuste.png}
+	\caption{Error absoluto del ajuste por Cuadrados Mínimos.}
+	\label{fig:error}
 \end{figure}
 
-En este otro gráfico se refuerzan los argumentos de antes, donde se puede ver un \texttt{error cuadrático medio} despreciable y se mantiene acotado en todo el rango, validando que el algoritmo cuenta con una complejidad temporal $\mathcal{O}(n)$.
+En la Figura \ref{fig:error} se refuerza el argumento, observando que el error absoluto se mantiene acotado y en magnitudes despreciables a lo largo de todo el rango de $N$, validando la complejidad temporal del algoritmo \textit{greedy} implementado.
