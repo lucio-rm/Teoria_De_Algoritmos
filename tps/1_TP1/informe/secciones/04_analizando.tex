@@ -32,7 +32,7 @@ La \textbf{complejidad temporal} del algoritmo diseñado para representar la ses
 
 Como cada iteración del algoritmo saca una moneda y el se detiene cuando los punteros se cruzan, el bucle se ejecuta exactamente $n$ veces. El tiempo de ejecución total se modela mediante la siguiente sumatoria de operaciones independientes:
 \begin{equation*} 
-    \mathcal{T}(n) = \sum_{i=1}^{n} \mathcal{O}(1) = \mathcal{O}(n)
+    \mathcal{T}(n) = \sum_{i=0}^{n} \mathcal{O}(1) = \mathcal{O}(n)
 \end{equation*}
 
 Por otro lado, el análisis de la \textbf{complejidad espacial} del algoritmo greedy implementado, se puede considerar un poco más directo. Si observan la estructura del código \ref{rec:codigo}, la solución no duplica el arreglo original ni genera subarreglos intermedios mediante operaciones de copia. El algoritmo se limita a crear y actualizar un número fijo de variables (\verb|inicio|, \verb|fin|, \verb|turno| y los contadores de puntaje). Acceder a los valores de un arreglo (representando las monedas), también tiene un valor constante.
@@ -84,7 +84,7 @@ La ganancia total del juego será la suma de la primera ronda más el resto de l
 Y como se ha demostrado que $S_{ronda\_1} \ge M_{ronda\_1}$, que no existe la opción de empate y asumido que $S_{resto} \ge M_{resto}$, al sumar ambas desigualdades se concluye que:
 \[ S_{total} > M_{total} \]
 
-Por lo tanto, si $P(k)$ es verdadero, $P(k+1)$ también lo es. Queda demostrado por inducción que Sophia siempre va a obtener un puntaje mayor l al de Mateo. En caso de que el tamaño inicial del arreglo $N$ sea impar, después de $\lfloor N/2 \rfloor$ rondas completas, Sophia tendrá el turno final para tomar la moneda restante $c_{final} \ge 0$, lo que incrementará aún más su puntaje final, manteniendo la desigualdad $S_{total} > M_{total}$.
+Por lo tanto, si $P(k)$ es verdadero, $P(k+1)$ también lo es. Queda demostrado por inducción que Sophia siempre va a obtener un puntaje mayor l al de Mateo. En caso de que el tamaño inicial del arreglo $n$ sea impar, después de $\lfloor N/2 \rfloor$ rondas completas, Sophia tendrá el turno final para tomar la moneda restante $c_{final} \ge 0$, lo que incrementará aún más su puntaje final, manteniendo la desigualdad $S_{total} > M_{total}$.
 
 \subsection{Experimentos}
 
@@ -94,11 +94,11 @@ Se realizaron distintos experimentos en funcion a crear veinte arreglos de disti
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.60\textwidth]{images/Tiempo_y_ajuste.png}
-	\caption{Tiempo de ejecución en función de la cantidad de elementos ($N$).}
+	\caption{Tiempo de ejecución en función de la cantidad de elementos ($n$).}
 	\label{fig:tiempo}
 \end{figure}
 
-Como se observa en la Figura \ref{fig:tiempo}, la medición presenta un una superposición prácticamente exacta con la recta de ajuste de Cuadrados Mínimos\footnote{La técnica de Cuadrados Mínimos es un método de optimización matemática que, en este análisis, permite encontrar la función lineal que mejor se ajusta al conjunto de datos experimentales, \textit{minimizando} la suma de los errores al cuadrado entre los \textit{tiempos de ejecución} medidos y la recta $\mathcal{O}(N)$.}. Esto evidencia un comportamiento lineal respecto al incremento de elementos en el arreglo, confirmando que la complejidad temporal es $\mathcal{O}(N)$.
+Como se observa en la Figura \ref{fig:tiempo}, la medida presenta un una superposición prácticamente exacta con la recta de ajuste de Cuadrados Mínimos\footnote{La técnica de Cuadrados Mínimos es un método de optimización matemática que, en este análisis, permite encontrar la función lineal que mejor se ajusta al conjunto de datos experimentales, \textit{minimizando} la suma de los errores al cuadrado entre los \textit{tiempos de ejecución} medidos y la recta $\mathcal{O}(n)$.}. Esto evidencia un comportamiento lineal respecto al incremento de elementos en el arreglo, confirmando que la complejidad temporal es $\mathcal{O}(n)$.
 
 
 \begin{figure}[htbp]
@@ -108,4 +108,4 @@ Como se observa en la Figura \ref{fig:tiempo}, la medición presenta un una supe
 	\label{fig:error}
 \end{figure}
 
-En la Figura \ref{fig:error} se refuerza el argumento, observando que el error absoluto se mantiene acotado y en magnitudes despreciables a lo largo de todo el rango de $N$, validando la complejidad temporal del algoritmo \textit{greedy} implementado.
+En la Figura \ref{fig:error} se refuerza el argumento, observando que el error absoluto se mantiene acotado y en magnitudes despreciables a lo largo de todo el rango de $n$, validando la complejidad temporal del algoritmo \textit{greedy} implementado.
