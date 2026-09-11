@@ -17,12 +17,13 @@ Por último se van a realizar experimentos sobre el mismo algoritmo, poniendolo 
 
 \subsection{Complejidad}
 
-Cuando se habla de \textit{complejidad algorítmica},
+Cuando se habla de \textit{complejidad algorítmica}, buscamos en el algoritmo analizarlo de dos maneras: \textit{espacial} y \textit{temporal}. La complejidad espacial analiza el espacio ocupado en memoria y cómo se comporta el algoritmo con respecto a esto. La complejidad temporal se analiza el tiempo en el que tarda en ejecutarse en varios casos de prueba. ¿Cómo se comporta el algoritmo?
+Comúnmente se representa la complejidad de forma matemática, analizando el comportamiento con respecto a una recta, parábola, etc. 
+Además, en este caso vamos a buscar el \textit{peor caso posible}\footnote{Uno de los mejores analisis es buscar el peor caso del algoritmo. En pocos contextos se va a ver que un peor caso ocurra tan poco frecuentemente como para que la medida del caso promedio sea tan diferente al peor caso.}, que va a ser representado con la notación Big-Oh \textit{$\mathcal{O}(funcionMatematica)$}.
 
 
-La complejidad del algoritmo diseñado para representar la sesión de juego de Sophia y Mateo es de $\mathcal{O}(n)$, esto debido a que se recorre todo el arreglo y por cada iteración lo único que se hace es comparar el elemento del principio con el del final, en basea eso y segun de quien sea el turno, se elige el más alto o el más bajo. Por cada pasada el arreglo se achica por izquierda o por derecha según se elija un elemento.
+La \textbf{complejidad temporal} del algoritmo diseñado para representar la sesión de juego de Sophia y Mateo es de $\mathcal{O}(n)$, esto debido a que se recorre todo el arreglo y por cada iteración lo único que se hace es comparar el elemento del principio con el del final, en basea eso y segun de quien sea el turno, se elige el más alto o el más bajo. Por cada pasada el arreglo se achica por izquierda o por derecha según se elija un elemento.
 
-Una demostracion de esto seria:
 \begin{itemize}
     \item Comparar \verb|monedas[inicio]| con \verb|monedas[fin]| es $\mathcal{O}(1)$.
     \item Elegir el mayor o el menor según el turno es $\mathcal{O}(1)$.
@@ -34,6 +35,9 @@ Todo esto termina derivando en una ecuación de recurrencia
     \mathcal{T}(n) = \sum_{i=1}^{n-1} \mathcal{O}(1) = \mathcal{O}(n)
 \end{equation*}
 
+
+La \textbf{complejidad espacial} del algoritmo greedy implementado, se puede considerar un poco más sencilla. Si observan en el código\ref{rec:codigo}, siempre se \textit{accede} al arreglo y se usan variables para representar los puntos, el turno, etc.
+Eso mismo tiene un costo constante, que se representa matemáticamente como O(1).
 
 \subsection{Demostración de la Optimalidad}
 
