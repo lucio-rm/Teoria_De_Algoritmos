@@ -1,5 +1,4 @@
-\section{Diseñando del Algoritmo}
-
+\section{Diseño del Algoritmo}
 ¿Por qué se elige para Sophia la mayor de las monedas y para Mateo la menor entre cada par?
 Si la regla hubiera sido: ''Para cada par, se elige la mayor.'', se le está dando la opción a Mateo de tener mayor puntaje, y el riesgo de Sophia de que eligiendo la mayor puede seguir después de esa una mayor a la elegida.
 
@@ -12,19 +11,19 @@ El turno va a empezar siendo de Sophia, y es donde va a empezar la elección.
 
 La lógica se gestiona de manera eficiente utilizando dos punteros que delimitan los extremos disponibles de la fila  \texttt{inicio} (inicializado en la primera posición) y \texttt{fin} (inicializado en la última). En cada turno, se evalúan los valores apuntados por los dos extremos. Después de cada elección, el puntero correspondiente se desplaza hacia el centro de la fila, reduciendo el espacio de búsqueda (porque ya seleccionamos dicha moneda).
 
-Una vez que termina las selecciones de una ronda, el control se alterna de forma automática. Siguiendo el marco teórico \textit{greedy}, esta secuencia iterativa sigue hasta que el juego termina, escenario que ocurre de forma cuando los punteros se cruzan, indicando que ya no quedan monedas disponibles en la mesa para seleccionar. Cada valor de la moneda seleccionada fue guardada en \texttt{puntos} para ir guardando los resultados obtenidos.
+Una vez que termina las selecciones de una ronda, el control se alterna de forma automática. Siguiendo el marco teórico \textit{greedy}, esta secuencia iterativa sigue hasta que el juego termina, escenario que ocurre cuando los punteros se cruzan, indicando que ya no quedan monedas disponibles en la mesa para seleccionar. Cada valor de la moneda seleccionada fue guardada en \texttt{puntos} para ir guardando los resultados obtenidos.
 
 
 
 
-\subsection{Código}
+\subsection{Código}\label{rec:codigo} % para llamarlo después. en el analisis de la complejidad.
 
 \begin{lstlisting}[mathescape=true]
 JuegoMonedas(monedas[1, 2, 3,..., n]):
     puntos_sophia = 0
     puntos_mateo = 0
-    inicio = 1
-    fin = n
+    inicio = 0
+    fin = n-1
     turno = True
     
     While inicio $\le$ fin:

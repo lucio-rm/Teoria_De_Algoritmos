@@ -12,7 +12,7 @@ Esa acción, ese pensamiento, esa \textit{secuencia} de acciones se puede denomi
 Ahora formalizandolo, se aplica una regla sencilla que nos permite obtener el/un \textbf{óptimo local} a mi \textbf{estado actual}. Aplicamos iterativamente esa regla, esperando que nos lleve al óptimo global (que sería, la mejor solución).
 
 Un algoritmo es greedy cuando tenemos dicha regla sencilla que sólo mira el estado actual y que busca un óptimo local. Si no podemos enunciar cuál es el óptimo local, el algoritmo no es greedy o lo \textit{estamos pensando mal}.
-Dicho de otra manera, el algoritmo construye una solución paso a paso mediante una secuencia \textit{finita} de estados. En cada estado, el algoritmo selecciona la alternativa que parece ser la mejor en ese intante (la elección del óptimo local), sin reconsiderar decisiones pasadas ni pensar en las consecuencias de pasos futuros.
+Dicho de otra manera, el algoritmo construye una solución paso a paso mediante una secuencia \textit{finita} de estados. En cada estado, el algoritmo selecciona la alternativa que parece ser la mejor en ese instante (la elección del óptimo local), sin reconsiderar decisiones pasadas ni pensar en las consecuencias de pasos futuros.
 
 Pensar de esta manera, como veníamos diciendo sin la visión general del problema, \textit{esperando} que nos lleve al óptimo global, los algoritmos Greedy nos pueden indicar varias cosas:
 \begin{itemize}
@@ -23,7 +23,8 @@ Pensar de esta manera, como veníamos diciendo sin la visión general del proble
     \item Para problemas complejos pueden ser buenas aproximaciones.
 \end{itemize}
 
-Recordar la regla de: Sucesión de óptimos locales -> óptimo global. Esa misma nos va a permitir explicar el por qué un algoritmo es greedy. 
+Recordar la regla de: Sucesión de óptimos locales $\implies$
+ óptimo global. Esa misma nos va a permitir explicar el por qué un algoritmo es greedy. 
 Por último, los algoritmos greedy poseen una propiedad de \textit{subestructura óptima}: Una solución óptima al problema general contiene en su interior soluciones óptimas a los subproblemas derivados de la elección voraz.
 
 \subsection{Regla Greedy buscada}
@@ -34,33 +35,11 @@ En el contexto del problema, el estado del juego queda determinado por la fila r
     \item \textbf{En el turno de Mateo:} Sophia elige para él la moneda de menor valor entre los dos extremos disponibles.
 \end{itemize}
 
-\subsubsection{Demostración de victoria}
+\noindent\textbf{Demostración de victoria:} \\
+Para ir pensando en la idea del por qué esta regla garantiza que Sophia nunca pierda, se puede analizar como avanza el juego en bloques de rondas formadas por dos turnos consecutivos (el de Sophia seguido por el de Mateo), cada dos turnos se eligen 2 monedas del total. 
+Como Sophia gestiona las dos decisiones, su estrategia la ejecuta pensandolo como la regla greedy: maximiza su propia ganancia eligiendo el valor más alto de los dos extremos, y después, minimiza la elección de Mateo eligiendole el menor valor que quede.
 
-Para demostrar brevemente que Sophia nunca pierde aplicando esta regla, se analiza el progreso del juego en rondas compuestas por dos turnos consecutivos: el turno de Sophia seguido inmediatamente por el de Mateo.
-
-Sean $c_i$ y $c_j$ las monedas ubicadas en los extremos izquierdo y derecho de la fila al inicio de la ronda $k$, respectivamente ($i < j$). Por simetría, suponer que $c_i \ge c_j$:
-\begin{enumerate}
-    \item Sophia aplica la regla \textit{greedy} sobre su propia jugada y selecciona:
-    \[
-    S_k = \max(c_i, c_j) = c_i
-    \]
-    \item Se remueve $c_i$, los nuevos extremos disponibles para Mateo pasan a ser $c_{i+1}$ y $c_j$.
-    \item Sophia aplica la regla greedy sobre el turno de Mateo y elige para él:
-    \[
-    M_k = \min(c_{i+1}, c_j)
-    \]
-    \item Por definición de la función mínimo\footnote{La función mínimo, en el ámbito de matemáticas y programación, simplemente toma un grupo de números y devuelve el más pequeño de todos.}, se cumple que $M_k \le c_j$. Dado que por la elección inicial de Sophia se cumple $c_j \le c_i = S_k$, se puede concluir que:
-    \[
-    M_k \le c_j \le S_k \implies S_k \ge M_k
-    \]
-\end{enumerate}
-
-De este modo, en cada ronda $k$, la ganancia obtenida por Sophia es mayor o igual a la asignada a Mateo ($S_k \ge M_k$). Sumando a lo largo de las $\lfloor n/2 \rfloor$ rondas completas del juego, el puntaje acumulado de Sophia siempre se mantendrá por encima o igual al de Mateo:
-\[
-\sum_{k=1}^{\lfloor n/2 \rfloor} S_k \ge \sum_{k=1}^{\lfloor n/2 \rfloor} M_k
-\]
-
-En caso de que el número inicial de monedas $n$ sea impar, la última moneda que queda es retirada por Sophia en un turno final individual, sumando un valor no negativo que va a mejorar su ventaja. En consecuencia, la regla greedy garantiza formalmente que Sophia gane la partida (del caso del empate se va a hablar en la demostración oficial).
+Más adelante se va a detallar en la sección de optimalidad, esta relación que asegura que en cada ronda, el valor que va a ir sumando Sophia va a ser mayor o igual a la que recibe su hermano (terminando siempre mayor, ganandole a Mateo). 
 
 \subsection{Pensamiento Greedy}
 
@@ -68,8 +47,8 @@ Para entender mejor la naturaleza del pensamiento Greedy, vamos a analizarlo des
 
 Del lado económico, un algoritmo \textit{Greedy} se comporta de manera muy similar al liberalismo clásico. Este sistema dice que si cada individuo busca maximizar de forma aislada su propio beneficio inmediato, la suma de egoísmos locales va a llevar de manera natural a un beneficio o bienestar (óptimo global) para \textit{toda} la sociedad. En los algoritmos Greedy se aplica esto mismo: se espera que una sucesión de elecciones óptimas locales nos guíe hacia la solución óptima global.
 
-Otra forma de plantearlo, desde el punto de vista filosófico, podemos contrastar este enfoque mediante el dilema del \textit{Consecuencialismo (o Utilitarismo) contra el Deontologismo}. El consecuencialismo clásico busca maximizar el bienestar general pensando el impacto a largo plazo, asumiendo que a veces es necesario aceptar una pérdida momentánea o local para alcanzar un bien mayor en el futuro. El Deontologismo , va por el lado del cumplimiento estricto de una regla fija sin importar las consecuencias futuras. (Hobbes y Kant).
+Otra forma de plantearlo, desde el punto de vista filosófico, podemos contrastar este enfoque mediante el dilema del \textit{Consecuencialismo (o Utilitarismo) contra el Deontologismo}. El consecuencialismo clásico busca maximizar el bienestar general pensando el impacto a largo plazo, asumiendo que a veces es necesario aceptar una pérdida momentánea o local para alcanzar un bien mayor en el futuro. El Deontologismo, va por el lado del cumplimiento estricto de una regla fija sin importar las consecuencias futuras (frecuentemente analizado a través de la tensión entre el egoísmo racional de Hobbes y la ética del deber de Kant)."
 
 A partir de esto, se puede decir que el pensamiento Greedy actúa como un utilitarismo ''ciego'' o de corto plazo. El algoritmo no es capaz de ''empeorar'' su estado local actual para beneficiarse en el futuro. En cada iteración piensa las consecuencias inmediatas y elige si o si la opción que maximiza su ganancia en ese instante, omitiendo el impacto que tiene en futuras decisiones/iteraciones.
 
-Teniendo en cuenta esta filosofía, pasemos ahora al diseo del algoritmo, manteniendo este enfoque Greedy en cada paso.
+Teniendo en cuenta esta filosofía, pasemos ahora al diseño del algoritmo, manteniendo este enfoque Greedy en cada paso.

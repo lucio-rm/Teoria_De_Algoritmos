@@ -1,6 +1,6 @@
 \section{El Problema}
 
-Cuando Mateo nació, Sophia estaba muy contenta. Finalmente tendría un hermano con quien jugar. Sophi tenía 3 años cuando Mateo nació. Ya desde muy chicos, ella jugaba mucho con su hermano.
+Cuando Mateo nació, Sophia estaba muy contenta. Finalmente tendría un hermano con quien jugar. Sophia tenía 3 años cuando Mateo nació. Ya desde muy chicos, ella jugaba mucho con su hermano.
 
 Pasaron los años, y fueron cambiando los juegos. Cuando Mateo cumplió 4 años, el padre de ambos le explicó un juego a Sophia: Se dispone una fila de \textit{n} monedas, de diferentes valores. En cada turno, un jugador debe elegir alguna moneda. Pero no puede elegir cualquiera: \textit{sólo puede elegir o bien la primera de la fila, o bien la última}. Al elegirla, la remueve de la fila, y le toca luego al otro jugador, quien debe elegir otra moneda siguiendo la misma regla. Siguen agarrando monedas hasta que no quede ninguna. Quien gane será quien tenga el mayor valor acumulado (por sumatoria).
 
@@ -18,7 +18,7 @@ Por último, lo más importante es que la elección va a ser si o sí entre 2 mo
 \begin{itemize}
     \item ¿Cómo se podría hacer que eligiendo $x$ moneda, no haya otra próxima (mayor a $x$) que otro la elija? 
     \item ¿Cómo es posible crear un algoritmo Greedy en el cual sea óptimo para cualquier caso de monedas? 
-    \item ¿Existe un contraejemplo para ese supuesto algoritmo "óptimo"?
+    \item ¿Existe un contraejemplo para ese supuesto algoritmo ''óptimo''?
 \end{itemize}
 Una vez propuesto eso, sigamos pensando para ahora empezar con el planteo.
 
@@ -33,7 +33,7 @@ Lo primero que se tiene que ocurrir es que entre las dos monedas a elegir agarre
 Para que Sophia gane tiene que tener mayor valor total a Mateo, entonces si Sophia agarra por cada par siempre la mayor, Sophia va a agarrar \textit{por Mateo} la menor. Siempre para cada par de monedas, Sophia agarra la mayor para ella y para Mateo va a agarrar la menor entre ellas.
 De manera \textit{avariciosa}.
 
-Sophia gana siempre?
+¿Sophia gana siempre?
 
 \subsection{Consecuencias de la optimalidad}
 

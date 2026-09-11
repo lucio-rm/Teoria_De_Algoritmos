@@ -67,10 +67,24 @@
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor} 
 
 \usepackage[style=authoryear-comp]{biblatex}
+\addbibresource{referencias.bib}
 
 \hypersetup{hidelinks}
-\begin{document}
 
+%\usepackage{setspace}
+\onehalfspacing            % Interlineado 1.5 (Estándar de paper científico)
+\setlength{\parskip}{1.5ex plus 0.5ex minus 0.2ex} % Espacio generoso ENTRE párrafos
+\setlength{\parindent}{0pt} % Elimina la sangría obligatoria para que no quede raro con el parskip
+
+
+
+
+
+
+
+
+\begin{document}
+\nocite{*} % para la bibliografía.
 \maketitle
 
 \justifying
@@ -86,19 +100,14 @@
 \input{secciones/02_teoria_greedy}
 \newpage
 \input{secciones/03_diseniando}
-\newpage
+\vfill
 \input{secciones/04_analizando}
 
 \newpage
 \input{secciones/05_conclusion}
-\newpage
-\input{secciones/1_herramientas}
-\newpage
-\justifying{
-\hypertarget{res}{\section*{Ejemplo de Resolución}}
 
-}
-
+\vfill %para que la bibliografia vaya para abajo.
+\printbibliography[heading=bibintoc, title={Bibliografía}]
 
 \newpage
 \end{document}
