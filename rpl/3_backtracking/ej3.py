@@ -24,6 +24,16 @@ str
 """
 planteo:
 
+lo mismo. pero no me sale la lógica del backatrancking.
+osea, tenog que ir poniendo uno y uno, hasta llegar a la mejor solución. no?
+
+me estoy comiendo la parte de posible solucion, mejor solucion, o solución óptima , no?.
+y me estoy comiendo la parte recursiva, no?
+
+a mejorar, dale dale dale dale dale dale dale dale dale dale.
+
+tengo que poner una reina. tener una func_aux que me diga si en 'x' posicion puedo poner una reina o (me come) la anterior/es y poder ir hasta que si no puedo ponerla, cambiar la pos de la anterior. no?
+
 
 
 """
