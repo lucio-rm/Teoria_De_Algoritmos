@@ -15,6 +15,11 @@ Nota: el ejercicio puede resolverse sin el uso de Grafos, pero en caso de querer
 """
 planteo:
 
+por cada celda, puedo tener una posible_solucion.
+para que sea una posible solucion (por ahora pienso una lista de numeros int.
+tengo que considerar leer cada fila y columna, y descartar todos los numeros que YA aparaecen en esa misma. ananananananaannashe)
+
+esta ejercicio es una baaaaandovich. dale.
 
 
 """
