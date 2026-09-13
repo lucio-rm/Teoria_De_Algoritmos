@@ -18,7 +18,7 @@ digo, consigno un IS comoe l ej.1, ahora cómo sé que es el máximo? y no habia
 planteo ej.4:
 - como me piden el maximo independent set, tengo que probar todas las combinaciones validas y quedarme con la mas grande.
 - llevo un registro de la "mejor_solucion".
-- recorro los vertices. por cada vertice tomo la decision de agregarlo o no agregarlo[cite: 1].
+- recorro los vertices. por cada vertice tomo la decision de agregarlo o no agregarlo.
 - si lo agrego, me aseguro que no sea adyacente a ninguno que ya puse en mi solucion parcial.
 - la poda clave aca para no hacer fuerza bruta inútil: si la cantidad de vertices que tengo en mi solucion parcial, sumada a la cantidad de vertices que todavia me faltan procesar, es menor o igual a la longitud de mi "mejor_solucion" actual, corto la rama. no tiene sentido seguir bajando porque aunque agregue a todos los que quedan, no voy a superar mi record.
 """

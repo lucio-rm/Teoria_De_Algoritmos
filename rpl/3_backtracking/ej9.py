@@ -18,15 +18,16 @@ como lo ves realizarlo de esa manera?
 
 """
 planteo ej.9:
-- tengo una lista de materias. cada materia tiene una lista de cursos posibles. debo elegir solo UNO por materia[cite: 7].
-- esto no es un grafo directamente, es el clásico combinatorio: en la materia 0, pruebo el curso 0. paso a la materia 1, pruebo sus cursos. si se solapan, lo descarto y pruebo el siguiente[cite: 5].
+- tengo una lista de materias. cada materia tiene una lista de cursos posibles. debo elegir solo UNO por materia.
+- esto no es un grafo directamente, es el clásico combinatorio: en la materia 0, pruebo el curso 0. paso a la materia 1, pruebo sus cursos. si se solapan, lo descarto y pruebo el siguiente.
 - al igual que las N reinas, avanzo por "materia" (como las filas).
 - llevo una "solucion_parcial" con los cursos que voy anotando. para validar un curso nuevo, uso la funcion que me dieron y chequeo contra todo lo que ya tengo en mi solucion_parcial.
-- mi caso base: la cantidad de cursos anotados es igual a la cantidad total de materias. cuando esto pasa, lo guardo en una lista "soluciones_finales" (haciendo una copia de la lista parcial[cite: 7]).
+- mi caso base: la cantidad de cursos anotados es igual a la cantidad total de materias. cuando esto pasa, lo guardo en una lista "soluciones_finales" (haciendo una copia de la lista parcial).
 - luego de la llamada recursiva, SIEMPRE saco el curso de la solucion parcial para que el bucle intente con el proximo curso de esa materia. acá devuelvo siempre una lista llena al final, no corto con "return True".
 """
-from compatibles import son_compatibles
+
 from compatibles import *
+
 def _curso_es_valido(curso_nuevo, solucion_parcial):
     for curso_anotado in solucion_parcial:
         if not son_compatibles(curso_nuevo, curso_anotado):
@@ -34,9 +35,9 @@ def _curso_es_valido(curso_nuevo, solucion_parcial):
     return True
 
 def _combinaciones_rec(materias, indice_materia, solucion_parcial, combinaciones_finales):
-    # caso base: anotamos 1 curso por cada materia[cite: 5]
+    # caso base: anotamos 1 curso por cada materia
     if indice_materia == len(materias):
-        combinaciones_finales.append(solucion_parcial[:]) # ojo acá, siempre copia[cite: 7]
+        combinaciones_finales.append(solucion_parcial[:]) # ojo acá, siempre copia
         return
         
     for curso in materias[indice_materia]:
@@ -45,7 +46,7 @@ def _combinaciones_rec(materias, indice_materia, solucion_parcial, combinaciones
             
             _combinaciones_rec(materias, indice_materia + 1, solucion_parcial, combinaciones_finales)
             
-            # backtracking (necesitamos encontrar TODAS, asi que siempre deshacemos)[cite: 5]
+            # backtracking (necesitamos encontrar TODAS, asi que siempre deshacemos)
             solucion_parcial.pop()
 
 def obtener_combinaciones(materias):

@@ -23,11 +23,11 @@ no terminé de entender cuando y por qué devolvemos una copia del arreglo/lista
 """
 """
 planteo ej.5:
-- como el camino hamiltoniano tiene que visitar todos los vertices una vez[cite: 1, 14], necesito un conjunto de visitados para no repetir y una lista para guardar el camino en orden[cite: 1].
-- no se de que vertice salgo, asi que pruebo iniciar el backtracking desde cada vertice iterativamente[cite: 1].
-- en la funcion recursiva, me fijo en los adyacentes del vertice actual. si hay uno que no visite, lo agrego a visitados y al camino, y llamo recursivamente[cite: 1].
-- si llegue a que la longitud de mi camino es igual a la cantidad de vertices totales, gane. devuelvo el camino[cite: 1].
-- si fallo, le aplico backtracking a los visitados (remove) y al camino (pop) para habilitarlo por otro lado[cite: 1].
+- como el camino hamiltoniano tiene que visitar todos los vertices una vez, necesito un conjunto de visitados para no repetir y una lista para guardar el camino en orden.
+- no se de que vertice salgo, asi que pruebo iniciar el backtracking desde cada vertice iterativamente.
+- en la funcion recursiva, me fijo en los adyacentes del vertice actual. si hay uno que no visite, lo agrego a visitados y al camino, y llamo recursivamente.
+- si llegue a que la longitud de mi camino es igual a la cantidad de vertices totales, gane. devuelvo el camino.
+- si fallo, le aplico backtracking a los visitados (remove) y al camino (pop) para habilitarlo por otro lado.
 """
 def camino_hamiltoniano(grafo):
     vertices = grafo.obtener_vertices()
@@ -64,5 +64,5 @@ def _camino_hamiltoniano_dfs(grafo, v, visitados, camino, total_vertices):
 Justificacion de la complejidad ej.5:
 - temporal: O(V!), ya que en el primer paso tenemos V opciones, luego podemos tener (V-1) opciones de adyacentes, y así sucesivamente en un grafo muy denso. En grafos menos densos la complejidad se acota, pero teóricamente es factorial por backtracking.
 - espacial: O(V). La recursión baja hasta una profundidad máxima de V. El set de "visitados" y la lista de "camino" ocupan O(V) de memoria extra.
-El problema de encontrar un Camino Hamiltoniano es NP-Completo[cite: 14]. No existen mejoras de complejidad temporal a polinomiales (asumiendo P!=NP).
+El problema de encontrar un Camino Hamiltoniano es NP-Completo. No existen mejoras de complejidad temporal a polinomiales (asumiendo P!=NP).
 """

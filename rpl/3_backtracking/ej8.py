@@ -29,9 +29,9 @@ esta bien ese pensamiento?
 """
 """
 planteo ej.8:
-- busco una biyección entre el grafo 1 y el grafo 2. es decir, mapear cada vértice de g1 con uno de g2, preservando su estructura de aristas[cite: 13].
+- busco una biyección entre el grafo 1 y el grafo 2. es decir, mapear cada vértice de g1 con uno de g2, preservando su estructura de aristas.
 - primero descarto lo obvio: si tienen distinta cantidad de vértices, devuelvo False.
-- voy iterando los vértices de g1 y para cada uno pruebo asignarle un vértice de g2 que aún no haya sido usado[cite: 4].
+- voy iterando los vértices de g1 y para cada uno pruebo asignarle un vértice de g2 que aún no haya sido usado.
 - antes de asignarlo, verifico: para todo vértice ya mapeado de g1, la existencia (o no) de arista con el vértice actual de g1 DEBE ser exactamente igual a la existencia (o no) de arista en g2 entre los vértices mapeados correspondientes.
 - uso un diccionario "mapping" para acordarme quién es pareja de quién.
 - mi caso base: logré mapear todos los vértices de g1.
@@ -77,7 +77,7 @@ def hay_isomorfismo(g1, g2):
 
 """
 Justificacion de la complejidad
-- temporal: O(V! * V). Donde V es la cantidad de vértices de cada grafo. Generamos todas las permutaciones posibles de mapeo de vértices (esto es el factorial, probamos V opciones para el primero, V-1 para el segundo...)[cite: 4]. Por cada intento de mapeo, la validación chequea las aristas contra los vértices ya mapeados, costando O(V).
+- temporal: O(V! * V). Donde V es la cantidad de vértices de cada grafo. Generamos todas las permutaciones posibles de mapeo de vértices (esto es el factorial, probamos V opciones para el primero, V-1 para el segundo...). Por cada intento de mapeo, la validación chequea las aristas contra los vértices ya mapeados, costando O(V).
 - espacial: O(V). La profundidad máxima del call stack recursivo es V. Las estructuras adicionales ("mapping" y "usados_g2") también albergan a lo sumo V elementos. 
 Sobre la complejidad P vs NP: El problema de Isomorfismo de Grafos (GI) es uno de los pocos problemas célebres que pertenece a NP pero no se sabe si está en P o si es NP-Completo. Actualmente se conocen algoritmos que lo resuelven en tiempo cuasi-polinomial (algoritmo de Babai).
 """

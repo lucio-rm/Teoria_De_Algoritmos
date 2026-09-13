@@ -32,7 +32,7 @@ teniendo en cuenta que si o si tengo que pasar una vez en el tablero.
 
 """
 planteo ej.7:
-- el tablero es una grilla n x n. mi objetivo es encontrar un camino hamiltoniano, es decir, un recorrido que pase por las n*n celdas exactamente una vez[cite: 2, 5, 7].
+- el tablero es una grilla n x n. mi objetivo es encontrar un camino hamiltoniano, es decir, un recorrido que pase por las n*n celdas exactamente una vez.
 - no necesito armar un grafo explícito, las celdas (fila, columna) son mis vértices y los saltos del caballo son mis adyacencias.
 - tengo que crearme la funcioncita que me devuelva los saltos en "l" validos, filtrando los que se caigan del tablero.
 - no sé en qué celda arranca el caballo, así que tengo que probar arrancar en (0,0), luego en (0,1), etc., hasta que alguno me de el camino completo.
@@ -40,19 +40,19 @@ planteo ej.7:
 - mi caso base: ¿tengo n*n elementos en visitados? devuelvo True.
 - si la recursión desde un salto devuelve False, deshago el "add" a visitados y pruebo el siguiente salto.
 """
-def _movimientos_validos(n, f, c):
+def _movimientos_validos(n, fila, columna):
     saltos = [
         (-2, -1), (-2, 1), (-1, -2), (-1, 2),
         (1, -2), (1, 2), (2, -1), (2, 1)
     ]
-    return [(f + df, c + dc) for df, dc in saltos if 0 <= f + df < n and 0 <= c + dc < n]
+    return [(fila + df, columna + dc) for df, dc in saltos if 0 <= fila + df < n and 0 <= columna + dc < n] #holy shet
 
-def _knight_tour_rec(n, f, c, visitados):
+def _knight_tour_rec(n, fila, columna, visitados):
     # caso base: pisamos todas las celdas
     if len(visitados) == n * n:
         return True
         
-    for nf, nc in _movimientos_validos(n, f, c):
+    for nf, nc in _movimientos_validos(n, fila, columna):
         if (nf, nc) not in visitados:
             visitados.add((nf, nc))
             

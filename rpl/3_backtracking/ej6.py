@@ -28,10 +28,10 @@ esta ejercicio es una baaaaandovich. dale.
 planteo ej.6:
 - itero la matriz buscando una celda con valor 0.
 - si no hay ceros, es que la matriz ya esta completamente llena y devuelvo true.
-- cuando encuentro el cero, hago un for del 1 al 9[cite: 3].
-- pregunto si es valido poner ese numero en la fila, columna y submatriz de 3x3 correspondientes[cite: 3].
-- si es valido, lo escribo. llamo recursivamente[cite: 3]. 
-- si la recursion pincha, borro el numero volviendolo 0 (backtracking) y el for prueba el que le sigue[cite: 3].
+- cuando encuentro el cero, hago un for del 1 al 9.
+- pregunto si es valido poner ese numero en la fila, columna y submatriz de 3x3 correspondientes.
+- si es valido, lo escribo. llamo recursivamente. 
+- si la recursion pincha, borro el numero volviendolo 0 (backtracking) y el for prueba el que le sigue.
 - si se me acaban los numeros del for, devuelvo false.
 """
 def es_valido_sudoku(matriz, fila, col, num):
