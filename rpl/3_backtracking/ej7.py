@@ -24,6 +24,8 @@ str
 """
 planteo:
 
+acá, tengo que hacer una funcion "movimiento_caballo()" para analizar las poibles soluciones de moviemiento en "L"?
+teniendo en cuenta que si o si tengo que pasar una vez en el tablero.
 
 
 """

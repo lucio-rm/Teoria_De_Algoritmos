@@ -6,6 +6,12 @@ Se tiene una lista de materias que deben ser cursadas en el mismo cuatrimestre, 
 """
 planteo:
 
+alta paja pensar este.
+
+por cada posible_solución tengo que analizar que no se solapeen entrer comisiones de otras materias y elegir varia cantidad y seguir asi y que pase cierto "filtro" , no?
+
+como lo ves realizarlo de esa manera?
+
 
 
 """
