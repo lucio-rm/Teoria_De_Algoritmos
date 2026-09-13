@@ -1,3 +1,5 @@
+# Aca va el algoritmo del tp1 pero sin las sys.stdout
+
 def juego(monedas: list[int]):
     pts_mateo = pts_sophia = 0
     inicio = 0
@@ -13,11 +15,11 @@ def juego(monedas: list[int]):
                 pts_sophia += monedas[fin]
                 fin -= 1
         else:
-            if monedas[inicio] > monedas[fin]:
+            if monedas[inicio] >= monedas[fin]:
                 pts_mateo += monedas[fin]
                 fin -= 1
             else:
                 pts_mateo += monedas[inicio]
                 inicio += 1
         turno = not turno
-    return (pts_sophia, pts_mateo)
+    return pts_sophia
