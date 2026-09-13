@@ -48,6 +48,7 @@ def no_adyacentes(grafo, n):
     visitados = set()
     
     for v in grafo.obtener_vertices(): # tengo que hacerlo si o si para admitir más de una comp. conexa, o no?
+        #tengo entendido que el for v in grafo en un ejercicio de BT es ilegal.
         todo_ok = True
         if v not in visitados:
             for ady in grafo.obtener_adyacentes(v):
@@ -60,12 +61,4 @@ def no_adyacentes(grafo, n):
                 vert_no_ady.append(v)
 
     return vert_no_ady
-
-
-
-
-
-
-
-    pass
 
