@@ -21,46 +21,48 @@ o uso solo ese último y listo?
 no terminé de entender cuando y por qué devolvemos una copia del arreglo/lista/solución.
 
 """
-
-
+"""
+planteo ej.5:
+- como el camino hamiltoniano tiene que visitar todos los vertices una vez[cite: 1, 14], necesito un conjunto de visitados para no repetir y una lista para guardar el camino en orden[cite: 1].
+- no se de que vertice salgo, asi que pruebo iniciar el backtracking desde cada vertice iterativamente[cite: 1].
+- en la funcion recursiva, me fijo en los adyacentes del vertice actual. si hay uno que no visite, lo agrego a visitados y al camino, y llamo recursivamente[cite: 1].
+- si llegue a que la longitud de mi camino es igual a la cantidad de vertices totales, gane. devuelvo el camino[cite: 1].
+- si fallo, le aplico backtracking a los visitados (remove) y al camino (pop) para habilitarlo por otro lado[cite: 1].
+"""
 def camino_hamiltoniano(grafo):
     vertices = grafo.obtener_vertices()
-    if len(vertices) == 0:
+    if not vertices:
         return []
-    solucion_parcial = []
-    return _cam_ham_rec(grafo, vertices, 0, solucion_parcial)
+    
+    camino = []
+    visitados = set()
+    
+    for v in vertices:
+        if _camino_hamiltoniano_dfs(grafo, v, visitados, camino, len(vertices)):
+            return camino
+    return None
 
-def _cam_ham_rec(grafo, vertices, v_indice, solucion_parcial):
-    visitados_camino = set()
-
-    v = vertices[v_indice]
-
-    if v not in visitados_camino:
-        visitados_camino.add(v) # agrego el vertice al camino hamiltoneano
-
-        for ady in grafo.adyacentes(v):
-            if ady not in visitados_camino:
-                if _puedo_agregarlo(grafo, ady, visitados_camino):
-                    visitados_camino.add(ady)
-                    solucion_parcial.append(ady)
-                    return _cam_ham_rec(grafo, vertices, v_indice + 1, solucion_parcial)
-            else:
-                #tengo que volver, si es adyacente y ya fue visitado, hago el BACKtracking, no?
-                solucion_parcial.pop()
-    return []
-
-def _puedo_agregarlo(grafo, vertice, visitados_camino):
-    for ady in grafo.adyacentes(vertice):
-        if ady in visitados_camino:
-            return False
-
-    return True
+def _camino_hamiltoniano_dfs(grafo, v, visitados, camino, total_vertices):
+    visitados.add(v)
+    camino.append(v)
+    
+    if len(visitados) == total_vertices:
+        return True
+        
+    for w in grafo.adyacentes(v):
+        if w not in visitados: # Esta es la poda natural
+            if _camino_hamiltoniano_dfs(grafo, w, visitados, camino, total_vertices):
+                return True
+                
+    # Backtracking: deshacemos para probar otra rama
+    visitados.remove(v)
+    camino.pop()
+    
+    return False
 
 """
-Justificacion de la complejidad:
-blablabla
-temporal : O(2^V), porque por cada vertice del grafo, se abre en la poda recursiva la opción de utilizarlo y no utilizarlo.
-(esta bien esa justificacion asi bien de nasheeeeeeeeeeeEE?????????????)
-espacial: O(V), porque a lo sumo visitados_camino() va a llenarse con n vertices, que n < v, por lo que O(v) es correcto.
-
+Justificacion de la complejidad ej.5:
+- temporal: O(V!), ya que en el primer paso tenemos V opciones, luego podemos tener (V-1) opciones de adyacentes, y así sucesivamente en un grafo muy denso. En grafos menos densos la complejidad se acota, pero teóricamente es factorial por backtracking.
+- espacial: O(V). La recursión baja hasta una profundidad máxima de V. El set de "visitados" y la lista de "camino" ocupan O(V) de memoria extra.
+El problema de encontrar un Camino Hamiltoniano es NP-Completo[cite: 14]. No existen mejoras de complejidad temporal a polinomiales (asumiendo P!=NP).
 """

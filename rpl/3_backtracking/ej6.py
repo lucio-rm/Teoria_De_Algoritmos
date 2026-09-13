@@ -24,6 +24,59 @@ esta ejercicio es una baaaaandovich. dale.
 
 """
 
+"""
+planteo ej.6:
+- itero la matriz buscando una celda con valor 0.
+- si no hay ceros, es que la matriz ya esta completamente llena y devuelvo true.
+- cuando encuentro el cero, hago un for del 1 al 9[cite: 3].
+- pregunto si es valido poner ese numero en la fila, columna y submatriz de 3x3 correspondientes[cite: 3].
+- si es valido, lo escribo. llamo recursivamente[cite: 3]. 
+- si la recursion pincha, borro el numero volviendolo 0 (backtracking) y el for prueba el que le sigue[cite: 3].
+- si se me acaban los numeros del for, devuelvo false.
+"""
+def es_valido_sudoku(matriz, fila, col, num):
+    # Verifico fila
+    for c in range(9):
+        if matriz[fila][c] == num:
+            return False
+            
+    # Verifico columna
+    for f in range(9):
+        if matriz[f][col] == num:
+            return False
+            
+    # Verifico subgrilla 3x3
+    f_inicio = (fila // 3) * 3
+    c_inicio = (col // 3) * 3
+    for f in range(f_inicio, f_inicio + 3):
+        for c in range(c_inicio, c_inicio + 3):
+            if matriz[f][c] == num:
+                return False
+                
+    return True
+
+def _resolver_sudoku_bt(matriz):
+    for f in range(9):
+        for c in range(9):
+            if matriz[f][c] == 0:
+                for num in range(1, 10):
+                    if es_valido_sudoku(matriz, f, c, num):
+                        matriz[f][c] = num # Aplico
+                        
+                        if _resolver_sudoku_bt(matriz):
+                            return True
+                            
+                        matriz[f][c] = 0 # Backtracking
+                return False # Si probé del 1 al 9 y ninguno anduvo, la rama no tiene solución
+    return True # Si no encontré ningún 0, ya resolví el Sudoku
 
 def resolver_sudoku(matriz):
+    _resolver_sudoku_bt(matriz)
     return matriz
+
+"""
+Justificacion de la complejidad ej.6:
+- temporal: O(9^C), donde C es la cantidad total de celdas vacías (ceros) en la matriz inicial. Por cada celda vacía, ramificamos hasta 9 caminos posibles. Las comprobaciones de validez toman un máximo de 27 comparaciones O(1).
+- espacial: O(C). La pila de llamadas recursivas alcanzará una profundidad igual a la cantidad de celdas vacías C a llenar (a lo sumo 81 en una cuadrícula vacía). Modificamos la matriz in-place, lo que evita almacenar copias redundantes.
+Resolver generalizaciones de Sudoku NxN es NP-Completo.
+"""
