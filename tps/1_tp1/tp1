@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys
 
 def juego(monedas: list[int]):
@@ -27,6 +28,26 @@ def juego(monedas: list[int]):
                 sys.stdout.write("Primera moneda para Mateo;")
         turno = not turno
         
-    sys.stdout.write(f"\nGanancia de Sophia: {pts_sophia}")
+    sys.stdout.write(f"\nGanancia de Sophia: {pts_sophia}\n")
     return pts_sophia
     
+def leer_archivos(ruta):
+    with open(ruta, "r") as archivo:
+        primera_linea = archivo.readline()
+        if not primera_linea.startswith("#"):
+            arreglo = [int(n) for n in primera_linea.split(";")]
+        else: 
+            numeros = archivo.readline()
+            arreglo = [int(n) for n in numeros.split(";")]
+        return arreglo
+    
+def main():
+    if len(sys.argv) < 2:
+        print("Falta pasar un archivo")
+        sys.exit(1)
+        
+    monedas = leer_archivos(sys.argv[1])
+    return juego(monedas)
+    
+if __name__ == "__main__":
+    main()
