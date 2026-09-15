@@ -2,9 +2,9 @@
 \ProvidesClass{estilo}
 \LoadClass[10pt]{article}
 
-\RequirePackage{hyperref}
+%\RequirePackage{hyperref}
 \RequirePackage{verbatim}
-\RequirePackage{attachfile2}
+%\RequirePackage{attachfile2} % lo comento porque no se usa para nada y solo hizo causar errores.
 \RequirePackage{etoolbox}
 \RequirePackage{xparse}
 \RequirePackage{pgffor}
@@ -20,7 +20,7 @@
 \RequirePackage[a4paper, left=30mm, right=30mm, top=30mm, bottom=30mm, marginpar=25mm]{geometry}
 \RequirePackage[utf8]{inputenc}
 \RequirePackage{csquotes}
-
+\graphicspath{{images/}} % indico la carpeta raíz las imágenes
 
 \RequirePackage{tikz}
 
@@ -113,8 +113,8 @@
 	
 	\large
 	\begin{tabular}{c @{\hskip 1.5cm} c @{\hskip 1.5cm} c}
-		Lucio Romero Mascaró & joel joel joel & Valentín Raunic \\
-		113091               & 111111         & 114081
+		Lucio Romero Mascaró & Joel Isaac Fernandez Fox & Valentín Raunic \\
+		113091               & 104424         & 114081
 	\end{tabular}
 	
 	
