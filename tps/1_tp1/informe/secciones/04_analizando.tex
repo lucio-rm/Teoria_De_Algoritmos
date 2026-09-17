@@ -37,7 +37,7 @@ La \textbf{complejidad temporal} del algoritmo diseñado para representar la ses
 
 Como cada iteración del algoritmo saca una moneda y el ciclo se detiene cuando los punteros se cruzan, el bucle se ejecuta exactamente $n$ veces. El tiempo de ejecución total se modela mediante la siguiente sumatoria de operaciones independientes:
 \begin{equation*} 
-    \mathcal{T}(n) = \sum_{i=0}^{n} \mathcal{O}(1) = \mathcal{O}(n)
+    \mathcal{T}(n) = \sum_{i=0}^{n-1} \mathcal{O}(1) = \mathcal{O}(n)
 \end{equation*}
 
 Por otro lado, el análisis de la \textbf{complejidad espacial} del algoritmo greedy implementado, se puede considerar un poco más directo. Si observan la estructura del código \ref{rec:codigo}, la solución no duplica el arreglo original ni genera subarreglos intermedios mediante operaciones de copia. El algoritmo se limita a crear y actualizar un número fijo de variables (\verb|inicio|, \verb|fin|, \verb|turno| y los contadores de puntaje). Acceder a los valores de un arreglo (representando las monedas), también tiene un valor constante.
