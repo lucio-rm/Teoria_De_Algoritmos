@@ -7,30 +7,30 @@ Pasaron los años, y fueron cambiando los juegos. Cuando Mateo cumplió 4 años,
 El problema es que Mateo es aún pequeño para entender cómo funciona esto, por lo que Sophia debe elegir las monedas por él. Digamos, Mateo está “jugando”. Aquí surge otro problema: Sophia es muy competitiva. Será buena hermana, pero no se va a dejar ganar (consideremos que tiene 7 nada más). Todo lo contrario. En la primaria aprendió algunas cosas sobre algoritmos greedy, y lo va a aplicar.
 
 Para transformar esta situación en un problema algorítmico concreto, el desafío es el siguiente:
-Hacer un análisis del problema, y proponer un algoritmo greedy que obtenga la solución óptima al problema planteado: Dados los \textbf{n} valores de todas las monedas, indicar qué monedas debe ir eligiendo Sophia para si misma y para Mateo, de tal forma que se asegure de ganar siempre. Considerar que Sophia siempre comienza (para sí misma).
+Hacer un análisis del problema, y proponer un algoritmo greedy que obtenga la solución óptima al problema planteado: Dados los \textbf{n} valores de todas las monedas, indicar qué monedas debe ir eligiendo Sophia para si misma y para Mateo, de tal forma que se asegure de ganar siempre. Considerar que Sophia \textit{siempre comienza} (para sí misma).
 
 \subsection{Introducción}
 
-Tranquilamente, se puede observar que el objetivo es uno solo: que \textit{Sophia gane}. A eso sumemosle que juega "para los dos lados", siempre por beneficio suyo y Mateo está mas de \textit{observador}.
+Tranquilamente, se puede observar que el objetivo es uno solo: que \textit{Sophia gane}. A eso sumemosle que juega ``para los dos lados'', siempre por beneficio suyo y Mateo está mas de \textit{observador}.
 
 \vspace{0.425cm}
 Por último, lo más importante es que la elección va a ser si o sí entre 2 monedas y el valor entre ellas. Se puede preguntar:
 \begin{itemize}
-    \item ¿Cómo se podría hacer que eligiendo $x$ moneda, no haya otra próxima (mayor a $x$) que otro la elija? 
-    \item ¿Cómo es posible crear un algoritmo Greedy en el cual sea óptimo para cualquier caso de monedas? 
-    \item ¿Existe un contraejemplo para ese supuesto algoritmo ''óptimo''?
+    \item ¿Cómo se podría hacer que eligiendo $x$ moneda (una entre esas dos), no haya otra moneda próxima (mayor a $x$) que otro la elija en el turno siguiente? 
+    \item ¿Cómo es posible crear un algoritmo Greedy en el cual sea óptimo para cualquier caso de monedas? ¿Qué es un algoritmo Greedy y qué significa que sea óptimo?
+    \item ¿Existe un contraejemplo para ese supuesto algoritmo ``óptimo''?
 \end{itemize}
 Una vez propuesto eso, sigamos pensando para ahora empezar con el planteo.
 
 \subsection{Planteamiento}
 
-Hacer que gane siempre Sophia, y tenemos la suerte de que Sophia es la que elige por Mateo también. Entonces, cómo podemos aconsejar a Sophia de tal forma que siempre haga lo que le digamos, gane siempre?
+Hacer que gane siempre Sophia, y tenemos la suerte también de que Sophia es la que elige por Mateo. Entonces, cómo podemos aconsejar a Sophia de tal forma que si siempre hace lo que le hayamos dicho, gane siempre?
 
-Lo primero que se tiene que ocurrir es que entre las dos monedas a elegir agarre siempre la mayor en valor. Eso va a garantizar que siempre termine con una suma mayor que Mateo. O no?
+La primer solución que se tiene que ocurrir es que entre las dos monedas a elegir agarre siempre la mayor en valor. Eso va a garantizar que siempre termine con una suma mayor que Mateo. O no?
 
-¿Qué tiene que elegir Mateo? ¿Qué tiene que elegir Sophia por Mateo?
+Pero, ¿Qué tiene que elegir Mateo? ¿Qué tiene que elegir \textit{Sophia} por Mateo?
 
-Para que Sophia gane tiene que tener mayor valor total a Mateo, entonces si Sophia agarra por cada par siempre la mayor, Sophia va a agarrar \textit{por Mateo} la menor. Siempre para cada par de monedas, Sophia agarra la mayor para ella y para Mateo va a agarrar la menor entre ellas.
+Para que Sophia gane, tiene que tener la mayor cantidad de valor acumulado comparado con Mateo, entonces si Sophia agarra por cada par siempre la mayor, Sophia va a agarrar \textit{por Mateo} la menor. Siempre para cada par de monedas, Sophia agarra la mayor para ella y para Mateo va a agarrar la menor entre estas dos.
 De manera \textit{avariciosa}.
 
 ¿Sophia gana siempre?
@@ -41,15 +41,15 @@ Si gana siempre, significa que:
 
 \begin{itemize}
     \item Las indicaciones propuestas fueron óptimas.
-    \item Si pasamos las instrucciones un algoritmo, ese mismo es óptimo.
+    \item Si pasamos las instrucciones a un algoritmo, ese mismo es óptimo.
     \item Si es posible demostrar un solo contraejemplo, significa que no era óptimo.
-    \item Va a haber que demostrar matemáticamente que es óptimo.
+    \item Va a haber que demostrar matemáticamente que es óptimo y no gana siempre.
     \item Se va a hablar en otro momento sobre el caso borde de un posible empate entre Sophia y Mateo.
 \end{itemize}
 
 
-Las pruebas a realizar de todo esto y mucho más se va a realizar en la lectura que sigue. Se recomienda leer detenidamente cada paso, y si no entiende, releerlo. 
+Las pruebas a realizar de todo esto y mucho más se va a realizar en la lectura que sigue. Se recomienda leer detenidamente cada paso, y si no se entiende, releerlo. 
 
-Y a eso sumarle el pensamiento Greedy, hasta acá se dijo sutilmente como es éste. A continuación, se explica exáctamente eso. Qué es un \textbf{algoritmo Greedy}, por qué se lo llama así, y más que nada cómo se cumple a este problema propuesto.
+A eso sumarle el pensamiento Greedy, hasta acá se dijo sutilmente como es éste. A continuación, se explica exáctamente eso: qué es un \textbf{algoritmo Greedy}, por qué se lo llama así, y más que nada cómo se puede implementar a este problema propuesto.
 
 

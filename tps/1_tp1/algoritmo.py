@@ -1,5 +1,5 @@
-# Aca va el algoritmo del tp1 pero sin las sys.stdout
-
+# pre condiciones: recibe una lista de enteros que representa la cantidad de monedas del juego.
+# post condiciones: devuelve los puntos ganados por sophia, que siempre va a ganar.
 def juego(monedas: list[int]):
     pts_mateo = pts_sophia = 0
     inicio = 0

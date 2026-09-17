@@ -5,13 +5,12 @@
 \usepackage{amsmath}        % para los vectores columnas
 \usepackage{amsfonts}       % para las negrita de pizarra
 \usepackage{amssymb}        % para simbolos matematicos
-%\usepackage{hyperref}       % para utilizar referencias
 \usepackage{multirow}       % para las tablas
+%\usepackage{hyperref} 
 \usepackage{dsfont}
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{ragged2e}       % para que no tire error con \justifying
-
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -38,7 +37,24 @@
 \lstset{style=mystyle}
 
 \usepackage{enumitem,multicol,setspace}
+\onehalfspacing % Interlineado 1.5
+\setlength{\parskip}{1.5ex plus 0.5ex minus 0.2ex} % Espacio entre párrafos
+\setlength{\parindent}{0pt} % Elimina la sangría obligatoria para que no quede raro 
+
+
+\usepackage{hyperref} 
+\hypersetup{
+    hidelinks,
+    pdfstartview={XYZ null null null},
+    pdfview={XYZ null null null}
+}
+
+\usepackage[style=authoryear-comp]{biblatex}
+\addbibresource{referencias.bib}
+
+
 \newcounter{subenum}[enumi] % para las multicolumnas
+
 \renewcommand{\thesubenum}{\arabic{subenum}}
 \usepackage[nomessages]{fp}
 \FPeval\thecolwidth{round(1/4:4)}% Specify number of columns -> column width
@@ -66,20 +82,6 @@
 \usepackage{mathtools}      % floor y ceil
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor} 
-
-\usepackage[style=authoryear-comp]{biblatex}
-\addbibresource{referencias.bib}
-
-\hypersetup{hidelinks}
-
-%\usepackage{setspace}
-\onehalfspacing            % Interlineado 1.5 (Estándar de paper científico)
-\setlength{\parskip}{1.5ex plus 0.5ex minus 0.2ex} % Espacio generoso ENTRE párrafos
-\setlength{\parindent}{0pt} % Elimina la sangría obligatoria para que no quede raro con el parskip
-
-
-
-
 
 
 
