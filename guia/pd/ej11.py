@@ -1,5 +1,10 @@
 """
 
 
+Ej.11 (★★):
+    Dado un número K, se quiere obtener la mínima cantidad de operaciones para llegar desde 0 a K, siendo que las operaciones posibles son:
+        . (i) aumentar el valor del operando en 1;
+        . (ii) duplicar el valor del operando.
+    Implementar un algoritmo que, por programación dinámica, obtenga la menor cantidad de operaciones a realizar (y cuáles son dichas operaciones). Desarrollar la ecuación de recurrencia. Indicar y justificar la complejidad del algoritmo implementado. Aclaración: asegurarse de que el algoritmo presentado sea de programación dinámica, con su correspondiente ecuación de recurrencia.
 
 """
