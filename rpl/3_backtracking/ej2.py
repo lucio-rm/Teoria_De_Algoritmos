@@ -44,7 +44,7 @@ planteo ej.2:
 - me pregunto: ¿de qué va este coloreo? le quiero asignar 1 color de los n posibles a absolutamente todos los vértices.
 - decisiones: me paro en un vértice. ¿qué opciones tengo? los n colores.
 - antes de pintar, me pregunto: ¿es válido este color? reviso todos los adyacentes a mi vértice actual. si alguno de sus vecinos ya está pintado con ese mismo color, no puedo usarlo y sigo con el próximo.
-- caso base: logré procesar a todos los vértices exitosamente, o sea, llegué a que `v_indice == len(vertices)`. devuelvo True.
+- caso base: logré procesar a todos los vértices exitosamente, o sea, llegué a que v_indice == len(vertices). devuelvo True.
 - si pruebo los n colores para un vértice y ninguno es válido, o ninguno lleva a una solución final, devuelvo False. al retroceder, hago el "del colores[v]" (backtracking) y el vértice anterior prueba su siguiente color.
 """
 def es_color_valido(grafo, v, color, colores):
@@ -59,15 +59,15 @@ def _colorear_bt(grafo, n, vertices, v_indice, colores):
         
     v = vertices[v_indice]
     
-    # Decisión: probar colores de 0 a n-1
+    # pruebo colores de 0 a n-1
     for color in range(n):
         if es_color_valido(grafo, v, color, colores):
-            colores[v] = color # Aplico
+            colores[v] = color 
             
             if _colorear_bt(grafo, n, vertices, v_indice + 1, colores):
                 return True
                 
-            del colores[v] # Backtracking! Deshago
+            del colores[v] # hago el backtracking
             
     return False
 
@@ -80,6 +80,8 @@ def colorear(grafo, n):
 """
 Justificacion de la complejidad
 - temporal: O(n^V) donde n es la cantidad de colores (las opciones posibles) y V la cantidad de vértices. para cada vértice abrimos un factor de ramificación de n en la recursión en el peor caso, generando un árbol de recursión de n a la potencia V. la validación de adyacencias suma un costo O(V), resultando en O(V * n^V).
-- espacial: O(V) por la profundidad del call stack recursivo (un nivel por vértice) y el diccionario de `colores` que como máximo guarda V elementos.
-y qué se puede mejorar, y si s posible. (PvsNP): El K-Coloring (con k>=3) es NP-Completo. Salvo para grafos bipartitos (2-colorable), no podemos resolverlo en tiempo polinomial (P != NP). Podemos agregar podas, por ejemplo, ordenar los vértices de mayor grado a menor grado antes de arrancar. Al procesar primero los vértices más conectados, las restricciones (conflictos de color) saltan más rápido cerca de la raíz del árbol, podando ramas infructuosas velozmente, pero el peor caso siempre será exponencial.
+- espacial: O(V) por la profundidad del call stack recursivo (un nivel por vértice) y el diccionario de colores que como máximo guarda V elementos.
+y qué se puede mejorar, y si s posible. 
+
+este tambien es PNP completo
 """
