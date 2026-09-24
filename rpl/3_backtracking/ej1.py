@@ -70,7 +70,7 @@ def _independent_set_bt(grafo, vertices, v_indice, n, solucion_parcial):
         
     v = vertices[v_indice]
     
-    # Decisión 1: trato de agregar a v
+    # primero: trato de agregar a v
     if es_compatible(grafo, v, solucion_parcial):
         solucion_parcial.append(v)
         sol = _independent_set_bt(grafo, vertices, v_indice + 1, n, solucion_parcial)
@@ -78,7 +78,7 @@ def _independent_set_bt(grafo, vertices, v_indice, n, solucion_parcial):
             return sol
         solucion_parcial.pop() #aca se hace el Backtracking! deshago
         
-    # Decisión 2: no agrego a v
+    # primero: no agrego a v
     return _independent_set_bt(grafo, vertices, v_indice + 1, n, solucion_parcial)
 
 def no_adyacentes(grafo, n):
