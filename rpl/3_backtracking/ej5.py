@@ -21,6 +21,7 @@ o uso solo ese último y listo?
 no terminé de entender cuando y por qué devolvemos una copia del arreglo/lista/solución.
 
 """
+
 """
 planteo ej.5:
 - como el camino hamiltoniano tiene que visitar todos los vertices una vez, necesito un conjunto de visitados para no repetir y una lista para guardar el camino en orden.
@@ -50,11 +51,11 @@ def _camino_hamiltoniano_dfs(grafo, v, visitados, camino, total_vertices):
         return True
         
     for w in grafo.adyacentes(v):
-        if w not in visitados: # Esta es la poda natural
+        if w not in visitados: # la poda "natural"
             if _camino_hamiltoniano_dfs(grafo, w, visitados, camino, total_vertices):
                 return True
                 
-    # Backtracking: deshacemos para probar otra rama
+    # BACKTRACKKIKKKING  (deshago pa probar otra rama)
     visitados.remove(v)
     camino.pop()
     
@@ -64,5 +65,9 @@ def _camino_hamiltoniano_dfs(grafo, v, visitados, camino, total_vertices):
 Justificacion de la complejidad ej.5:
 - temporal: O(V!), ya que en el primer paso tenemos V opciones, luego podemos tener (V-1) opciones de adyacentes, y así sucesivamente en un grafo muy denso. En grafos menos densos la complejidad se acota, pero teóricamente es factorial por backtracking.
 - espacial: O(V). La recursión baja hasta una profundidad máxima de V. El set de "visitados" y la lista de "camino" ocupan O(V) de memoria extra.
-El problema de encontrar un Camino Hamiltoniano es NP-Completo. No existen mejoras de complejidad temporal a polinomiales (asumiendo P!=NP).
+
+tengo entendido que este chad tambien es NPcomplettttte
+
+"No existen mejoras de complejidad temporal a polinomiales (asumiendo P!=NP)."
+
 """

@@ -18,12 +18,12 @@ como lo ves realizarlo de esa manera?
 
 """
 planteo ej.9:
-- tengo una lista de materias. cada materia tiene una lista de cursos posibles. debo elegir solo UNO por materia.
+- tengo una lista de materias. cada materia tiene una lista de cursos posibles. tengo que elegir solo UNO por materia
 - esto no es un grafo directamente, es el clásico combinatorio: en la materia 0, pruebo el curso 0. paso a la materia 1, pruebo sus cursos. si se solapan, lo descarto y pruebo el siguiente.
-- al igual que las N reinas, avanzo por "materia" (como las filas).
-- llevo una "solucion_parcial" con los cursos que voy anotando. para validar un curso nuevo, uso la funcion que me dieron y chequeo contra todo lo que ya tengo en mi solucion_parcial.
+-  igual que las N reinas, avanzo por "materia" (como las filas)
+- llevo una "solucion_parcial" con los cursos que voy anotando. para validar un curso nuevo, uso la funcion que me dieron y chequeo contra todo lo que ya tengo en mi solucion_parcial (como verificar ciclos en g dirigido?). 
 - mi caso base: la cantidad de cursos anotados es igual a la cantidad total de materias. cuando esto pasa, lo guardo en una lista "soluciones_finales" (haciendo una copia de la lista parcial).
-- luego de la llamada recursiva, SIEMPRE saco el curso de la solucion parcial para que el bucle intente con el proximo curso de esa materia. acá devuelvo siempre una lista llena al final, no corto con "return True".
+- despues de la llamada recursiva, SIEMPRE saco el curso de la solucion parcial para que el bucle intente con el proximo curso de esa materia. acá devuelvo siempre una lista llena al final, no corto con "return True".
 """
 
 from compatibles import *
@@ -56,7 +56,7 @@ def obtener_combinaciones(materias):
 
 """
 Justificacion de la complejidad
-- temporal: O(K^M * M). Sea M la cantidad de materias, y K la cantidad máxima de cursos que tiene una materia. En cada nivel de recursión iteramos sobre K ramas posibles. Como la profundidad es M, exploramos K^M hojas. Por cada curso que queremos agregar, lo verificamos contra los que ya tenemos en la solución parcial (costo O(M)).
+- temporal: O(K^M * M). con M la cantidad de materias, y K la cantidad máxima de cursos que tiene una materia. En cada nivel de recursión iteramos sobre K ramas posibles. Como la profundidad es M, exploramos K^M hojas. Por cada curso que queremos agregar, lo verificamos contra los que ya tenemos en la solución parcial (costo O(M)).
 - espacial: O(M) de forma auxiliar. El call stack desciende hasta una profundidad M. La lista "solucion_parcial" pesa O(M). Notar que el espacio ocupado por "combinaciones_finales" dependerá de cuántas soluciones válidas existan, lo cual puede llegar a O(K^M * M) y exceder el espacio de trabajo auxiliar, pero algorítmicamente se evalúa el espacio interno en memoria.
-Se podría pre-procesar las compatibilidades para tenerlas en una matriz en memoria O(1) pero la combinatoria general del problema seguirá siendo exponencial.
+Se podría pre-procesar las compatibilidades para tenerlas en una matriz en memoria O(1) (cuenta como PD eso?) pero la combinatoria general del problema seguirá siendo exponencial.
 """

@@ -43,11 +43,11 @@ ej3
 planteo ej.3:
 - hago planteamiento
 - pienso: un tablero de ajedrez nxn, n reinas. no pueden compartir ni fila, ni columna, ni diagonal.
-- me pregunto: si tengo que poner n reinas en un tablero nxn, necesariamente va a ir exactamente una reina por fila (o por columna). 
+- me pregunto: si tengo que poner n reinas en un tablero nxn, necesariamente va a ir exactamente una reina por fila (o por columna). (eso mejoraría el tiempo?)
 - entonces mi recursión avanza por filas. en la fila 0, pruebo qué columna usar. en la fila 1, pruebo qué columna usar. ya no me preocupo por las filas.
 - chequeo la validez (que no me coman): para la reina que quiero colocar en (fila, columna), me fijo que las que ya coloqué no estén en la misma columna, y que la diferencia absoluta entre las filas no sea igual a la diferencia absoluta entre las columnas (así chequeo de forma matemática ambas diagonales).
 - caso base: llegué a la fila n. es decir, coloqué exitosamente mis n reinas.
-- voy a guardar la solución como una lista de tuplas de posiciones `(fila, columna)`.
+- voy a guardar la solución como una lista de tuplas de posiciones (fila, columna.
 """
 def es_segura(fila, col, reinas):
     for r, c in reinas:
@@ -58,14 +58,14 @@ def es_segura(fila, col, reinas):
     return True
 
 def _nreinas_bt(n, fila, reinas):
-    # Caso base
+    # caso base
     if fila == n:
-        return reinas[:] # una copia de la mejor rta hasta ahora.
+        return reinas[:] #aca devuelvo una copia de lo mejor que tengo hasta ahora
         
     for col in range(n):
-        # Decisión: pongo reina en esta columna de la fila actual
+        # hago la decicisión. pongo reina en esta columna de la fila actual
         if es_segura(fila, col, reinas):
-            reinas.append((fila, col)) # Aplico
+            reinas.append((fila, col))
             
             sol = _nreinas_bt(n, fila + 1, reinas)
             if sol is not None:
@@ -78,10 +78,13 @@ def _nreinas_bt(n, fila, reinas):
 def nreinas(n):
     if n <= 0: 
         return []
-    return _nreinas_bt(n, 0, [])
+    solucion = _nreinas_bt(n, 0, [])
+    return solucion if solucion is not None else [] 
 """
 Justificacion de la complejidad
 - temporal: O(n!) (factorial), aunque matemáticamente el límite superior bruto sea O(n^n). Como vamos por fila y descartamos automáticamente colocar dos reinas en la misma fila, la primera fila tiene n opciones, la segunda a lo sumo n-1 (descartando la misma columna), y así sucesivamente. Con la validación de O(n) por cada reina colocada, la complejidad queda O(n * n!).
-- espacial: O(n) por la profundidad del call stack (n niveles recursivos, un frame por fila) y el arreglo `reinas` que guarda n posiciones.
-y qué se puede mejorar, y si s posible. (PvsNP): El problema clásico de las N-Reinas NO es NP-Completo (la versión de decisión de ubicar o no N reinas es siempre 'Sí' para N>3 y se puede construir en O(n)). Sin embargo, resolverlo explícitamente mediante Backtracking toma tiempo exponencial/factorial. Se puede optimizar muchísimo si en vez de recorrer el arreglo `reinas` en O(n) en `es_segura`, utilizamos tres conjuntos (sets) o boolean arrays para `columnas_usadas`, `diagonales_positivas_usadas` y `diagonales_negativas_usadas` (las cuales se mapean como `fila + col` y `fila - col`). De esta forma el chequeo pasa de O(n) a O(1), bajando radicalmente la constante del algoritmo factorial.
+
+- espacial: O(n) por la profundidad del call stack (n niveles recursivos, un frame por fila) y el arreglo reinas que guarda n posiciones.
+y qué se puede mejorar, y si s posible.
+
 """
