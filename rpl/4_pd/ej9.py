@@ -5,3 +5,6 @@ Ej.9 (★★★):
 
 
 """
+
+def subset_sum(elementos, v):
+    return []

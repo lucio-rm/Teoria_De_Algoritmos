@@ -5,3 +5,6 @@ Ej.2 (★★★):
 
 
 """
+
+def scheduling(charlas):
+    return []

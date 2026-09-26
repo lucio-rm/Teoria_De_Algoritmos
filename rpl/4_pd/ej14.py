@@ -5,3 +5,6 @@ Ej.14 (★★★):
 
 
 """
+
+def lunatico(ganancias):
+    return []

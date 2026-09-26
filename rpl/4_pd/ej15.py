@@ -11,3 +11,6 @@ Ej.15 (★★★):
         . n = 10 -> Debe devolver 36 (producto máximo es 3 * 3 * 4)
 
 """
+
+def problema_soga(n):
+    return 0

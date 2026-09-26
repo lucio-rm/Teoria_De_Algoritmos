@@ -5,3 +5,7 @@ Ej.4 (★★):
 
 
 """
+
+def juan_el_vago(trabajos):
+    # devolver un arreglo de los índices de días a trabajar
+    return []
