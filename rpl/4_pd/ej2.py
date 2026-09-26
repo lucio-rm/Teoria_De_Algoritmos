@@ -27,5 +27,5 @@ def scheduling(charlas):
 def _siguiente_a_quien(charlas):
     dicc_p = []
     for c in charlas:
-        
+        c = 0
     return dicc_p
