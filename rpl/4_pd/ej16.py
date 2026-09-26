@@ -6,3 +6,6 @@ Ej.16 (★★★★):
 
 
 """
+
+def compra_venta(p):
+    return 0, len(p) - 1

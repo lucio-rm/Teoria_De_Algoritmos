@@ -17,3 +17,6 @@ Ej.6 (★★):
         - Empezando por 9, son válidos 96, 98 (cantidad: 2)
 
 """
+
+def numeros_posibles(k, n):
+    return 0

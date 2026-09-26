@@ -5,3 +5,6 @@ Ej.3 (★):
 
 
 """
+
+def escalones(n):
+    return 1
