@@ -50,6 +50,9 @@ def juan_el_vago(trabajos):
     
     indice = cant
     DIAS_TRABAJADOS = [] # esta bien en mayuscula? o bien para el orto?
+    ult = M_DIAS[cant-1] if cant >= 1 else 0
+    ante_ult = M_DIAS[cant-2] if cant >= 2 else 0
+    ante_pen = M_DIAS[cant-3] if cant >= 3 else 0 # inchequeable que esté bien esto.
     while indice >= 0:
         """
         reconstrucción:
@@ -59,7 +62,30 @@ def juan_el_vago(trabajos):
         ante_ult = ...
         ante_pen = ...
         
-        si en ult trabajé, significa que en ante_ult no, por lo que el óptimo de esas dos pos es igual.
-        
+        si en unlt trabajé, significa que ult != ante_ult.
+        si en ante_ult trabajé, significa que ult == anteult
+        si ante_pen trabajé, ante_pen == ante_ult
         """
+        ult = M_DIAS[indice-1] if indice >= 1 else 0
+        ante_ult = M_DIAS[indice-2] if indice >= 2 else 0
+        ante_pen = M_DIAS[indice-3] if indice >= 3 else 0 # inchequeable que esté bien esto.
+        if ult != ante_ult:
+            DIAS_TRABAJADOS.append(ult)
+        elif ult == ante_ult:
+            DIAS_TRABAJADOS.append(ante_ult)
+        if ante_pen == ante_ult:
+            DIAS_TRABAJADOS.append(ante_pen)
+        
+        indice -= 3
+
     return DIAS_TRABAJADOS[::-1] # O(n) para invertirlo, no?
+
+"""
+Justificación de la complejidad:
+- temporal: O(n)
+O(n) para llenar la tabla de dias con los optimos, y O(n) para la reconstrucción. siendo n la cantidad de dias para trbaajar
+
+- espacial: O(n)
+a lo sumo va a ser eso, guardado en arreglos.
+
+"""
