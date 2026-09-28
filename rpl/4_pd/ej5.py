@@ -21,42 +21,62 @@ OPT(actual) = max(vengo de la izquierda, vengo de arriba) + dinero[actual] <== s
 """
 
 def laberinto(matriz):
-    if not matriz:
+    if not matriz or not matriz[0]:
         return 0
-    M_MATRIZ = [0][0] * len(matriz)
-    for i in range(len(matriz)): # filas
-        for j in range(len(matriz[0])): # columnas ¿? o era al reves
+    filas = len(matriz)
+    columnas = len(matriz[0])
+    
+    M_MATRIZ = [[0] * columnas for _ in range(filas)] #así sería crear una tabla para la matriz de tamaño real de la matriz original.
+
+    #caso base: el comienzo del laberinto
+    M_MATRIZ[0][0] = matriz[0][0] # y si es un obstaculo ¿?
+    for i in range(filas): 
+        for j in range(columnas):
+            if i == 0 and j == 0:
+                continue
+            
             de_arriba = -1
             de_izquierda = -1
             if i > 0:
-                de_izquierda = matriz[i-1][j]
+                de_arriba = M_MATRIZ[i-1][j] # ir una fila para atras es venir de arriba
             if j > 0:
-                de_arriba = matriz[i][j-1]
+                de_izquierda = M_MATRIZ[i][j-1] # ir una columna para la izq es venir por la izquierda.
             
             M_MATRIZ[i][j] = max(de_izquierda, de_arriba) + matriz[i][j]
 
-    RECORRIDO = _reconstruccion(matriz, M_MATRIZ)
-    return M_MATRIZ[len(matriz[0])-1][len(matriz)-1] #devuelvo la esquina, que esta el valor máximo.
+    RECORRIDO = _reconstruccion(M_MATRIZ, filas, columnas)
+    return M_MATRIZ[filas-1][columnas-1] #devuelvo la esquina, que esta el valor máximo.
 
-def _reconstruccion(matriz, M_MATRIZ):
+def _reconstruccion(M_MATRIZ, filas, columnas):
     """
     idea reconstruccion.
     voy a la esquina inferior izquierda de la matriz.
     si el valor es igual al de arriba o izquierda, significa que no cambió. y no se usó
     si cambió, se usó.
+    
+    tiene que decidir si vino de arriba o de la izquierda
     """
     RECORRIDO = [] # guardo los índices que se recorrieron en el laberinto.
-    for i in range(matriz, 0, -1):
-        for j in range(matriz[0], 0, -1):
-            actual = M_MATRIZ[i][j]
-            arriba = M_MATRIZ[i][j-1]
-            izquierda = M_MATRIZ[i-1][j]
+    i = filas -1
+    j = columnas - 1
 
-            if actual == arriba and actual == izquierda:
-                continue
+    RECORRIDO.append((i, j)) # si o si donde termina tienq ue estar, me habia re olvidado
+
+    # voy para atras tipo minotauro hasta llegar al inicio del laberinto
+    while i > 0 or j > 0:
+        if i == 0:
+            j -= 1 # su no puedo subir mas solo puedo ir a la izquierda
+        elif j == 0:
+            i -= 1 #misma shet
+        else:
+            # comparo quien fue el crack que aportó el valor maximo
+            if M_MATRIZ[i-1][j] >= M_MATRIZ[i][j-1]:
+                i -= 1 # de_arriba
             else:
-                RECORRIDO.append(actual)
-    
+                j -= 1 # de_izquierda
+                
+        RECORRIDO.append((i, j))
+    # no olvidarme, en la reconstruccion tiene que estar la esencia de la ecuacion de la recurrencia.
     return RECORRIDO[::-1] # porque esta invertido, lo cambio para que este bien.
 
 
