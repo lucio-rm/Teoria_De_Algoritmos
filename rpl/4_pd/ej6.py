@@ -82,36 +82,49 @@ OPT(n, k) = SUM(vecino_de_k) [OPT(n-1, vecino_de_k)]
 """
 
 def numeros_posibles(k, n):
-    valores = {}
-    valores[1] = 2
-    valores[2] = 3
-    valores[3] = 2
-    valores[4] = 3
-    valores[5] = 4
-    valores[6] = 3
-    valores[7] = 2
-    valores[8] = 4
-    valores[9] = 2
-    valores[0] = 1
-    # me da paja hacerlo con grafos. es más optimo hacerlo con grafos? en complejidad espacial? temporal?
-    vecinos = {}
-    vecinos[1] = [2, 4]
-    vecinos[2] = [1, 3, 5]
-    vecinos[3] = [2, 6]
-    vecinos[4] = [1, 5, 7]
-    vecinos[5] = [2, 4, 6, 8]
-    vecinos[6] = [3, 5, 9]
-    vecinos[7] = [4, 8]
-    vecinos[8] = [5, 7, 9, 0]
-    vecinos[9] = [6, 8]
-    vecinos[0] = [8]
+    # caso base 
+    if n <= 0:
+        return 0
+    if n == 1:
+        return 1
 
-    # ponerlos manualmente me siento totalmente de bot + romperia el OPC (Open-Closed Principle), pero bueno. tocará ser bot por el rpl. que forma NO manualmente sería óptima? de alguna forma se lo tengo que poner. O pongo una constante externa fija? (si o si es fija)
-    total = 0
-    for i in range(n):
-        for ady in vecinos[k]:
-            total += valores[ady]
-    return total
+    # meto todos los vecinos a mano (esta bien esto o rompe OPC(open-closed principle)), tipo si quiero poner nuevos digitos inventados con nuevos vecinos, tengo que toquetear esto.
+    vecinos = [
+        [8], #0
+        [2, 4], #1
+        [1, 3, 5], #2
+        [2, 6], #3
+        [1, 5, 7], #4
+        [2, 4, 6, 8], #5
+        [3, 5, 9], #6
+        [4, 8], #7
+        [5, 7, 9, 0], #8
+        [6, 8] #
+    ]
+    """
+    creo la tabla
+    filas: de 0 hasta n (n+1 tengo entendido que nos sirve por los indices (comodidad de no estar haciendo i-1 todo el tiempo))
+    columnas: 10 (una por cada digito del 0 al 9). num. cte.
+    """
+    M_TABLA = [[0] * 10 for _ in range(n + 1)]
+    # lo puedo llegar a hacer en O(1), o no? me guardo solo una columna. para la prox. ¿?
+
+    # voy llenando la tabla que puse en el planteo. caso base que todos tienen uno.
+    for digito in range(10):
+        M_TABLA[1][digito] = 1
+
+    # lleno la tabla desde 2 hasta n
+    for longitud in range(2, n + 1):
+        for digito in range(10):
+            
+            # uso la ec. de recurrencia
+            suma_vecinos = 0
+            for v in vecinos[digito]:
+                suma_vecinos += M_TABLA[longitud - 1][v]
+                
+            M_TABLA[longitud][digito] = suma_vecinos
+
+    return M_TABLA[n][k] # devuelvo lo que me piden
 
 
 """
@@ -119,7 +132,8 @@ Justificación de la complejidad
 
 - temporal: O(k.n), pseudo-polinomial? por estar pendiente completamente de la longitud en bites de 'n'
 siendo k una constante conocida, 10. se puede considerar complejidad O(n) ?
-- espacial: O
-
+n iteraciones, por 10 digitos, que tienen como maximo 4 vecinos. O(nx4x10) = O(n).
+- espacial: O(1) si guardo los resultados que solo me importan (del paso anterior, tipo fibonacci).
+(ahora mismo uso O(n), son las 23:51 y me da paja seguir pensando)
 
 """
