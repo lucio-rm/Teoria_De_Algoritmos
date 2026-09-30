@@ -45,7 +45,7 @@ def subset_sum(elementos, v):
         valor = elementos[i-1] #desfasaje
         for obj in range(1, v+1): #v  incluido
             if valor <= obj:
-                M_TABLA[i][obj] = max(M_TABLA[i-1][obj - valor], M_TABLA[i-1][obj])
+                M_TABLA[i][obj] = max(valor + M_TABLA[i-1][obj - valor], M_TABLA[i-1][obj])
             else:
                 #voy al anterior
                 M_TABLA[i][obj] = M_TABLA[i-1][obj]
@@ -57,15 +57,16 @@ def _reconstruccion(M_TABLA, elementos, v):
     ELEMENTOS_USADOS = []
     # aplicar la ec. de recurrencia inversa
     i = len(elementos)
-    obj = v
+    obj = M_TABLA[i][v] # el objetivo real alcanzado, puede ser que no sea igual a V.
+    
     while i > 0 and obj > 0:
         # si lo usé significa que el anterior al de la esquina tiene otro obj
         valor = elementos[i-1]
         if valor <= obj and M_TABLA[i][obj] == (valor + M_TABLA[i-1][obj- valor]):
-            ELEMENTOS_USADOS.append(i)
+            ELEMENTOS_USADOS.append(valor)
             obj -= valor
-        else:
-            i -= 1 # voy al anterior
+        
+        i -= 1 # voy al anterior, en cualquier caso.
     return ELEMENTOS_USADOS[::-1]
 
 
