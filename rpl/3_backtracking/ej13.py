@@ -51,6 +51,10 @@ tengo en BT 2 opciones (por eso 2^n)
 
 incluyo el vertice o no lo incluyo
 
+pero cuando lo incluya en la solucionparical tenog uqe deshacer y fijarme despues el optimo
+esa sería la parte de backtracking
+
+
 despues de burradas:
 tengo que usar un set() para hacer preguntas en O(1)
 y en _es_compatible me tengo que fijar si tiene una arista con NINGUN vertice
@@ -60,13 +64,17 @@ y mejor _es_compatible ===> _es_cover_esto
 from grafo import Grafo
 
 def vertex_cover_min(grafo):
-    vertices = grafo.obener_vertices()
+    vertices = grafo.obtener_vertices()
     if not vertices:
         return []
     preguntame = set()
     vertex_cover = _recolectando_vertex(grafo, vertices, 0, preguntame)
 
-    return vertex_cover
+    #acá, la peor situacion es que no haya un vertex_cover mínimo a la cantidad de vertices
+    if vertex_cover == None:
+        return vertices
+    else:
+        return vertex_cover
 
 def _es_cover_esto(grafo, sol_actual):
     for v in grafo.obtener_vertices():
@@ -88,4 +96,30 @@ def _recolectando_vertex(grafo, vertices, indice, sol_parcial):
     
     no_te_quiero = _recolectando_vertex(grafo, vertices, indice+1, sol_parcial)
     
+    #ahorasi
+    sol_parcial.add(v_actual)
+    si_te_quise = _recolectando_vertex(grafo, vertices, indice+1, sol_parcial)
+
+    sol_parcial.remove(v_actual) #aplico el backtracking, 
+    #cual es la diferencia entre usar remove y 'del' ¿?
     
+    #primeroquenada chequeo si alguno de los dos no fue una solucion valida
+    if no_te_quiero is None:
+        return si_te_quise
+    if si_te_quise is None:
+        return no_te_quiero
+
+    #como queiro el conjunto minimo tneog que agarrar el de menos vertices
+    if len(no_te_quiero) <= len(si_te_quise):
+        return no_te_quiero
+    else:
+        return si_te_quise
+
+
+"""
+justificacion de la complejidad:
+
+- temporal: O(2^n), teniendo 2 ramas de decisiones, y exploro todo haciendo pequeñas podas. sigue siendo exponiencial.
+
+- espacial: O(n), siendo n la cantida de vertices. como mucho la sol_parcial va a tener la cantidad de vertices del grafo.
+"""
