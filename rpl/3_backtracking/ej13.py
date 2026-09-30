@@ -45,6 +45,17 @@ _recolectando_vertec(grafo, indice, sol_parcial, sol_oficial)
 
 _es_compatible(grafo, sol_parcial, vertice)
     . me fijo si el vertice que quiero agregar es adyacente de alguno
+
+
+tengo en BT 2 opciones (por eso 2^n)
+
+incluyo el vertice o no lo incluyo
+
+despues de burradas:
+tengo que usar un set() para hacer preguntas en O(1)
+y en _es_compatible me tengo que fijar si tiene una arista con NINGUN vertice
+
+y mejor _es_compatible ===> _es_cover_esto
 """
 from grafo import Grafo
 
@@ -52,28 +63,29 @@ def vertex_cover_min(grafo):
     vertices = grafo.obener_vertices()
     if not vertices:
         return []
-    sol_parcial, sol_oficial = [], []
-    vertex_cover = _recolectando_vertex(grafo, vertices, 0, sol_parcial, sol_oficial)
+    preguntame = set()
+    vertex_cover = _recolectando_vertex(grafo, vertices, 0, preguntame)
 
     return vertex_cover
 
-def _recolectando_vertex(grafo, vertices, indice, sol_parcial, sol_oficial):
-    if len(sol_parcial) == len(vertices):
-            sol_oficial = sol_parcial
-            return sol_oficial[:] #una copia devuelvo. por que?
-
-    v_actual = vertices[indice]
-    if not v_actual in sol_parcial:
-        if _es_compatible(v_actual, sol_parcial, grafo):
-            sol_parcial.append(v_actual)
-            _recolectando_vertex(grafo, vertices, indice+1, sol_parcial, sol_oficial)
-        else:
-            # hago bactracking
-            
-
-def _es_compatible(vertice, sol_parcial, grafo):
-    ady = grafo.adyacentes(vertice) # una lista de adyacentes del vertice
-    for v in sol_parcial:
-        if v in ady:
-            return False
+def _es_cover_esto(grafo, sol_actual):
+    for v in grafo.obtener_vertices():
+        for w in grafo.adyacentes(v):
+            if v not in sol_actual and w not in sol_actual:
+                # si hay una arista del grafo sin las dos puntas en la sol_actual, no cubri todo el grafo.
+                return False
     return True
+
+def _recolectando_vertex(grafo, vertices, indice, sol_parcial):
+    if indice == len(vertices):
+        if _es_cover_esto(grafo, sol_parcial):
+            return list(sol_parcial) #devuelvo una compia tipo lista + rpl me pide lista je
+        return None #no es solucion valida
+    
+    v_actual = vertices[indice]
+
+    #ahora las decisiones, lo incluyo o no
+    
+    no_te_quiero = _recolectando_vertex(grafo, vertices, indice+1, sol_parcial)
+    
+    
