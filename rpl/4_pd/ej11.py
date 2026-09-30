@@ -47,12 +47,16 @@ def operaciones(k):
 
     while i > 0:
         # me fijo buscando queé operacion usé
-        if i % 2 == 0 and M_OPERACIONES[i] == 1 + M_OPERACIONES[i // 2]:
-            L_OPERACIONES.append("duplicar")
-            i //= 2
-        else:
-            L_OPERACIONES.append("sumar 1")
+        if i % 2 != 0:
+            L_OPERACIONES.append("mas1")
             i -= 1
+        else:
+            if M_OPERACIONES[i] == 1 + M_OPERACIONES[i // 2]:
+                L_OPERACIONES.append("duplicar")
+                i //= 2
+            else:
+                L_OPERACIONES.append("mas1")
+                i -= 1
     
     return L_OPERACIONES[::-1] # como fuid e k a 0, lo invierto.
 

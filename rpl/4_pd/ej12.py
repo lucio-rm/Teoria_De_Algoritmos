@@ -9,7 +9,19 @@ Indicar y justificar la complejidad del algoritmo propuesto.
 ¿Da lo mismo si los valores están expresados en pesos argentinos, dólares u otra moneda? Por ejemplo, si una campaña cuesta 100 dólares, para pasar a pesos se debe hacer la conversión de divisa.
 
 """
+"""
+planteo:
+es lomismo que el knapsack o es toy loco?
+presupuesto = W, costo = peso del elemento, ganancia = vlaor del elemento
 
+misma ec. recurrencia y tdo
+"""
 # cada campaña publicitaria i de la forma (Gi, Ci)
 def carlitos(c_publicitaria, P):
+    cant = len(c_publicitaria)
+    if cant == 0 or P <= 0:
+        return []
+
+    M_CAMPANAS = [[0] * (P+1) for _ ]
+    
     return []
