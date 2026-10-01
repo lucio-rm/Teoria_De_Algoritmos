@@ -1,6 +1,7 @@
 """
 Enunciado ej.13:
-Un Vertex Cover de un Grafo G es un conjunto de vértices del grafo en el cual todas las aristas del grafo tienen al menos uno de sus extremos en dicho conjunto. Por ejemplo, el conjunto de todos los vértices del grafo siempre será un Vertex Cover.
+Un Vertex Cover de un Grafo G es un conjunto de vértices del grafo en el cual todas las aristas del grafo tienen al menos uno de sus extremos en dicho conjunto. 
+Por ejemplo, el conjunto de todos los vértices del grafo siempre será un Vertex Cover.
 
 Implementar un algoritmo que dado un Grafo no dirigido nos devuelva un conjunto de vértices que representen un mínimo Vertex Cover del mismo.
 
@@ -21,5 +22,104 @@ str
 
 """
 
+"""
+planteo:
+- todas las aristas del grafo
+- uno de sus extremos en dicho conjunto
+
+receta bt:
+1. si ya encontre solucion, la devuelvo y termino
+2. avanzo si puedo
+3. pruebo si la solucion parcial es valida
+    a) si no lo es, voy pa tras y vuelvo al 2.
+    b) si lo es, llamo recursivamente y vuelvo pal 1.
+-. si llegué hasta aca, ya probe con todo y no encontre una solucion
+
+
+indice_vertice
+solucion_parcial
+solucion
+grafo
+
+_recolectando_vertec(grafo, indice, sol_parcial, sol_oficial)
+
+_es_compatible(grafo, sol_parcial, vertice)
+    . me fijo si el vertice que quiero agregar es adyacente de alguno
+
+
+tengo en BT 2 opciones (por eso 2^n)
+
+incluyo el vertice o no lo incluyo
+
+pero cuando lo incluya en la solucionparical tenog uqe deshacer y fijarme despues el optimo
+esa sería la parte de backtracking
+
+
+despues de burradas:
+tengo que usar un set() para hacer preguntas en O(1)
+y en _es_compatible me tengo que fijar si tiene una arista con NINGUN vertice
+
+y mejor _es_compatible ===> _es_cover_esto
+"""
+from grafo import Grafo
+
 def vertex_cover_min(grafo):
-    return []
+    vertices = grafo.obtener_vertices()
+    if not vertices:
+        return []
+    preguntame = set()
+    vertex_cover = _recolectando_vertex(grafo, vertices, 0, preguntame)
+
+    #acá, la peor situacion es que no haya un vertex_cover mínimo a la cantidad de vertices
+    if vertex_cover == None:
+        return vertices
+    else:
+        return vertex_cover
+
+def _es_cover_esto(grafo, sol_actual):
+    for v in grafo.obtener_vertices():
+        for w in grafo.adyacentes(v):
+            if v not in sol_actual and w not in sol_actual:
+                # si hay una arista del grafo sin las dos puntas en la sol_actual, no cubri todo el grafo.
+                return False
+    return True
+
+def _recolectando_vertex(grafo, vertices, indice, sol_parcial):
+    if indice == len(vertices):
+        if _es_cover_esto(grafo, sol_parcial):
+            return list(sol_parcial) #devuelvo una compia tipo lista + rpl me pide lista je
+        return None #no es solucion valida
+    
+    v_actual = vertices[indice]
+
+    #ahora las decisiones, lo incluyo o no
+    
+    no_te_quiero = _recolectando_vertex(grafo, vertices, indice+1, sol_parcial)
+    
+    #ahorasi
+    sol_parcial.add(v_actual)
+    si_te_quise = _recolectando_vertex(grafo, vertices, indice+1, sol_parcial)
+
+    sol_parcial.remove(v_actual) #aplico el backtracking, 
+    #cual es la diferencia entre usar remove y 'del' ¿?
+    
+    #primeroquenada chequeo si alguno de los dos no fue una solucion valida
+    if no_te_quiero is None:
+        return si_te_quise
+    if si_te_quise is None:
+        return no_te_quiero
+
+    #como queiro el conjunto minimo tneog que agarrar el de menos vertices
+    if len(no_te_quiero) <= len(si_te_quise):
+        return no_te_quiero
+    else:
+        return si_te_quise
+
+
+"""
+justificacion de la complejidad:
+
+- temporal: O(2^n), teniendo 2 ramas de decisiones, y exploro todo haciendo pequeñas podas. sigue siendo exponiencial.
+
+- espacial: O(n), siendo n la cantida de vertices. como mucho la sol_parcial va a tener la cantidad de vertices del grafo.
+"""
