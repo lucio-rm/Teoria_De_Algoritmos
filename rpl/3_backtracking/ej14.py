@@ -29,33 +29,52 @@ si es vertex-cover cumple con eso, o no?
 
 testeo mismo codigo a ver si pasa rpl, despues me fijo si tenog que toquetear algo
 
+
+bueno se quedó bugeado, pero no . no es lo mismo que vortex.
+son NP-completos ?
+
+vertex mira aristas
+
+dominating set mira vertices. todo vertice del grafo tiene queestar, o tener un vecino que esté
+
+
+
+o esta en la sol_actual 
+o al menos uno de sus adyacentes está en la sol_actual
+
 """
 from grafo import Grafo
+
 
 def dominating_set_min(grafo):
     vertices = grafo.obtener_vertices()
     if not vertices:
         return []
     preguntame = set()
-    vertex_cover = _recolectando_vertex(grafo, vertices, 0, preguntame)
+    resultado = _recolectando_ds(grafo, vertices, 0, preguntame)
 
     #acá, la peor situacion es que no haya un vertex_cover mínimo a la cantidad de vertices
-    if vertex_cover == None:
+    if resultado == None:
         return vertices
     else:
-        return vertex_cover
+        return resultado
 
-def _es_cover_esto(grafo, sol_actual):
+def _es_ds_esto(grafo, sol_actual):
     for v in grafo.obtener_vertices():
+        if v in sol_actual:
+            continue
+        tiene_vecino_goat = False
         for w in grafo.adyacentes(v):
-            if v not in sol_actual and w not in sol_actual:
-                # si hay una arista del grafo sin las dos puntas en la sol_actual, no cubri todo el grafo.
-                return False
+            if w in sol_actual:
+                tiene_vecino_goat = True
+                break
+        if not tiene_vecino_goat:
+            return False
     return True
 
-def _recolectando_vertex(grafo, vertices, indice, sol_parcial):
+def _recolectando_ds(grafo, vertices, indice, sol_parcial):
     if indice == len(vertices):
-        if _es_cover_esto(grafo, sol_parcial):
+        if _es_ds_esto(grafo, sol_parcial):
             return list(sol_parcial) #devuelvo una compia tipo lista + rpl me pide lista je
         return None #no es solucion valida
     
@@ -63,11 +82,11 @@ def _recolectando_vertex(grafo, vertices, indice, sol_parcial):
 
     #ahora las decisiones, lo incluyo o no
     
-    no_te_quiero = _recolectando_vertex(grafo, vertices, indice+1, sol_parcial)
+    no_te_quiero = _recolectando_ds(grafo, vertices, indice+1, sol_parcial)
     
     #ahorasi
     sol_parcial.add(v_actual)
-    si_te_quise = _recolectando_vertex(grafo, vertices, indice+1, sol_parcial)
+    si_te_quise = _recolectando_ds(grafo, vertices, indice+1, sol_parcial)
 
     sol_parcial.remove(v_actual) #aplico el backtracking, 
     #cual es la diferencia entre usar remove y 'del' ¿?
