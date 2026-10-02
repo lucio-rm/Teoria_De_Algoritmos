@@ -63,14 +63,13 @@ def _crear_dados(n):
     return M_MATRIZ_COMBINACIONES
 
 def _sumatoria_rec(n, s, MATRIZ_DADOS, indice, sol_parcial, sol_optima):
+    if len(sol_parcial) > len(sol_optima):
+        # cuando la cantidad de combinaciones que tiene sol_parcial es mayor a la optima
+        sol_optima = sol_parcial[:]
+        # paso una copia porque puede seguir mejorando.
+
     if indice == 7:
-        # cuando el indice llega a 7 significa que no hay mas lados por recorrer y que ya terminó.
-        if len(sol_parcial) > len(sol_optima):
-            # cuando la cantidad de combinaciones que tiene sol_parcial es mayor a la optima
-            return sol_parcial[:]
-            #devuelvo una copia, porque puede seguir mejorando.
-        else:
-            return sol_optima # sé que no hay nada mejor.
+        return sol_optima # sé que no hay nada mejor.
 
     """
     recorro la matriz. fila y columnas.
@@ -89,9 +88,11 @@ def _sumatoria_rec(n, s, MATRIZ_DADOS, indice, sol_parcial, sol_optima):
     
     Backtracking + podas = si sé que la suma ya es mayor, no sigo probando.
     """
-    for i in range(6):
-        for j in range(n):
-            
+    dado = 0
+    for fila in range(1, 7):
+        valor = MATRIZ_DADOS[fila][dado]
+        if indice + valor == s:
+            sol_parcial.add([indice, valor])
 
 
 
