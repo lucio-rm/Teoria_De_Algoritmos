@@ -14,38 +14,37 @@ esta verga es un subset sum, o knapsack.
 P[i] = valor
 encontrar la mayor suma de valores que sea <= W 
 
+
+tengo que elegir el mejor subconjunto, de vuelta no tengo que usar 2 listas y con una sola alcanza
+uso la de l sol_parcial.
+
 """
 def max_grupos_bodegon(P, W):
     if W <= 0 or not P:
         return []
 
     sol_parcial = []
-    sol_optima = []
 
     # le paso tambien el indice y la suma acumulada
-    solucion = _bodegon_rec(P, W, 0, 0, sol_parcial, sol_optima)
+    solucion = _bodegon_rec(P, W, 0, 0, sol_parcial)
     return solucion if not None else []
 
-def _bodegon_rec(P, W, indice, sum_ac, sol_parcial, sol_optima):
+def _bodegon_rec(P, W, indice, sum_ac, sol_parcial):
+    # tengo que devolver UN conjunto
     if indice == len(P):
-        # si ya no tengo grupos por fijarme
-        if sum_ac <= W:
-            # si justo sigue siendo <= W, entra en la mesa asi comen todos y no se quedan con hambre
-            return sol_optima + [sol_parcial]
-            #tengo entendido que eso crea una copia de un nuevo arreglo (con el sol_parcial), sin tocar el anterior
-        return sol_optima
-    else:
-        valor_actual = P[indice]
+        return sol_parcial # si ya revise todos los grupos devuelvo lo mejor que conseguí
+    
+    if sum_ac == W:
+        return sol_parcial # si ya se llenó la mesa, devuelvo y listo al carajovich
+
+    #no enteindo si tendría que ir la copia o no. en estos ejercicios no va copia?
+    valor_actual = P[indice]
 
     """
     posibles podas:
     si se que ninguno de los valores que siguen sumados a la sum_ac son <= W, tengo que volver.
     """
-    conviene_seguir = False
-    for valor in range(indice+1, len(P)):
-        if valor + sum_ac <= W:
-            conviene_seguir = True
-            #eso significa que en algun momento , por este lado, me va a ir bien.
+
     """
     tengo 2 opciones:
     o la familia me cae bien y come en la mesa
@@ -57,22 +56,20 @@ def _bodegon_rec(P, W, indice, sum_ac, sol_parcial, sol_optima):
             W,
             indice+1,
             sum_ac + valor_actual,
-            sol_parcial + [valor_actual],
-            sol_optima
+            sol_parcial + [valor_actual]
         )
     else: 
-        vos_comes = None
+        vos_comes = None # si no entran, rama anulada
 
     no_comiste = _bodegon_rec(
         P,
         W,
         indice+1,
         sum_ac,
-        sol_parcial,
-        sol_optima
+        sol_parcial
     )
 
-    if vos_comes is None or not conviene_seguir:
+    if vos_comes is None:
         # si no elijo al grupo, o los que siguen no estan ok
         return no_comiste
 
