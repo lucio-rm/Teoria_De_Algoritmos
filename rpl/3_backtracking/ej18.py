@@ -76,6 +76,7 @@ def _contar_rec(grafo, vertices, grados_entrada, visitados):
                 grados_entrada[ady] += 1
 
             visitados.remove(v) #deshago completamente BT BT BTBTBT baaaacktrackinGoat
+            # es como si no hubiera pasado por ahi. porque eso cuenta como la cantidad de caminos de ordenamiento topologico que puedo tener. tengo que volver como al grafo default como si nunca lo tocara y empezara aprobando Fisica 1 en vez de empezar aprobando por AM1
     return total_caminos
 
 
