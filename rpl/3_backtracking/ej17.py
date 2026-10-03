@@ -77,7 +77,7 @@ def submarinos(matriz):
     return solucion if not None else []
 
 
-def _faros_bf(filas, columnas, todas_las_celdas, indice, submarinos, sol_parcial):
+def _faros_bt(filas, columnas, todas_las_celdas, indice, submarinos, sol_parcial):
     if indice == len(todas_las_celdas):
         # si ya no tengo mas pa recorrer, decidi todo si ponia o no ponia faro, etc etc
         if _quedan_todos_ok(sol_parcial, submarinos, filas, columnas):
@@ -136,3 +136,16 @@ def _quedan_todos_ok(sol_parcial, submarinos, filas, columnas):
         if sub not in total_iluminados:
             return False
     return True
+
+
+
+
+"""
+justificacion de la complejidad:
+
+- temporal: mucho mucho mucho
+
+- espacial: fila por culumna?
+
+
+"""
