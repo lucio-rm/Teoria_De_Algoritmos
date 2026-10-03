@@ -48,13 +48,15 @@ ahora a hacerlo jeje
 from grafo import Grafo
 
 def pintar_colectivos(colectivos, paradas):
-    if not colectivos or not paradas:
+    if not colectivos:
         return 0 # no se puede colorear con ningun valor, valor min = 0 
-    # si no hay paradas, significaría que puedo pintar todo con 1 color? a chequear despues con rpl.
+    # si no hay paradas, significaría que puedo pintar todo con 1 color? a chequear despues con rpl. yep.
+    if not paradas:
+        return 1
     
     # creo grafo, mas que nada para poder hacer el recorrido entre los colores mejor
     # le pongo un vertices = colectivo, total el problema es por cada parada y no entre paradas
-    grafo = Grafo(dirigido=False, vertices_init = colectivos)
+    grafo = Grafo(False, vertices_init = colectivos)
 
     """
     y tengo que ponerle las relaciones entre vertices. va a ser un grafo con multiples subgrafos (que van a ser las paradas)
@@ -126,11 +128,6 @@ siendo V la cantidad de vértices (lienas de colectivo) y k el numero de coloreo
 => para un valor de K, las ramas de subproblemas serían K ramas por acada vertice
 lo que me daría K^V en el peor caso
 
-2. ESPACIAL: O(V + E)
-   - El grafo almacena todos los colectivos y sus restricciones de paradas: O(V + E).
-   - La pila de recursión (Call Stack) desciende hasta una profundidad máxima de 'V'.
-   - El diccionario 'colores_asignados' ocupa como mucho 'V' elementos.
-   Por lo tanto, la memoria auxiliar se mantiene lineal respecto al tamaño del grafo: O(V + E).
 - espacial: O(V + E), 
 siendo lo que guarda el grafo , todos los colectivos y restricciones de paradas
 el arbol de subproblemas llegan hasta profundidad (en el peor de los casos) de V
