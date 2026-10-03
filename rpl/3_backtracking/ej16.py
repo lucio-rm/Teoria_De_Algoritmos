@@ -102,12 +102,7 @@ def _coloreo_bt(grafo, lista_colectivos, indice, k, colores):
 
     for col in range(1, k+1):
         #pruebo con todos los colores del 1 al k
-        if _es_color_valido(
-            grafo,
-            colectivo_goatee,
-            col,
-            colores
-        ):
+        if _es_color_valido(grafo, colectivo_goatee, col, colores):
             colores[colectivo_goatee] = col
 
             # voy al sgte colectivo
@@ -115,7 +110,7 @@ def _coloreo_bt(grafo, lista_colectivos, indice, k, colores):
                 return True
 
 
-            # deshago al carajovich (la parte del backtracking)
+            # deshago al carajovich si no funcó(la parte del backtracking)
             del colores[colectivo_goatee]
 
     # si probe todos los colores y ninguno sirvió, esa rama no me sirve bruv
@@ -124,11 +119,22 @@ def _coloreo_bt(grafo, lista_colectivos, indice, k, colores):
 
 """
 justificacion de la complejidad:
+ahora tengo tiempo no hay excusa
+- temporal: O(V² + V.(K^V))
+siendo V la cantidad de vértices (lienas de colectivo) y k el numero de coloreo que me quedó al final
+=> armado de grafo, tiempo polinomial dependiendod e la cantidad de lineas por parada
+=> para un valor de K, las ramas de subproblemas serían K ramas por acada vertice
+lo que me daría K^V en el peor caso
 
-- temporal:
+2. ESPACIAL: O(V + E)
+   - El grafo almacena todos los colectivos y sus restricciones de paradas: O(V + E).
+   - La pila de recursión (Call Stack) desciende hasta una profundidad máxima de 'V'.
+   - El diccionario 'colores_asignados' ocupa como mucho 'V' elementos.
+   Por lo tanto, la memoria auxiliar se mantiene lineal respecto al tamaño del grafo: O(V + E).
+- espacial: O(V + E), 
+siendo lo que guarda el grafo , todos los colectivos y restricciones de paradas
+el arbol de subproblemas llegan hasta profundidad (en el peor de los casos) de V
+colores guarad como mucho V
 
-
-- espacial:
-
-
+O(V+E) + O(V) + O(V) = O(V+E).
 """
