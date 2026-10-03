@@ -20,3 +20,12 @@ adyacentes(self, v)
 str
 
 """
+"""
+planteo:
+
+
+
+"""
+
+def pintar_colectivos(colectivos, paradas):
+    return 0
