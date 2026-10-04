@@ -72,28 +72,54 @@ def submarinos(matriz):
         return [] 
 
     sol_parcial = set()
-    
-    solucion = _faros_bt(filas, columnas, todas_las_celdas, 0, submarinos, sol_parcial)
+
+    # meto un mejor_tamanio, para ir podando ramas que sé uqe no van a ser mejores
+    mejor_tamanio = [filas * columnas + 1]
+    # el peor caso posible= poner faros en todas las celdas
+    solucion = _faros_bt(filas, columnas, todas_las_celdas, 0, submarinos, sol_parcial, mejor_tamanio)
     return solucion if not None else []
 
 
-def _faros_bt(filas, columnas, todas_las_celdas, indice, submarinos, sol_parcial):
+def _faros_bt(filas, columnas, todas_las_celdas, indice, submarinos, sol_parcial, mejor_tamanio):
+    # agrego podas, rpl me daba timeout no se que hice mal
+    if len(sol_parcial) >= mejor_tamanio[0]:
+        # si usé mas o la misma cantidad de faros que el mejor pr (personasl record9 que) hcie, devuelvo y mato la rama
+        return None
+
     if indice == len(todas_las_celdas):
         # si ya no tengo mas pa recorrer, decidi todo si ponia o no ponia faro, etc etc
         if _quedan_todos_ok(sol_parcial, submarinos, filas, columnas):
+            mejor_tamanio[0] = len(sol_parcial) #actualizo con lo mejor que conseguí
             return list(sol_parcial) # lo paso a lista
         return None
+
+
+
+    # otra poda (aca ayudó el maldito gemini, no se me ocurrió ni en pedo)
+    # si ya avancé más de 2 filas completas en la matriz, verifico las celdas de la fila (f - 2)
+    # que dejamos atrás. si hay un submarino ahí y sigue apagado, ningun faro del futuro lo va a alcanzar :(
+    if indice > 0 and indice < len(todas_las_celdas):
+        f_actual, c_actual = todas_las_celdas[indice]
+
+
+        # si ya avanzo de fila , chequeo si dejo atras algun submarino
+        for sub in submarinos:
+            fil_sub, col_sub = sub
+
+            if fil_sub < f_actual - 2: # so esta 2 filas mas arriba
+                if not _celda_esta_iluminada(sub, sol_parcial, filas, columnas):
+                    return None # rama murió, chau.
 
     celda_actual = todas_las_celdas[indice]
 
 
     # y ahora elijo o no eljiovich
-    faro_tonto = _faros_bt(filas, columnas, todas_las_celdas, indice+1, submarinos, sol_parcial)
+    faro_tonto = _faros_bt(filas, columnas, todas_las_celdas, indice+1, submarinos, sol_parcial, mejor_tamanio)
     #no lo elegi
     
     # si lo elijo
     sol_parcial.add(celda_actual)
-    faro_crack = _faros_bt(filas, columnas, todas_las_celdas, indice+1, submarinos, sol_parcial)
+    faro_crack = _faros_bt(filas, columnas, todas_las_celdas, indice+1, submarinos, sol_parcial, mejor_tamanio)
 
     sol_parcial.remove(celda_actual) #limpio, bt bt btb tbtbt
 
@@ -109,6 +135,17 @@ def _faros_bt(filas, columnas, todas_las_celdas, indice, submarinos, sol_parcial
     else:
         return faro_crack
 
+def _matriz_tiene_submarino(celda, submarinos):
+    return celda in submarinos
+
+def _celda_esta_iluminada(celda, sol_parcial, filas, columnas):
+    # func aux pa la poda, se fija si la celda ya es alcanzada por lo menos uno de los faros colocados en sol_parcial
+    fil_c, col_c = celda
+    for faro in sol_parcial:
+        fil_f, col_f = faro
+        if abs(fil_f - fil_c) <= 2 and abs(col_f - col_c) <= 2:
+            return True
+    return False
 
 # creo una aux que me calcula el radio de 2 celdas alrdededor de un faro
 def _celdas_iluminadas_por(faro, filas, columnas):
@@ -118,11 +155,14 @@ def _celdas_iluminadas_por(faro, filas, columnas):
     # el radio seria izq-der (-2, 2), arr-abajo(-2,2)
     for ffil in range(-2, 3):
         for ccol in range(-2, 3):
-            ffil, ccol = fil + ffil, col + ccol
-            if 0 <= ffil < filas and 0 <= ccol < columnas:
-                iluminadas.add((ffil, ccol))
+            n_fil = fil + ffil
+            n_col = col + ccol
+            if 0 <= n_fil < filas and 0 <= n_col < columnas:
+                iluminadas.add((n_fil, n_col))
 
     return iluminadas
+
+# esas ultimas dos, me costó un carajo entenderlas/quesemeocurran para el ejercicio 
 
 # func aux que se fija si todos los faros elegidos cubren la totalidad del set
 def _quedan_todos_ok(sol_parcial, submarinos, filas, columnas):
