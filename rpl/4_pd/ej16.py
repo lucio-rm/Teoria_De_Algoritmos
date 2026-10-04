@@ -39,11 +39,58 @@ OPT(3) = max(p[3], )
 (3, 3) ; (2, 3) ; (1, 3) --> dia 3, puedo (c_v hoy), (c dia 2 v hoy) y (c dia 1 v hoy)
 
 OPT(4) = 
-(4, 4) ; ()
+(4, 4) ; (3, 4) ; (2, 4) ; (1, 4)
+
+OPT(i) = mejor(paratodoi (i, i) , (i-1), )
+
+
+------- viendo clase eze
+si quiero vender la casa un dia, sé que antes no la vendí.
+
+ec. recurrencia qué dia me conviene comprar, que dia me conviene vender
+
+compra(i) = el mejor dia para comprarla
+compra(i) = min(p[i], compra[i-1])
+
+vender(i) = max(p[i], vender[i-1])
+
 
 """
 
 def compra_venta(p):
     if not p:
         return 0, len(p)
-    return 0, len(p) - 1
+    n = len(p) # n dias
+    OPT_COMPRAR = [0] * (n)
+    OPT_VENDER = [0] * (n)
+    OPT_COMPRAR[0] = p[0]
+    OPT_VENDER[0] = 0
+
+    for i in range(1, n):
+        OPT_COMPRAR[i] = min(OPT_COMPRAR[i-1], p[i])
+        OPT_VENDER[i] = max(p[i] - OPT_COMPRAR[i], OPT_VENDER[i-1])
+    
+    return _reconstruccion(p, OPT_COMPRAR, OPT_VENDER)
+
+def _reconstruccion(p, OPT_COMPRAR, OPT_VENDER):
+    i = len(p)-1
+    vendi = 0
+    while i > 0:
+        if OPT_VENDER > OPT_VENDER[i-1]:
+            vendi = i
+        i -= 1
+    i = vendi
+
+    while i > 1:
+        if OPT_COMPRAR[i] < OPT_COMPRAR[i-1]:
+            compre = i
+        i -= 1
+    return vendi, compre
+
+
+
+"""
+Justificacion de la complejidad:
+
+
+"""
