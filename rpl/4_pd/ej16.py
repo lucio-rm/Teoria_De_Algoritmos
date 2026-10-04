@@ -76,7 +76,7 @@ def _reconstruccion(p, OPT_COMPRAR, OPT_VENDER):
     i = len(p)-1
     vendi = 0
     while i > 1:
-        if OPT_VENDER > OPT_VENDER[i-1]:
+        if OPT_VENDER[i] > OPT_VENDER[i-1]:
             vendi = i
             break
         i -= 1
