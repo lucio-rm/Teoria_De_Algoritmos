@@ -75,22 +75,27 @@ def compra_venta(p):
 def _reconstruccion(p, OPT_COMPRAR, OPT_VENDER):
     i = len(p)-1
     vendi = 0
-    while i > 0:
+    while i > 1:
         if OPT_VENDER > OPT_VENDER[i-1]:
             vendi = i
+            break
         i -= 1
     i = vendi
-
+    compre = 0
     while i > 1:
         if OPT_COMPRAR[i] < OPT_COMPRAR[i-1]:
             compre = i
+            break
         i -= 1
-    return vendi, compre
+    return compre, vendi
 
 
 
 """
 Justificacion de la complejidad:
 
+- temporal: O(n), siendo n la longitud de p ( n iteraciones, y la reconstruccion tambien O(n))
+
+- espacial: O(n), ya que las dos tablas de OPT van a almacenar N elementos.
 
 """
