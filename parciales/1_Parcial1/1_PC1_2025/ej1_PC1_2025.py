@@ -38,9 +38,9 @@ def _min_dyc(nodo, padre):
     if nodo is None:
         return None
 
-    v_izq = nodo.izq.valor if not None else float('inf')
-    v_der = nodo.der.valor if not None else float('inf')
-    v_padre = padre.valor if not None else float('inf')
+    v_izq = nodo.izq.valor if nodo.izq is not None else float('inf')
+    v_der = nodo.der.valor if nodo.der is not None else float('inf')
+    v_padre = padre.valor if padre is not None else float('inf')
     v_actual = nodo.valor
     #las igualdades no me importan porque sé que son todos con distinto valor
     
