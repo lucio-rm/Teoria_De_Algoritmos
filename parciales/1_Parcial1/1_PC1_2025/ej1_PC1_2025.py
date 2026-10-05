@@ -57,7 +57,7 @@ def _min_dyc(nodo, padre):
 
 """
 justificacion de la complejidad:
-- temporal: O(logn).
+- temporal: O(logn). siendo n la cantidad de nodos
 Al ser un problema de División y Conquista, puedo justificar la complejidad utilizando el Teorema Maestro.
 La ecuación de recurrencia general es: T(n) = A.T(n/B) + f(n)
 siendo:
@@ -77,5 +77,9 @@ y además, logB(A) = C, log2(1) = 0, la complejidad temporal queda:
 
 
 
-- espacial: O(1), no se usa espacio adicional. 
+- espacial: O(log(n)), con n siendo la cantidad de nodos
+utilizo O(1) de espacio extra.
+Y en el peor de los casos hago O(logn) llamadas recursivas consumiendo memoria en Call Stack. 
+(O(altura_del_arbol))
+
 """
