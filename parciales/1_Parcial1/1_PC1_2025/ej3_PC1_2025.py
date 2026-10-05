@@ -25,42 +25,43 @@ def interval_scheduling(charlas):
 
     # podría hacerlo sin ordenarlas?
     ordenadas = sorted(charlas, key=lambda x: x[1])
+    # ordenarla me ayuda a los tiempos y a la solucion de las ramas.
     
     sol_parcial = [] # la cantidad de charlas elegidas en mi rama
+    sol_optima = []
+    
+    return _is_bt(ordenadas, 0, 0, sol_parcial, sol_optima) # le paso el indice y el ultimo fin
 
-    return _is_bt(charlas, 0, sol_parcial) # le paso el indice tambien
+def _is_bt(charlas, indice, ultimo_fin, sol_parcial, sol_optima):
+    # poda: si lo que tengo + lo que queda no supera mi opt actual, chau chau
+    charlas_restantes = len(charlas) - indice
+    if len(sol_parcial) + charlas_restantes <= len(sol_optima):
+        return sol_optima
 
-def _is_bt(charlas, indice, ultimo_fin, sol_parcial):
     if indice == len(charlas):
-        # llegue al final de la lista, devuelvo una foto de lo mejor que conseguí
-        return sol_parcial[:]
+        if len(sol_parcial) > len(sol_optima):
+            # encontre una solucion mejor, hago una foto 
+            return sol_parcial[:]
+        return sol_optima
 
-    charla_actual = charlas[indice]
-    ini_act = charla_actual[0]
-    fin_act = charla_actual[1]
+    charla_act = charlas[indice]
+    ini_act = charla_act[0]
+    fin_act = charla_act[1]
 
-    # rama 1: si elijo
-    # solo evalúo si no se solapa con la anteiror
+    #rama 1: si la elijo (si es compatible
     if ini_act >= ultimo_fin:
-        # lista concatenada, crea una nueva sol_parcial con la charla actual como el último elemento
-        te_elijo = _is_bt(charlas, indice+1, fin_act, sol_parcial + [charla_actual])
-    else:
-        te_elijo = None
+        sol_parcial.append(charla_actual)
 
-    # rama 2, no la elijo
-    no_gracias = _is_bt(charlas, indice+1, ultimo_fin, sol_parcial)
+        sol_optima = _is_bt(charlas, indice+1, fin_act, sol_parcial, sol_optima)
 
-    if te_elijo is None:
-        return no_gracias
+        sol_parcial.pop() #backtracking, restauro estado
 
-    # y ahora me fijo cuál pudo meter mas charlas adentro
-    if len(te_elijo) >= len(no_gracias):
-        return te_elijo
-    else:
-        return no_gracias
+    # rama 2: no la elijo
     
+    sol_optima = _is_bt(charlas, indice+1, ultimo_fin, sol_parcial, sol_optima)
 
-    
+
+    return sol_optima
 
 """
 Justificación de la complejidad:
