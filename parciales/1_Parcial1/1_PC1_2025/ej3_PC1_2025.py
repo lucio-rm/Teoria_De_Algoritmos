@@ -50,7 +50,7 @@ def _is_bt(charlas, indice, ultimo_fin, sol_parcial, sol_optima):
 
     #rama 1: si la elijo (si es compatible
     if ini_act >= ultimo_fin:
-        sol_parcial.append(charla_actual)
+        sol_parcial.append(charla_act)
 
         sol_optima = _is_bt(charlas, indice+1, fin_act, sol_parcial, sol_optima)
 
