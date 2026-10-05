@@ -63,51 +63,52 @@ no me estaría dando cuenta la solucion real. pero decime si el algoritmo no fun
 def pokemons(productos, P, W):
     if not productos or W <= 0 or P < 0:
         return []
+    
     n = len(productos)
     M_CUBICA = [[[0] * (W+1) for _ in range(P+1)] for _ in range(n+1)]
     # 3 ejes.
     
-    for p in range(0, n):
-        producto = productos[p]
-        valor_actual = producto[0]
-        precio_actual = producto[1]
-        peso_actual = producto[2]
-        for i in range(0, (W+1)):
-            for j in range(0, (P+1)):
-                if precio_actual > j and peso_actual > i:
+    for i in range(1, n+1):
+        valor_actual = productos[i-1][0] #v_i
+        precio_actual = productos[i-1][1] #p_i
+        peso_actual = productos[i-1][2] #w_i
+        
+        for j in range(1, (P+1)):
+            for w in range(1, (W+1)):
+                if precio_actual <= j and peso_actual <= w:
                     # y ahora hago la ecuacion de recurrencia
-                    agarro = M_CUBICA[p-1][i-peso_actual][j-precio_actual] + valor_actual
-                    no_agarro = M_CUBICA[p-1][i][j]
-
-                    M_CUBICA[p][i][j] = max(agarro, no_agarro)
+                    opcion_comprar = valor_actual + M_CUBICA[i - 1][j - precio_actual][w - peso_actual]
+                    opcion_dejar = M_CUBICA[i - 1][j][w]
+                    
+                    M_CUBICA[i][j][w] = max(opcion_comprar, opcion_dejar)
                 else:
-                    M_CUBICA[p][i][j] = M_CUBICA[p-1][i][j] # voy al anterior
-
+                    # No entra, heredamos el óptimo del producto anterior
+                    M_CUBICA[i][j][w] = M_CUBICA[i - 1][j][w]
+    
     return _reconstruccion(M_CUBICA, productos, P, W)
 
 def _reconstruccion(M_CUBICA, productos, P, W):
     PRODUCTOS_COMPRADOS = []
     """
     idea de reconstruccion:
-    voy al final de la cubica. si el valor cambió (comparado con izq y arriba), significa que lo usé.
+    voy al final de la cubica. si el valor cambió (comparado con el de arriba), significa que lo usé.
     si no cambió, voy al anterior. significa que no pude mejorarlo.    
     """
-    p = len(productos)
-    i = W
+    i = len(productos)
+    w = W
     j = P
 
-    while p >= 0 and i >= 0 and j >= 0:
-        actual = M_CUBICA[p][i][j]
-        izq = M_CUBICA[p][i-1][j]
-        arr = M_CUBICA[p][i][j-1]
-        #aplico ec. recurrencia inversa
-        if actual > izq and actual > arr:
-            #significa que lo compré
-            PRODUCTOS_COMPRADOS.append(productos[p-1]) # desfasaje.
-            comprado = productos[p-1]
-            j -= comprado[1]
-            i -= comprado[2]
-        p -= 1 #voy al anterior
+    while i > 0 and j > 0 and w > 0:
+        # comparo directamente contra la "capa" del producto anterior
+        if M_CUBICA[i][j][w] != M_CUBICA[i - 1][j][w]:
+            producto_real = productos[i - 1] #desfasaje
+            PRODUCTOS_COMPRADOS.append(producto_real)
+            
+            # resto, misma shit que la ec. de recurrencia pero a la inversa. resto precio y peso del objeto
+            j -= producto_real[1]
+            w -= producto_real[2]
+            
+        i -= 1 # voy pal producto anterior
     
     return PRODUCTOS_COMPRADOS[::-1] # invierto, asi queda en orden cronológico en que los compró Laura
 
