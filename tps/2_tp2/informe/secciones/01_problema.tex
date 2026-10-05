@@ -1,0 +1,61 @@
+\section{El Problema}
+
+Mateo tiene 7 años. Los mismos años que tenía Sophia cuando comenzaron a jugar al juego de las monedas. Eso quiere decir que Mateo también ya aprendió sobre algoritmos greedy, y lo comenzó a aplicar. Esto hace que ahora quién gane dependa más de quién comience y un tanto de suerte.
+
+Esto no le gusta nada a Sophia. Ella quiere estar segura de ganar siempre. Lo bueno es que ella comenzó a aprender sobre programación dinámica. Ahora va a aplicar esta nueva técnica para asegurarse ganar siempre que pueda.
+
+El juego de las monedas consiste en disponer una fila de $n$ monedas, de diferentes valores. En cada turno, un jugador debe elegir alguna moneda. Pero no puede elegir cualquiera: \textit{sólo puede elegir o bien la primera de la fila, o bien la última}. Al elegirla, la remueve de la fila, y le toca luego al otro jugador, quien debe elegir otra moneda siguiendo la misma regla. Siguen agarrando monedas hasta que no quede ninguna. Quien gane será quien tenga el mayor valor acumulado (por sumatoria).
+
+Para transformar esta situación en un problema algorítmico concreto, el desafío es el siguiente:
+Hacer un análisis del problema, y proponer un algoritmo de Programación Dinámica que obtenga la solución óptima al problema planteado:
+Dada la secuencia de monedas $m_1$, $m_2$, ..., $m_{n}$, sabiendo que Mateo siempre elegirá la moneda más grande para sí en su respectivo turno, indicar qué monedas debe ir eligiendo Sophia para si misma, de tal forma que Sophia gane siempre que pueda, y que siempre alcance el \textit{mayor valor acumulado posible}. Considerar que Sophia siempre comienza.
+
+\subsection{Introducción}
+
+Tranquilamente, se puede observar que los objetivos son dos: que \textit{Sophia gane siempre que pueda} y que \textit{alcance el mayor valor acumulado posible}. A eso sumémosle que vamos a saber que Mateo siempre va a elegir la moneda de mayor valor en su turno.
+
+\vspace{0.425cm}
+Por último, lo más importante es que la elección va a ser si o sí entre 2 monedas y el valor entre ellas. Se puede preguntar:
+\begin{itemize}
+    \item ¿Cómo se podría hacer que eligiendo $x$ moneda (una entre esas dos), no haya otra moneda próxima (mayor a $x$) que Mateo la elija en el turno siguiente? 
+    \item ¿Cómo es posible crear un algoritmo de Programación Dinámica en el cual sea óptimo para cualquier caso de monedas? ¿Qué es un algoritmo de Programación Dinámica y qué significa que sea óptimo?
+    \item ¿Qué casos van a ser que Sophia pierda? ¿Es posible que Sophia gane siempre?
+\end{itemize}
+Una vez propuesto eso, sigamos pensando para ahora empezar con el planteo.
+
+\subsection{Planteamiento}
+
+Hacer que gane siempre que pueda Sophia, y tenemos la suerte también de que Sophia tiene \textit{visión} por sobre todas las monedas y \textit{no tiene el sesgo} de elegir siempre la mayor. Entonces, cómo podemos aconsejar a Sophia de tal forma que si siempre hace lo que le hayamos dicho, gane siempre que pueda y se quede con el mejor valor acumulado posible?
+
+La primer solución que se tiene que ocurrir es que entre las dos monedas a elegir agarre siempre la mayor en valor. Eso va a garantizar que siempre termine con una suma mayor que Mateo. O no?
+
+Pero las monedas que elige Mateo, ¿van a llegar a repercutir mucho en el problema?
+
+Para que Sophia gane, tiene que tener la mayor cantidad de valor acumulado comparado con Mateo, entonces si Sophia agarra por cada par siempre la mayor, Sophia va a competir con las monedas de mayor valor que agarre Mateo. La manera \textit{avariciosa} de Sophia, copiándole a Mateo, la va a llevar por mal camino.
+
+Simple contraejemplo: la fila de monedas son [5, 10, 1, 2]. Turno Sophia, entre [5, 2] agarra la de mayor valor [5]. Turno Mateo, entre [10, 2] agarra la de mayor valor tambien [10]. Ahora sin importar la que agarre Sophia, va a terminar \textit{perdiendo y sin el mayor valor acumulado}.
+
+La manera avariciosa, manera \textit{Greedy}, pierde la visión del ``Big Picture'' del problema. Ahora planteo, ¿Qué pasaría si Sophia empeora su estado actual, mejorando su óptimo global?. Algo que no ocurriría nunca con el pensamiento greedy, puede utilizarse a nuestro favor con un pensamiento cercano a la \textbf{Programación Dinámica}. Volviendo al ejemplo anterior, primer turno Sophia agarra la moneda de valor [2], en vez de la mayor, ``empeorando'' su estado actual. Mateo, en su turno y de manera inocente, agarra la de mayor valor entre [5, 1]. En el turno de Sophia va a elegir entre [10, 1]. Eligiendo la [10] y asegurándose la victoria + el mayor valor acumulado posible.
+
+¿Cómo se puede aplicar esa técnica, para cualquier fila de monedas?
+
+¿Existe un patrón que se cumpla siempre?
+
+
+\subsection{Consecuencias de la optimalidad}
+
+Si gana siempre que pueda y siempre obtenga el mayor valor acumulado posible, significa que:
+
+\begin{itemize}
+    \item Las indicaciones propuestas fueron óptimas.
+    \item Si pasamos las instrucciones a un algoritmo, ese mismo es óptimo.
+    \item Si es posible demostrar un solo contraejemplo con respecto al mayor valor acumulado, significa que no era óptimo\footnote{La condición de que siempre obtenga el mayor valor acumulado, es obligatoria. No tiene por qué ganar siempre, ya hablaremos de esto en el futuro.}.
+    \item Va a haber que demostrar matemáticamente que es óptimo y que no gana siempre.
+\end{itemize}
+
+
+Las pruebas a realizar de todo esto y mucho más se va a realizar en la lectura que sigue. Se recomienda leer detenidamente cada paso, y si no se entiende, releerlo. 
+
+A eso sumarle el pensamiento tipo Programación Dinámica, hasta acá se dijo sutilmente como es éste. A continuación, se explica exáctamente eso: qué es un \textbf{algoritmo de Programación Dinámica}, qué técnica realiza, y más que nada cómo se puede implementar a este problema propuesto.
+
+
