@@ -15,6 +15,56 @@ La solución óptima sería elegir el trabajo de
 """
 planteo:
 
+aproach:
+mismo greedy. elijo por fin.
+peeero, como es un horario fijo, de 24 horas. pero lo complicado está en entender la relacion de los que empiecan pm y terminan am, la teca esta en:
+- hacer una linea de 48 horas.
+
+(0)----(a.m)1-------------------(p.m)1---------------|(24)------(a.m)2--------------------(p.m)2---------------|(48)
+
+entonces.
+posibles escenarios: (E = empieza, T = termina)
+
+1- E=a.m, T=a.m, E < T.
+2- E=a.m, T=a.m, E > T. (da toda la vuelta, e.g:  4 A.M., 3 A.M.)
+3- E=a.m, T=p.m
+
+4- E=p.m, T=p.m, E < T
+5- E=p.m, T=p.m, E > T
+6- E=p.m, T=a.m
+
+lo que yo propongo es asignarles valores nuevos. a cada charla, con respecto a la linea de 48hs. para saber si termina en 
+(a.m)2 o (p.m)2
+no tengo que ignorar que cuando dan la vuelta, aparecen de vuelta las otras.
+ejemplo:
+    (0)----(a.m)1-------------------(p.m)1---------------|(24)------(a.m)2--------------------(p.m)2---------------|(48)
+(6pm, 6am) ->                               |----------------------------|                               |---------
+(9pm, 4am) ->                                   |--------------------|                                        |----
+(3am, 2pm) ->    |--------------|                                |----------------------------|
+(1pm, 7pm) ->                |---------------|                                        |---------------------|
+
+
+- elegir por inicio -> mal
+- elegir por menor_colisiones -> mal
+- elegir por fin ¿?
+
+
+
+
+
+- que pasa si parto las clases? cuando pasan de las 24 horas? siguen siendo 1. pero con importancia de 2 (siguen con valor=1)
+e.g:
+(6pm, 6am) -> (6pm, 0am) && (0am, 6am)
+
+- por duracion/colisiones?
+(6pm, 6am) -> 12hs, 3 colisiones
+(9pm, 4am) -> 7hs, 2 colisiones
+(3am, 2pm) -> 11hs, 3 colisiones
+(1pm, 7pm) -> 6hs, 2 colisiones
+
+oh que casualidad, las de menor duracion y colisiones terminan siendo las favoritas.
+
+- contraejemplo?
 
 
 """
