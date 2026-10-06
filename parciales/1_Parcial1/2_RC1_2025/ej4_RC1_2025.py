@@ -44,6 +44,8 @@ def pasos_min(arreglo):
     OPT[0] = 0
     OPT[1] = 0 #primer elem, 0 pasos para llegar a él.
     M_MINIMOS = [float('inf')] * (n-1) # siempre me voy a fijar al anterior. pos[n] me fijo pos[n-1] nunca llego a n.
+    # en el peor de los casos, voy a tener n-1 opciones para elegir. (el último escalon)
+    
     for i in range(2, n+1): #siempre en el 1er caso es quedarme parado. si len(arr) = 1. return [0]
         # y ahora aplico la ecuacion de recurrencia.
         escalon = i-1
@@ -60,12 +62,37 @@ def pasos_min(arreglo):
 
 def _reconstruccion(arreglo, OPT):
     CUAL_USE = []
-
+    """
+    idea de reconstrucción:
+    voy al final.
+    me fijo cuántos pasos hice/utilicé.
+    sé que el primer escalon si o si usé.
+    
+    - tengo que fijarme solo cuales usé para llegar al final.
+    - sé cuántos hice con OPT[n]
+    - ecuacion de recurrencia al reves
+    
+    voy al anterior del ultimo.
+    me fijo si es esa cantidad -1. si no lo es, significa que no lo usé.
+    """
+    n = len(arreglo)
+    cant_usados = OPT[n]
+    while n > 0:
+        if OPT[n-1] == (cant_usados-1):
+            #significa que lo usé.
+            CUAL_USE.append(n-1)
+            cant_usados -= 1
+        n -= 1 #voy al anterior
     return CUAL_USE[::-1] # cuál use, en orden cronologico de 0 a n.
 
 
 """
 justificacion de la complejidad:
 
+- temporal: O(n²) siendo n la cantidad de elementos en el arreglo
+por cada iteracion de los n elementos del arreglo, para llenar la tabla de OPTIMOS, recorro su cantidad (elementos-1) por cada iteracion además de la anterior. Tiene una cota superior de O(n²)
+
+- espacial: O(n). siendo el espacio extra utilizado de n elementos (n+1 para ser específico) en la tabla y en la reconstrucción, en el peor de los casos, n elementos. 'M_MINIMOS' nunca va a tener más de n elementos tampoco. 
+O(n) + O(n) + O(n) = O(3n) = O(n)
 
 """
