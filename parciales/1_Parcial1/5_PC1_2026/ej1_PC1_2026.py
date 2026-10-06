@@ -79,8 +79,4 @@ Por eso mismo, no se puede utilizar el Teorema Maestro. Al estar pendiente de 2 
 (el costo de recorrer la matriz es O(i.j), siendo i cantidad de filas y j cantidad de columnas.)
 
 ------------ espacial: O(n), siendo n el espacio de CallStack. por cada llamado recursiva se reutiliza el espacio de la cantidad de elementos de la matriz. no se utiliza espacio adicional. k es una varibale constante, no afecta.
-
-
-
-
 """
