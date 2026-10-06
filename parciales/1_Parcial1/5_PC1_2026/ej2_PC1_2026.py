@@ -67,4 +67,58 @@ oh que casualidad, las de menor duracion y colisiones terminan siendo las favori
 - contraejemplo?
 
 
+
+por fin/colisiones ¿? pasa de una  o no
+
+
+por colisiones + recalculo cada vez que agarro una? cual sería el contraejemplo de esta?
+
+
+"""
+
+def scheduling(charlas):
+    if not charlas:
+        return []
+    C_USADAS = []
+    grados = _calculo_colisiones(charlas)
+    while grados: #mientras siga teniendo elementos
+        c = grados[0]
+        C_USADAS.append((c[1], c[2])) #agarro siempre el primero, regla greedy.
+        #ahora descarto todas las ya usadas
+        nuevo_c = []
+        for col in grados:
+            if (col[1] < c[1] and col[2] <= c[1]) or (col[1] >= c[2] and col[2] > col[2]):
+                nuevo_c.append(col)
+        grados = _calculo_colisiones(nuevo_c) #recalculo, actualizo.
+    return C_USADAS
+
+def _calculo_colisiones(charlas):
+    grados = {}
+    for c in charlas:
+        contador = 0
+        for col in charlas:
+            if col != c:
+                if (c.fin > col.ini and c.ini <= col.ini) or (c.ini < col.fin and c.fin >= col.fin) or (c.ini >= col.ini and c.fin <= col.fin): # colision. los 3 casos posibles.
+                    conador += 1
+        grados[c] = (contador, c.ini, c.fin)
+    return sorted(grados, keylambda=lambda x: x[0], reverse=False) # ordeno de menor grado a mayor
+
+"""
+Justificacion de la complejidad:
+- temporal: O(n²), me fui al carajo.
+
+
+- espacial: O(n) como mucho, espacio adicional la cantiad de charlas que hay en el arreglo (en el peor de los casos), uso todas.
+
+
+Justificacion de la Optimaliad y Greedy:
+
+Es un algoritmo greedy, porque demanera avariciosa siempre agarra la primer charla con menor colision comparado con las otras.
+Esa es la regla Greedy: agarrar la charla con menor colisión.
+
+En una sucesión de óptimos locales (agarrar la charla con menor colisión) en mi estado actual (primer elemento del diccionario), se espera llegar al óptimo global (dar la mayor cantidad de charlas posible).
+
+
+Es óptimo.
+Se puede demostrar por el método inductivo, o por el método de inversiones. No encontré un contraejemplo que refute esta regla Greedy.
 """
