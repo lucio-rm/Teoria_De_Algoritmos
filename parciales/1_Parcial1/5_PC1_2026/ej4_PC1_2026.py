@@ -167,3 +167,31 @@ complejidad temporal: O(k.V)
 
 -------------- espacial: O(k.V), ya que a lo sumo como memoria adicional va a llenarse la matriz de óptimos con k.V elementos. siendo V la cantidad de vertices en el grafo y k la condicion de aristas.
 """
+
+
+"""
+
+correccion:
+
+mejor reconstruccion
+
+"""
+
+def _reconstruccion(M_MATRIZ, grafo, s, t, k):
+    if M_MATRIZ[k][t] == float('inf'):
+        return [] #no hay camino posible para k aristas
+
+    CAMINO = [t]
+    vertice_actual = t
+
+    for aristas_usadas in range(k, 0, -1):
+        for ady in grafo.adyacentes(vertice_actual):
+            peso = grafo.peso_arista(vertice_actual, ady)
+
+            #ec. recurrencia al reves
+            if M_MATRIZ[aristas_usadas][vertice_actual] == M_MATRIZ[aristas_usadas-1][ady] + peso:
+                CAMINO.append(ady)
+                vertice_actual = ady
+
+                break #encuentro el origen de este paso, voy pal siguiente k
+    return CAMINO[::-1]
