@@ -62,3 +62,32 @@ igual no lo piden. lo pongo por costumbre.
 
 - espacial: O(n). sol_parcial y sol_optima van a tener como maximo n elementos.
 """
+
+
+
+"""
+correccion:
+
+tengo que darle importancia a que puede pasar de medianoche.
+
+ult_ fin no sirve.
+"""
+
+def _IS_bt(charlas, indice, sol_parcial, sol_optima):
+    if indice == len(charlas):
+        if len(sol_parcial) > len(sol_optima):
+            return sol_parcial[:]
+        return sol_optima
+
+    charla_actual = charlas[indice]
+
+    # poda: valido contra todas las elegidas usando logica 24hs
+    
+    if not _se_solapan_lista(charla_actual, sol_parcial):
+        sol_parcial.append(charla_actual)
+        sol_optima = _IS_bt(charlas, indice+1, sol_parcial, sol_optima)
+        sol_parcial.pop() #backtracking O(1).
+
+    sol_optima = _IS_bt(charlas, indice+1, sol_parcial, sol_optima)
+
+    return sol_optima
