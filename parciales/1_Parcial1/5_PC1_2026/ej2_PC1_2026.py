@@ -122,3 +122,65 @@ En una sucesión de óptimos locales (agarrar la charla con menor colisión) en 
 Es óptimo.
 Se puede demostrar por el método inductivo, o por el método de inversiones. No encontré un contraejemplo que refute esta regla Greedy.
 """
+
+
+"""
+correccion:
+
+Circular Interval Scheduling
+
+elijo una cualquiera, y despues se hace una linea recta normal
+"""
+
+def scheduling(charlas):
+    mejor_horario = []
+
+    #pruebo forzar la inclusion de cada charla una por una
+    for charla_fija in charlas:
+        horario_actual = [charla_fija]
+
+        #filtro las que no colisionan con la charla fija
+        charlas_lineales = [c for c in charlas if not _se_solapan(charla_fija, c)]
+
+        """
+        y ahora es un Interval Scheduling normal
+        - si se cruzan la medianoche, su fin es relativo a la charla_fija
+        - ordeno por hora de fin
+        """
+        ordenadas = sorted(charlas_lineales, key=lambda x: _fin_relativo(x, charla_fija.ini))
+
+        ult_fin = charla_fija.fin
+        for c in ordenadas:
+            if not _se_solapan_lista(c, horario_actual):
+                #valido con las ya elegidas
+                horario_actual.append(c)
+                ult_fin = c.fin
+        if len(horario_actual) > len(mejor_horario):
+            mejor_horario = horario_actual
+
+    return mejor_horario
+
+def _se_solapan(c1, c2):
+    # logica para solapamiento en reloj de 24hs
+    def a_intervalos(c): # y esto ¿???
+        return [(c.ini, c.fin)] if c.ini < c.fin else [(c.ini, 24), (0, c.fin)]
+
+    int1 = a_intervalos(c1)
+    int2 = a_intervalos(c2)
+
+    for i1_ini, i1_fin in int1:
+        for i2_ini, i2_fin in int2:
+            if max(i1_ini, i2_ini) < min(i1_fin, i2_fin):
+                return True
+
+    return False
+
+def _se_solapan_lista(charla, lista):
+    return any(_se_solapan(charla, c) for c in lista)
+
+def _fin_relativo(charla, hora_cero):
+    # desplaza la hora de fin para que sea comparable linealmente
+    return charla.fin if charla.fin >= hora_cero else charla.fin + 24
+
+
+# no entendi un pingo.
