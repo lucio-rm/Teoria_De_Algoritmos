@@ -24,8 +24,8 @@ def obtiene_nota_acta(nex, nfi):
 mis_notas = {
     "Dyc": "B",
     "Greedy": "R",
-    "Backtracking": "B-",
-    "Programación Dinámica": "B",
+    "Backtracking": "R",
+    "Programación Dinámica": "B-",
     "Programación Lineal": None,
     "Flujo": None,
     "Reducciones": None
