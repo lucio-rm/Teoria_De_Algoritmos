@@ -44,10 +44,15 @@ def biggest_PathSelection(grafo, caminos):
 
 
 def _pathSelection_bt(caminos, indice, sol_parcial, sol_optima, visitados):
+    # poda . si se que los caminos que faltan no van a superar mi solucion optima, no hace falta que vaya por ese lado.
+    caminos_restantes = len(caminos) - indice
+    if len(sol_parcial) + caminos_restantes <= len(sol_optima):
+        return sol_optima #no puedo mejorar lo que mejor que conseguí hasta ahora.
+    
     # caso base
     if indice == len(caminos):
         # si ya recorrí todos los caminos, devuelvo lo mejor que pude hacer.
-        if len(sol_parcial) > sol_optima:
+        if len(sol_parcial) > len(sol_optima):
             # si la solucion de esta rama fue mejor a lo que tenía como mejor_global
             return sol_parcial[:] # devuelvo una foto de lo mejor que pude tener.
         return sol_optima
@@ -56,11 +61,8 @@ def _pathSelection_bt(caminos, indice, sol_parcial, sol_optima, visitados):
 
     """
     podas:
-    . si se que los caminos que faltan no van a superar mi solucion optima, no hace falta que vaya por ese lado.
     . si sé que tiene como mínimo 1 vertice ya visitado, no lo voy a agarrar.
     """
-    if (len(caminos) - len(sol_parcial)) <= len(sol_optima):
-        return sol_optima # no puedo mejorar la cantidad de caminos que tengo ni siquiera agarrando todos los caminos que quedan.
 
     if _puedo_usar(cam_actual, visitados):
         # si lo puedo usar, empieza la opcion 1: Elijo el camino actual.

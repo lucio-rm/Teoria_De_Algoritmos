@@ -33,27 +33,20 @@ el mínimo valor, tengo que ir guardandolo.
 def minimoExcluido(arreglo):
     if not arreglo: 
         return -1
-    n = len(arreglo)
+    n = len(arreglo)-1
     ini = 0
-    minimo = float('inf')
-    return _minimo_dyc(arreglo, ini, n, minimo)
-def _minimo_dyc(arreglo, ini, fin, minimo):
+    return _minimo_dyc(arreglo, ini, n)
+def _minimo_dyc(arreglo, ini, fin):
     if ini > fin:
-        # si ya no quedan elementos para devolver, el minimo es la cantidad de elementos (significa que está ordenado)
-        # es el que le sigue a arreglo[n-1]
-        # siempre y cuando sea menor a lo que encontramos
-        return len(arreglo) if len(arreglo) < minimo else minimo
+        return ini # si ya no quedan más elementos para averiguar, devuelvo el que quedó que es el indicado.
     
     medio = (ini + fin) // 2
 
-    if arreglo[medio] != medio:
-        #significa que está desfazado y el problema esta en el lado izquierdo
-        # el medio es un posible sospechoso. pero como sabemos que el problema esta del lado izquierdo, lo ponemos como "techo"
-        return _minimo_dyc(arreglo, ini, medio-1, medio)
+    if arreglo[medio] == medio:
+        # toda la izquierda esta perfecta, el hueco esta a la derecha
+        return _minimo_dyc(arreglo, medio+1, fin)
     else:
-        return _minimo_dyc(arreglo, medio, fin, minimo) # medio nuevo piso. el minimo sigue siendo éste.
-        # si no esta desfazado el medio, puede estar ordenado y el minimo terminar siendo len(arreglo).
-
+        return _minimo_dyc(arreglo, ini, medio-1) # el huevo esta en el medio o a su izquierda
 """
 justificacion de la complejidad:
 

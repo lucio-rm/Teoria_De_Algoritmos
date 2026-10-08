@@ -30,59 +30,37 @@ Regla Greedy: primer arista que vea la agarro al recarajo.
     ~ empezando de una hoja.
     ~ menor adyacentes --> menor ban
 """
-
+from collections import deque
 # from grafo import Grafo
 def matching_maximo(grafo):
-    if not grafo:
-        return 0
+    # O(V+E) calculo grados
+    grados = {v: len(grafo.adyacentes(v)) for v in grafo.obtener_vertices()}
+    hojas = deque([v for v, g in grados.items() if g <= 1])
 
-    vertices = grafo.obtener_vertices()
-    if not vertices:
-        return 0 # no hay aristas je
+    matching = []
+    visitados = set()
 
-    """
-    pienso:
-    - grados de entrada/salida
-    - ordenarlo de menor a mayor.
-    - set() de usados
-    """
-    usados = set()
-    grados = _calcular_grados(grafo, vertices, usados)
-    conjunto = []
-    indice = 0
-    while True:
-        if indice < len(grados):
-            v = grados[indice]
-            
-        # admite varias componentes conexas
-            if v not in usados and grados[v] > 0: # los que no tienen arista no me importan.
-                _matching_greedy(grafo, v, usados, conjunto)
-            # tengo que recalcular?
-            
-            grados = _calcular_grados(grafo, vertices, usados)
-            
-        else:
-            break
-    
-    return conjunto
+    while hojas:
+        v = hojas.popleft()
+        if v in visitados:
+            continue
+        padre = None #busco el único vecino disponible
+        for w in grafo.adyacentes(v):
+            if w not in visitados:
+                padre = w
+                break
+        if padre is not None:
+            matching.append((v, padre))
+            visitados.add(v)
+            visitados.add(padre)
 
-def _calcular_grados(grafo, vertices, usados):
-    grados = {}
-    for v in vertices:
-        contador = 0
-        if v not in usados:
-            for ady in grafo.adyacentes(v):
-                if ady not in usados:
-                    contador += 1
-        grados[v] = contador
-    ordenados = sorted(grados, key=lambda x: x[0], reverse=False)
-    return ordenados
-
-def _matching_greedy(grafo, origen, usados, conjunto):
-    usados.add(origen)
-    for ady in grafo.adyacentes(origen):
-        if ady not in usados:
-            conjunto.append((origen, ady)) # tupla con la arista (origen, ady)
+            #actualizo los grados de los vecinos del padre para encontrar nuevas hojas
+            for u in grafo.adyacentes(padre):
+                if u not in visitados:
+                    grados[u] -= 1
+                    if grados[u] <= 1:
+                        hojas.append(u)
+    return matching
 
 
 """
@@ -129,4 +107,9 @@ V = 3, E = 2.
 si se que
 p(k+1) = V = (k+1)+1, E = (#V-1)
 y está demostrado que para k es óptimo, si se le suma 1 vertice y 1 arista, no va a cmabiar el resultado. no va a cambiar la optimalidad, como mucho cambia para mejor y se encuentra un matching máximo de mayor valor (si se agrega como hoja y adyacente a otros).
+"""
+"""
+justificacion de verdad (optimalidad):
+Una hoja tiene grado 1. Solo puede unirse a su padre. Si no la unes a su padre, la hoja queda aislada (pierdes 1 arista potencial). Si la unes, podrías impedir que el padre se una a otro nodo, pero el intercambio es de 1 a 1 (no pierdes cantidad). Al eliminar la hoja y el padre, se generan nuevas hojas y repites.
+
 """

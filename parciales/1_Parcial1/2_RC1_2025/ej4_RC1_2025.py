@@ -62,27 +62,17 @@ def pasos_min(arreglo):
 
 def _reconstruccion(arreglo, OPT):
     CUAL_USE = []
-    """
-    idea de reconstrucción:
-    voy al final.
-    me fijo cuántos pasos hice/utilicé.
-    sé que el primer escalon si o si usé.
-    
-    - tengo que fijarme solo cuales usé para llegar al final.
-    - sé cuántos hice con OPT[n]
-    - ecuacion de recurrencia al reves
-    
-    voy al anterior del ultimo.
-    me fijo si es esa cantidad -1. si no lo es, significa que no lo usé.
-    """
     n = len(arreglo)
-    cant_usados = OPT[n]
-    while n > 0:
-        if OPT[n-1] == (cant_usados-1):
-            #significa que lo usé.
-            CUAL_USE.append(n-1)
-            cant_usados -= 1
-        n -= 1 #voy al anterior
+
+    actual = n
+    while actual > 0:
+        # busco quien fue el j que nos permitio llegar a actual con OPT[actual]-1
+        for j in range(actual):
+            #tiene que ser un salto viable y ser el optimo anterior
+            if arreglo[j] >= (actual-j) and OPT[j] == OPT[actual] -1:
+                CUAL_USE.append(j)
+                actual = j
+                break
     return CUAL_USE[::-1] # cuál use, en orden cronologico de 0 a n.
 
 

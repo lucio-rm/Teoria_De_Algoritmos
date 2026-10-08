@@ -27,11 +27,8 @@ def multiplicar_matrices(A, B):
     return A*B
 
 def cant_caminos(A, k):
-    if not A or k == 0:
+    if not A or k <= 0:
         return 0 # no hay caminos
-    if k < 0:
-        return -1 # no se puede  
-
     
     MATRIZ_K = _calculo_dyc(A, k)
 
@@ -40,7 +37,7 @@ def cant_caminos(A, k):
         for j in range(0, len(MATRIZ_K)): #columnas
             if MATRIZ_K[i][j] == 1:
                 #estan conectados, y longitud camino k
-                contador += 1
+                contador += MATRIZ_K[i][j]
 
     return contador
 
