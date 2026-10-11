@@ -1,0 +1,118 @@
+\section{Anexo: Correcciones de Reentrega}
+
+En esta sección se va a tratar las correcciones solicitadas para la reentrega del Informe en cuestión. Logrando expandir el análisis de complejidad y añadiendo casos de ejecución particulares pudiendo visualizarlos graficamente.
+
+
+\subsection{Impacto de la variabilidad de los valores en el tiempo de ejecución}
+
+El algoritmo propuesto \ref{rec:codigo} tiene una complejidad temporal de $\mathcal{O}(n)$, es lógico analizar si la varianza en la magnitud de los valores de las monedas (ejemplo, tener monedas de valor $1$ mezcladas con monedas de valor $1.000.000$) genera impacto en el tiempo real de ejecución. ¿Lo genera?
+
+La respuesta es que \textbf{no hay impacto algorítmico frente a la variabilidad}. La magnitud de los valores no altera la cantidad de pasos ni pone cuellos de botella en la CPU\footnote{Un cuello de botella en la CPU pasa cuando el procesador se satura por un exceso de operaciones. En este caso, se descarta este problema ya que la variabilidad o el tamaño de los datos no afecta la \textit{cantidad de pasos} del algoritmo. El esfuerzo que se le pide a la CPU se mantiene constante sin importar los valores de entrada.}.
+
+En cada iteración del \verb|while| principal, el algoritmo sólo se fija en una única evaluación entre los dos extremos (\verb|monedas[inicio] > monedas[fin]|) y una suma para el acumulador del puntaje. En las computadoras y lenguajes de programación de hoy en día, estas operaciones mantienen un costo temporal de $\Theta(1)$\footnote{Cuando se habla de complejidad algorítmica, el símbolo de $\Theta$ representa la cota inferior y superior al mismo tiempo del algoritmo.}, manteniendo el comportamiento temporal tanto en el mejor caso, peor caso y caso promedio.
+
+\subsection{Ejemplos de Ejecución y Casos Borde}
+
+Para visualizar mejor el comportamiento del algoritmo, se realiza el seguimiento paso a paso de distintos casos borde que ponen a prueba el \textit{algoritmo Greedy} planteado.
+
+\textbf{Caso 1: Todas las monedas de igual valor (Empate si o si)} 
+\\
+Arreglo: $A = [5, 5, 5, 5]$
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Turno} & \textbf{Jugador} & \textbf{Monedas} & \textbf{Extremos} & \textbf{Eligen} & \textbf{Ptos. Sophia} & \textbf{Ptos. Mateo} \\ \hline
+    1 & Sophia & $[5, 5, 5, 5]$ & $5$ vs $5$ & $5$ & $5$ & $0$ \\ \hline
+    2 & Mateo & $[5, 5, 5]$ & $5$ vs $5$ & $5$ & $5$ & $5$ \\ \hline
+    3 & Sophia & $[5, 5]$ & $5$ vs $5$ & $5$ & $10$ & $5$ \\ \hline
+    4 & Mateo & $[5]$ & $5$ & $5$ & $10$ & $10$ \\ \hline
+    \end{tabular}
+    \caption{Seguimiento de fila de monedas con valores iguales.}
+    \label{tab:caso1}
+\end{table}
+
+\textit{Resultado:} Sophia = $10$, Mateo = $10$. Como hemos explicado, este es el único escenario matemático donde la estrategia queda en un empate inevitable.
+
+\textbf{Caso 2: Arreglos de tamaño mínimo (0 y 1 moneda)} 
+\\
+\begin{itemize}
+    \item \textbf{Cero monedas ($A = []$):} El bucle principal \verb|while inicio <= fin| no cumple la condición inicial. Los puntajes devuelven al instante $0$.
+    \item \textbf{Una moneda ($A = [10]$):} Ambos punteros (\verb|inicio| y \verb|fin|) apuntan a la misma moneda. Sophia agarra la moneda (empieza ella). Se cruzan los punteros y el ciclo termina. \textit{Resultado:} Sophia = $10$, Mateo = $0$.
+\end{itemize}
+
+\textbf{Caso 3: Arreglo de picos alternados (test regla Greedy)} 
+\\
+Arreglo: $A = [100, 1, 100, 1, 100]$ 
+\\
+Este caso muestra cómo la regla Greedy (maximizar la ganancia propia y minimizar la del rival) se ejecuta bien sin caer en ``trampas'' numéricas:
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Turno} & \textbf{Jugador} & \textbf{Monedas} & \textbf{Extremos} & \textbf{Eligen} & \textbf{Ptos. Sophia} & \textbf{Ptos. Mateo} \\ \hline
+    1 & Sophia & $[100, 1, 100, 1, 100]$ & $100$ vs $100$ & $100$ & $100$ & $0$ \\ \hline
+    2 & Mateo & $[100, 1, 100, 1]$ & $100$ vs $1$ & $1$ & $100$ & $1$ \\ \hline
+    3 & Sophia & $[100, 1, 100]$ & $100$ vs $100$ & $100$ & $200$ & $1$ \\ \hline
+    4 & Mateo & $[100, 1]$ & $100$ vs $1$ & $1$ & $200$ & $2$ \\ \hline
+    5 & Sophia & $[100]$ & $100$ & $100$ & $300$ & $2$ \\ \hline
+    \end{tabular}
+    \caption{Seguimiento de fila de monedas con picos alternados.}
+    \label{tab:caso3}
+\end{table}
+
+\textit{Resultado:} Sophia = $300$, Mateo = $2$. La optimalidad del algoritmo bajo la avaricia de controlar los dos turnos queda demostrado, maximizando la diferencia y que no afecte con arreglos ``raros'' buscando que se rompa la optimalidad.
+
+\vspace{6px}
+\textbf{Caso 4: Arreglo con el mejor valor en el medio (1, 1000, 1, 1, 1, 1)}
+\\
+Arreglo: $A = [1, 1000, 1, 1, 1, 1]$
+\\
+Caso 4, con intención de que la moneda de mayor valor vaya a ser elegida para Mateo. Tratando de ``romper'' la optimalidad de la regla y estrategia ejecutada.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Turno} & \textbf{Jugador} & \textbf{Monedas} & \textbf{Extremos} & \textbf{Eligen} & \textbf{Ptos. Sophia} & \textbf{Ptos. Mateo} \\ \hline
+    1 & Sophia & $[1, 1000, 1, 1, 1]$ & $1$ vs $1$ & $1$ & $1$ & $0$ \\ \hline
+    2 & Mateo & $[1, 1000, 1, 1]$ & $1$ vs $1$ & $1$ & $1$ & $1$ \\ \hline
+    3 & Sophia & $[1, 1000, 1]$ & $1$ vs $1$ & $1$ & $2$ & $1$ \\ \hline
+    4 & Mateo & $[1, 1000]$ & $1$ vs $1000$ & $1$ & $2$ & $2$ \\ \hline
+    5 & Sophia & $[1000]$ & $1000$ & $1000$ & $1002$ & $2$ \\ \hline
+    \end{tabular}
+    \caption{Seguimiento de fila de monedas con el valor ganador en el medio.}
+    \label{tab:caso4}
+\end{table}
+
+\textit{Resultado:} Sophia = $1002$, Mateo = $2$. Pudiendo hacer que la elección entre el mejor valor ($1000$) o el peor ($1$) quede en el turno de Mateo, no logró absolutamente nada. La maximización y victoria segura de Sophia se mantuvo, una vez que vió que pudo minimizar por absoluto a Mateo y agarrar la moneda de valor $1000$ para ella, lo ejecutó inmediatamente.
+
+\vspace{6px}
+\textbf{Caso 5: Arreglo con forma escalonada (1, 2, 3, ...)}
+\\
+Arreglo: $A = [1, 2, 3, 4, 5]$
+\\
+Este caso tratamos de finalizar el análisis del algoritmo que no haya espacio de error con la regla Greedy, logrando la optimalidad por completo con cualquier caso de valores.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Turno} & \textbf{Jugador} & \textbf{Monedas} & \textbf{Extremos} & \textbf{Eligen} & \textbf{Ptos. Sophia} & \textbf{Ptos. Mateo} \\ \hline
+    1 & Sophia & $[1, 2, 3, 4, 5]$ & $1$ vs $5$ & $5$ & $5$ & $0$ \\ \hline
+    2 & Mateo & $[1, 2, 3, 4]$ & $1$ vs $4$ & $1$ & $5$ & $1$ \\ \hline
+    3 & Sophia & $[2, 3, 4]$ & $2$ vs $4$ & $4$ & $9$ & $1$ \\ \hline
+    4 & Mateo & $[2, 3]$ & $2$ vs $3$ & $2$ & $9$ & $3$ \\ \hline
+    5 & Sophia & $[3]$ & $3$ & $3$ & $12$ & $3$ \\ \hline
+    \end{tabular}
+    \caption{Seguimiento de fila de monedas con valores escalonados.}
+    \label{tab:caso5}
+\end{table}
+
+\textit{Resultado:} Sophia = $12$, Mateo = $3$. De nuevo, demostrada la optimalidad sin importar los valores de la fila de monedas. Y, teniendo cualquier otro arreglo $M$ con cantidad par de monedas, cantidad impar, con valores en cualquier posición, Sophia y su avaricia de agarrar por Mateo y aumentar la distancia entre sus dos ganancias va a seguir manteniendo su victoria indiscutiblemente.
