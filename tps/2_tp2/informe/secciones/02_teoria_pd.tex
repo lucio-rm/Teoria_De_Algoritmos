@@ -71,7 +71,8 @@ En vez de elegir sin pensar la moneda de mayor valor (como haría un algoritmo G
 Sophia simplemente calcula el total de cada camino (la moneda que elige ahora + los puntos que ya sabe que va a ganar en el futuro) y ejecuta la opción que le devuelva el número más grande.
 
 \vspace{1ex}
-\noindent \textbf{Ecuación de Recurrencia:} \\
+\noindent \textbf{Ecuación de Recurrencia:}\label{rec:ecRecu} 
+\\
 Para formalizar este pensamiento, definimos a $\mathcal{O}\mathcal{P}\mathcal{T}(\text{prim}, \text{ult})$ como el máximo valor acumulado que Sophia puede asegurarse en la fila de monedas actual.
 
 \textbf{Casos Base (y comúnmente, el final del juego):}
