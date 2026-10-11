@@ -1,0 +1,126 @@
+#!/usr/bin/env python3
+import sys
+from utils.leer_archivo import leer_archivos
+
+def juego(monedas):
+    if len(monedas) == 0:
+        return 0, 0
+
+    n = len(monedas)
+
+    # Matriz de valores optimos
+    OPT = [[0] * n for _ in range(n)]
+
+    # Casos base: longitud 1 y 2
+    for i in range(n):
+        OPT[i][i] = monedas[i] # Una moneda, esa misma.
+        if i < n -1:
+            OPT[i][i+1] = max(monedas[i], monedas[i+1]) # si son dos monedas agarro la de mayor valor
+
+    # Caso General
+    for long in range(3, n+1): # long es la longitud del problema o distancia entre i y j, lo hago crecer desde una longitud [3, n] (n incluido)
+        for i in range(n - long + 1):
+            j = i + long -1
+
+            # Caso 1: Sophia plantea elegir la primer moneda -> el M[i]
+            if monedas[i+1] > monedas[j]:
+                # Sophia agarra la moneda i. Mateo agarra la moneda de mayor valor entre i+1 y j
+                ganancia_izq = monedas[i] + OPT[i+2][j]
+            else:
+                ganancia_izq = monedas[i] + OPT[i+1][j-1] 
+
+            # Caso 2: Sophia plantea elegir la ultima moneda -> M[j]
+            if monedas[i] > monedas[j-1]:
+                # Sophia agarra la moneda j. Mateo agarra la moneda de mayor valor entre i y j-1 (se lee raro)
+                ganancia_der = monedas[j] + OPT[i+1][j-1]
+            else:
+                ganancia_der = monedas[j] + OPT[i][j-2]
+
+            # Ecuacion de recurrencia
+            OPT[i][j] = max(ganancia_izq, ganancia_der)
+    guia = _reconstruccion(monedas, OPT)
+    return partida(monedas, guia)
+
+def _reconstruccion(monedas, OPT):
+    QUE_PASO = [] # Que paso funciona como una especie de guía o manual que tiene Sophia, el cual le indica si agarrar la primera o la ultima
+    i = 0
+    j = len(monedas) -1
+
+    turno_sophia = True
+
+    while i <= j: # Mientras haya monedas para ver
+        if turno_sophia:
+            if i == j:
+                QUE_PASO.append(0) # Si es el turno de Sophia y solo queda una, es indistinto cual agarrar
+                break
+
+            # Me fijo si Sophia hubiera elegido la primer moneda
+            if monedas[i+1] > monedas[j]:
+                ganancia_izq = monedas[i] + (OPT[i+2][j] if (i+2) <= j else 0) # Siempre que pueda elijo el optimo, sino 0
+            else:
+                ganancia_izq = monedas[i] + (OPT[i+1][j-1] if (i+1) <= j-1 else 0) 
+
+            # Me fijo si coincide gracias a la ecuacion de recurrencia al reves
+            if OPT[i][j] == ganancia_izq:
+                QUE_PASO.append(0)
+                i += 1
+            else:
+                QUE_PASO.append(1)
+                j -= 1
+        else:
+            # Turno de mateo, al pensar de manera Greedy, elije la mas grande disponible siempre que pueda.
+            if monedas[i] > monedas[j]:
+                i += 1
+            else:
+                j -= 1
+
+        turno_sophia = not turno_sophia # Cambio de turno
+
+    return QUE_PASO # No hace falta invertirlo. Esta en orden crlonlogico
+
+
+def partida(monedas: list[int], QUE_PASO: list[int]):
+    pts_mateo = 0
+    pts_sophia = 0
+    i = 0
+    j = len(monedas) - 1
+    turno_sophia = True
+    paso = 0
+    while i <= j:
+        if turno_sophia: # Cuando es el turno de Sophia, uso el manual o guia para saber que tengo que hacer
+            if QUE_PASO[paso] == 1: # Si es 1, significa que debo tomar la moneda de la derecha
+                moneda = monedas[j]
+                sys.stdout.write(f"Sophia debe agarrar la ultima ({moneda}); ")
+                j -= 1
+            else:
+                moneda = monedas[i] # Si no (o sea es 0), debo tomar la moneda de la izquierda
+                sys.stdout.write(f"Sophia debe agarrar la primera ({moneda}); ")
+                i += 1
+            pts_sophia += moneda
+            paso += 1
+        else:
+            if monedas[i] > monedas[j]: # Cuando es el turno de Mateo, simplemente elije la moneda de mayor valor
+                moneda = monedas[i]
+                sys.stdout.write(f"Mateo debe agarrar la primera ({moneda}); ")
+                i += 1
+            else:
+                moneda = monedas[j]
+                sys.stdout.write(f"Mateo debe agarrar la ultima ({moneda}); ")
+                j -= 1
+            pts_mateo += moneda
+        turno_sophia = not turno_sophia
+    # Devuelvo los puntos de ambos
+    sys.stdout.write(f"\nGanancia Sophia: {pts_sophia}\n") 
+    sys.stdout.write(f"Ganancia Mateo: {pts_mateo}\n")
+    return pts_sophia, pts_mateo
+
+def main():
+    if len(sys.argv) < 2:
+        print("Falta pasar un archivo")
+        sys.exit(1)
+        
+    monedas = leer_archivos(sys.argv[1])
+    return juego(monedas)
+    
+if __name__ == "__main__":
+    main()

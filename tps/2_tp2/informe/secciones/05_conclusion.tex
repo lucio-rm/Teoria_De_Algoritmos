@@ -1,11 +1,9 @@
 \section{Conclusión}
 
-El desarrollo de este trabajo práctico permitió analizar las capacidades y limitaciones del paradigma \textit{Greedy} aplicado al problema. 
-La implementación de una regla greedy asimétrica, asimétrica porque Sophia maximiza su beneficio local inmediato y minimiza el de Mateo. Demostró ser una solución óptima, logrando una complejidad temporal lineal $\mathcal{O}(n)$ y espacial constante $\mathcal{O}(1)$ que fue corroborada usando el ajuste de Cuadrados Mínimos.
+El desarrollo de este Trabajo Práctico nos permitió investigar y entender a fondo el poder de Programación Dinámica. Con el diseño de la ecuación de recurrencia y la matriz de memoization, se pudo resolver un escenario donde cada decisión presente desencadena un efecto domino en el futuro, garantizando matemáticamente el máximo valor acumulado posible para Sophia en cada partida.
 
-Igualmente, el análisis más relevante de este escenario se basa en comprender las condiciones estrictas que habilitan la optimalidad del enfoque greedy. La estrategia implementada garantiza la victoria absoluta de Sophia únicamente por una restricción crucial de la consigna: ella tiene el control total sobre las decisiones de Mateo, anulando su capacidad de jugar a favor de él. 
+Al contrastar esta solución con el enfoque Greedy, mientras que la avariciosa tenía un costo rapidísimo en $\mathcal{O}(n)$ usando memoria constante, falla al caer en ciertas ``trampas'' perdiendo la visión del problema completo frente a variabilidades grandes. En cambio, la Programación Dinámica exige pagar un precio alto: un sacrificio computacional cuadrático tanto en tiempo ($\mathcal{O}(n^2)$) como en espacio ($\mathcal{O}(n^2)$) para guardar la ``foto o recuerdos'' de la experiencia en una matriz. Pero nos da una garantía de optimalidad inquebrantable.
 
-En conclusión, el problema propuesto los fundamentos teóricos en el diseño de algoritmos: las soluciones greedy son herramientas ``poderosas'', elegantes y rápidas, pero su éxito está vinculado a la estructura del entorno. 
-Una pequeña modificación en las reglas del juego o en el comportamiento de los actores puede llegar a transformar un algoritmo lineal óptimo en una estrategia deficiente por el problema de no tener la visión del ``Big Picture''. 
+En conclusión, esta forma nos demuestra que la mejor solución global rara vez se encuentra eligiendo el camino más fácil y evidente en el presente. Resolver problemas complejos de verdad requieren la capacidad de sacrificar el beneficio inmediato, pensar en las ramificaciones del futuro, y tener la memoria suficiente para no recalcular los mismos errores del pasado.
 
-Se pudo demostrar que la estrategia greedy es un gran diseño y una gran solución, pero también un pensamiento peligroso al ignorar las fronteras del óptimo global.
+
