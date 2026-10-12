@@ -10,7 +10,7 @@
 La solución por Programación Dinámica brinda resultados, estos resultados calculados los podemos guardar, lo que nos puede ayudar a optimizar el tiempo de ejecución. Esa técnica de guardado se llama \textit{Memoization} o \textit{Memorización}.
 
 La Programación Dinámica explora implícitamente el espacio de posibles soluciones, lo cual siempre va a convenir ver el problema general en pequeños \textit{subproblemas} del mismo.
-Nos basamos en la intuición que nos da la Memoization para reconocer los subproblemas y utilizarlos para construir la solución. Una vez que tenemos todas las soluciones memorizadas, el problema está resuelto. Nos ayuda evitar explorar un espacio exponencial de soluciones por fuerza bruta, y de esa manera podemos reducir la complejidad temporal del algoritmo a implementar.
+Nos basamos en la intuición que nos da la Memoization para reconocer los subproblemas y utilizarlos para construir la solución. Una vez que tenemos todas las soluciones memorizadas, el problema está resuelto. Nos ayuda evitar explorar un espacio \textit{exponencial} de soluciones por fuerza bruta, y de esa manera podemos reducir la complejidad temporal del algoritmo a implementar.
 
 Los \textit{subproblemas} establecen una lógica inductiva:
 
@@ -40,26 +40,26 @@ Esto es debido a que:
     \item Es mucho más fácil de entender qué esta pasando, cuándo y cómo.
     \item Como consecuencia de lo anterior, se facilita el cálculo de la complejidad (temporal y espacial).
     \item La resolución de problemas con esta técnica suelen ser más fáciles de resolver de forma inductiva que recursiva.
-    \item Nos estructura mucho más cómo pensar la solución\footnote{Primero la ecuación de recurrencia, después la programación del problema (siendo este último paso, sencillo)}.
+    \item Nos estructura mucho más cómo pensar la solución\footnote{Primero la ecuación de recurrencia, después la programación del problema (siendo este último paso, sencillo).}.
     \item Se pueden aplicar optimizaciones de memoria fácilmente.
 \end{enumerate}
 
 ¿Como se va a saber que puedo utilizar Programación Dinámica en un problema?
 \begin{itemize}
-    \item    Hay un número polinomial de subproblemas
+    \item Hay un número \textit{polinomial} de subproblemas
     \item La solución al problema original puede ser construido a partir de soluciones a subproblemas
     \item Hay un orden natural de los subproblemas de menor a mayor. Los subproblemas “mayores” son resueltos mediante la composición de problemas “menores”.
 \end{itemize}
 
-Otra utilidad que nos sirve usar la técnica de \textit{Memoization},comúnmente, permite pasar de un tiempo de ejecución exponencial a uno polinomial. Además, nos permite en ciertos ejercicios una optimización de memoria: En el anterior ejemplo de fibonacci, se puede utilizar un arreglo con todos los óptimos de $0$ hasta $n$, para recordar las soluciones. Pero mejor aún, utilizar una optimización y guardar solamente $2$ variables recordando las últimas dos soluciones. Eso nos va a brindar una complejidad espacial constante de $O(1)$.
+Otra utilidad que nos sirve usar la técnica de \textit{Memoization}, comúnmente, permite pasar de un tiempo de ejecución exponencial a uno polinomial. Además, nos permite en ciertos ejercicios una optimización de memoria: en el anterior ejemplo de fibonacci, se puede utilizar un arreglo con todos los óptimos de $0$ hasta $n$, para recordar las soluciones. Pero mejor aún, utilizar una optimización y guardar solamente $2$ variables recordando las últimas dos soluciones. Eso nos va a brindar pasar de una complejidad espacial constante de $\mathcal{O}(n)$ a $\mathcal{O}(1)$.
 
-Otra sección relacionada a la técnica de Programación Dinámica, es la \textit{reconstrucción del problema}. Si yo quiero recordar y devolver todos los resultados del fibonacci en el orden en que los usé, ahí sí se utiliza un arreglo con todos los óptimos precalculados y en una recorrida se pueden obtener qué resultados y \textit{cuándo} los utilicé. La reconstrucción del problema es construir la solución de abajo hacia arriba.
+Otra sección relacionada a la técnica de Programación Dinámica, es la \textit{reconstrucción del problema}. Si yo quiero recordar y devolver todos los resultados del fibonacci en el orden en que los tuve que calcular, ahí sí se utiliza un arreglo con todos los óptimos precalculados y en una recorrida se pueden obtener qué resultados y \textit{cuándo} los utilicé. La reconstrucción del problema es construir la solución de abajo hacia arriba.
 
 \subsection{Programación Dinámica aplicada al problema}
 
-En el contexto del juego de las monedas, el desafío de Sophia es planificar la mejor estrategia. El futuro es planificable y predecible, ya que sabemos que Mateo agarra siempre la moneda de mayor valor que se le cruce en frente. 
+En el contexto del juego de las monedas, el desafío de Sophia es planificar la mejor estrategia. El futuro es predecible, ya que sabemos que Mateo agarra siempre la moneda de mayor valor que se le cruce en frente. Entonces podemos predecir el comportamiento y las próximas filas de monedas en base a la moneda que agarremos en \textit{cada turno}.
 
-Entonces, la decisión de Sophia en el turno actual no reduce el tamaño del problema en $1$ moneda, sino en $2$ monedas (cada ronda). Su propia elección sumada a la reacción avariciosa de Mateo.
+La decisión de Sophia en el turno actual no reduce el tamaño del problema en $1$ moneda, sino en $2$ monedas (cada ronda). Su propia elección sumada a la reacción avariciosa de Mateo.
 
 \textbf{El Pensamiento de Sophia:} \\
 En vez de elegir sin pensar la moneda de mayor valor (como haría un algoritmo Greedy), Sophia piensa mentalmente los dos universos posibles en su turno:
@@ -68,7 +68,7 @@ En vez de elegir sin pensar la moneda de mayor valor (como haría un algoritmo G
     \item \textbf{¿Qué pasa si elijo la moneda de la derecha?} Mateo va a hacer exactamente lo mismo. Sophia vuelve a calcular: \textit{En este otro caso, ¿cuántos puntos me aseguro para el futuro?}.
 \end{enumerate}
 
-Sophia simplemente calcula el total de cada camino (la moneda que elige ahora + los puntos que ya sabe que va a ganar en el futuro) y ejecuta la opción que le devuelva el número más grande.
+Sophia calcula el total de cada camino (la moneda que elige ahora + los puntos que ya sabe que va a ganar en el futuro) y ejecuta la opción que le devuelva el número más grande.
 
 \vspace{1ex}
 \noindent \textbf{Ecuación de Recurrencia:}\label{rec:ecRecu} 
@@ -91,7 +91,7 @@ Lo mejor es simplemente el máximo entre esos dos futuros casos que calcula Soph
 \end{cases}
 \]
 
-Matemáticamente, ese "futuro" depende del Greedy aplicado de Mateo, quedando la ecuación completa así:
+Matemáticamente, ese ``futuro'' depende del Greedy aplicado de Mateo, quedando la ecuación completa así:
 \[
 \mathcal{O}\mathcal{P}\mathcal{T}(\text{prim}, \text{ult}) = \max 
 \begin{cases} 
@@ -113,9 +113,9 @@ Matemáticamente, ese "futuro" depende del Greedy aplicado de Mateo, quedando la
 
 Para demostrar que esta estrategia es la mejor que le podemos recomendar a Sophia y garantiza siempre el mayor valor acumulado posible para Sophia, nos basamos en el razonamiento inductivo. 
 
-Como vimos en los Casos Base, es un obvio que Sophia hace la decisión perfecta cuando quedan 1 o 2 monedas en la fila. El éxito de la estrategia de Programación Dinámica se basa en que, cuando Sophia se enfrenta a un problema de 3, 4 o $n$ monedas, ella no improvisa. Al evaluar el "camino izquierdo" y el "camino derecho", la ecuación consulta los resultados de los subproblemas más chicos (el futuro). Ventaja superior comparado con el pensamiento Greedy de agarrar siempre la de mayor valor.
+Como vimos en los Casos Base, es un obvio que Sophia hace la decisión perfecta cuando quedan $1$ o $2$ monedas en la fila. El éxito de la estrategia de Programación Dinámica se basa en que, cuando Sophia se enfrenta a un problema de $3$, $4$ o $n$ monedas, ella no improvisa. Al evaluar el ``camino izquierdo'' y el ``camino derecho'', la ecuación consulta los resultados de los subproblemas más chicos (el futuro). Ventaja superior comparado con el pensamiento Greedy de agarrar siempre la de mayor valor.
 
-Como esos subproblemas del futuro fueron resueltos previamente construidos desde los casos base hacia arriba, iterativamente, Sophia está sumando su moneda actual con un futuro que es matemáticamente insuperable. Dado que la ecuación evalúa el 100\% de las ramas posibles y siempre extrae la función $\max()$ entre ellas, es lógicamente imposible que exista una combinación de elecciones en la fila que sume un valor mayor al que la estrategia da.
+Como esos subproblemas del futuro fueron resueltos previamente construidos desde los casos base hacia arriba, iterativamente, Sophia está sumando su moneda actual con un futuro que es matemáticamente insuperable. Y como la ecuación evalúa el 100\% de las ramas posibles y siempre extrae la función $\max()$ entre ellas, es lógicamente imposible que exista una combinación de elecciones en la fila que sume un valor mayor al que la estrategia da.
 
 Se va a verificar, por demostración matemática y con ejemplos, en una sección a continuación.
 
@@ -126,4 +126,4 @@ Adoptar esta forma de razonar implica aprender a pensar de atrás hacia adelante
 
 Esta forma de razonar retroespectiva tiene una base analítica muy fuerte: si el futuro está planificado de manera óptima, el presente se resuelve solo. Trasladado a las decisiones de la vida real, esto nos da una estructura clara para manejar la optimización del esfuerzo del día a día y la satisfacción aplazada a través de ``ecuaciones de recurrencia personales''. El que adopta este chip mental entiende que las decisiones actuales son variables que modifican el escenario del mañana. Por eso, se acepta de forma natural un costo, un esfuerzo extra o un rendimiento subóptimo en el plano inmediato (como aguantarse de salidas por estudiar o meterle horas a un proyecto) con la certeza matemática de que es el único camino válido para maximizar el resultado global a largo plazo. (Principio de Optimalidad de Bellman)
 
-En un plano cognitivo, el enfoque PD introduce la \textit{memoization} como una técnica estricta para guardar la experiencia personal. El pensamiento dinámico no deja el desperdicio del aprendizaje ni el desgaste de tropezar dos veces con la misma piedra. Si o si exige que cada crisis superada, cada error corregido y cada subproblema resuelto quede anotado en una suerte de ``tabla mental'' permanente. Al cruzarse con situaciones repetitivas en la rutina diaria, la mente no reinventa la lógica desde cero, sino que hace una consulta rápida a su memoria. Y así, la toma de decisiones cotidianas no permiten el azar y pasa a pasa a ser algo más razonable, donde lo vivido se transforma de forma directa en un mapa predictivo para resolver la incertidumbre.
+En un plano cognitivo, el enfoque PD introduce la \textit{memoization} como una técnica estricta para guardar la experiencia personal. El pensamiento dinámico no deja el desperdicio del aprendizaje ni el desgaste de tropezar dos veces con la misma piedra. Si o si exige que cada crisis superada, cada error corregido y cada subproblema resuelto quede anotado en una ``tabla mental'' permanente. Al cruzarse con situaciones repetitivas en la rutina diaria, la mente no reinventa la lógica desde cero, sino que hace una consulta rápida a su memoria. Y así, la toma de decisiones cotidianas no permiten el azar y pasa a ser algo más razonable, donde lo vivido se transforma de forma directa en un mapa predictivo para resolver la incertidumbre.

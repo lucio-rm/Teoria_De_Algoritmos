@@ -27,24 +27,24 @@ Una vez propuesto eso, sigamos pensando para ahora empezar con el planteo.
 
 Hacer que gane siempre que pueda Sophia, y tenemos la suerte también de que Sophia tiene \textit{visión} por sobre todas las monedas y \textit{no tiene el sesgo} de elegir siempre la mayor. Entonces, cómo podemos aconsejar a Sophia de tal forma que si siempre hace lo que le hayamos dicho, gane siempre que pueda y se quede con el mejor valor acumulado posible?
 
-La primer solución que se tiene que ocurrir es que entre las dos monedas a elegir agarre siempre la mayor en valor. Eso va a garantizar que siempre termine con una suma mayor que Mateo. O no?
+Primero que nada, hay que aclarar que si Sophia consigue en todos los casos el mejor valor acumulado posible $\Longrightarrow$ va a ganar siempre que pueda. La solución que se puede ocurrir primero es que entre las dos monedas a elegir agarre siempre la mayor en valor. Eso va a garantizar que siempre termine con una suma mayor que Mateo. O no?
 
 Pero las monedas que elige Mateo, ¿van a llegar a repercutir mucho en el problema?
 
 Para que Sophia gane, tiene que tener la mayor cantidad de valor acumulado comparado con Mateo, entonces si Sophia agarra por cada par siempre la mayor, Sophia va a competir con las monedas de mayor valor que agarre Mateo. La manera \textit{avariciosa} de Sophia, copiándole a Mateo, la va a llevar por mal camino.
 
-Simple contraejemplo: la fila de monedas son [5, 10, 1, 2]. Turno Sophia, entre [5, 2] agarra la de mayor valor [5]. Turno Mateo, entre [10, 2] agarra la de mayor valor tambien [10]. Ahora sin importar la que agarre Sophia, va a terminar \textit{perdiendo y sin el mayor valor acumulado}.
+Simple contraejemplo: la fila de monedas son $[5, 100, 1, 2]$. Turno Sophia, entre $[5, 2$] agarra la de mayor valor $[5]$. Turno Mateo, entre $[100, 2]$ agarra la de mayor valor tambien $[100]$. Ahora sin importar la que agarre Sophia, va a terminar \textit{perdiendo y sin el mayor valor acumulado}.
 
-La manera avariciosa, manera \textit{Greedy}, pierde la visión del ``Big Picture'' del problema. Ahora planteo, ¿Qué pasaría si Sophia empeora su estado actual, mejorando su óptimo global?. Algo que no ocurriría nunca con el pensamiento greedy, puede utilizarse a nuestro favor con un pensamiento cercano a la \textbf{Programación Dinámica}. Volviendo al ejemplo anterior, primer turno Sophia agarra la moneda de valor [2], en vez de la mayor, ``empeorando'' su estado actual. Mateo, en su turno y de manera inocente, agarra la de mayor valor entre [5, 1]. En el turno de Sophia va a elegir entre [10, 1]. Eligiendo la [10] y asegurándose la victoria + el mayor valor acumulado posible.
+La manera avariciosa, manera \textit{Greedy}, pierde la visión del ``Big Picture'' del problema. Ahora planteo, ¿Qué pasaría si Sophia empeora su estado actual, mejorando su óptimo global?. Algo que no ocurriría nunca con el pensamiento greedy, puede utilizarse a nuestro favor con un pensamiento cercano a la \textbf{Programación Dinámica}. Volviendo al ejemplo anterior, primer turno Sophia agarra la moneda de valor $[2]$, en vez de la mayor, ``empeorando'' su estado actual. Mateo, en su turno y de manera inocente, agarra la de mayor valor entre $[5, 1]$. En el turno de Sophia va a elegir entre $[100, 1]$. Eligiendo la $[100]$ y asegurándose la victoria $+$ el mayor valor acumulado posible.
 
 ¿Cómo se puede aplicar esa técnica, para cualquier fila de monedas?
 
-¿Existe un patrón que se cumpla siempre?
+¿Existe un \textit{patrón} que se cumpla siempre?
 
 
 \subsection{Consecuencias de la optimalidad}
 
-Si gana siempre que pueda y siempre obtenga el mayor valor acumulado posible, significa que:
+Si se logra pensar y crear una estrategia para que Sophia gane siempre que pueda y siempre obtenga el mayor valor acumulado posible, significa que:
 
 \begin{itemize}
     \item Las indicaciones propuestas fueron óptimas.
@@ -55,7 +55,6 @@ Si gana siempre que pueda y siempre obtenga el mayor valor acumulado posible, si
 
 
 Las pruebas a realizar de todo esto y mucho más se va a realizar en la lectura que sigue. Se recomienda leer detenidamente cada paso, y si no se entiende, releerlo. 
-
-A eso sumarle el pensamiento tipo Programación Dinámica, hasta acá se dijo sutilmente como es éste. A continuación, se explica exáctamente eso: qué es un \textbf{algoritmo de Programación Dinámica}, qué técnica realiza, y más que nada cómo se puede implementar a este problema propuesto.
+A eso sumarle el \textbf{pensamiento} tipo Programación Dinámica, hasta acá se dijo sutilmente como es éste. A continuación, se explica exáctamente eso: qué es un \textbf{algoritmo de Programación Dinámica}, qué técnica realiza, y más que nada cómo se puede implementar a este problema propuesto.
 
 
