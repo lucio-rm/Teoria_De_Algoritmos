@@ -98,13 +98,14 @@ OPT[1][1] = v_{1}{1} + OPT[0][0]
         [0-0]
       [1-0][1-1]
     [2-0][2-1][2-2]
-~
+~ acá está lo que quiero tantear.
+desde (2-0) puedo:
+=> from (1-0) ==> v_{2}{0} + OPT[1][0] 
+=> from (2-1) !!! no esta analizado el óptimo. en una dependencia circular entre óptimos (no se cómo se dice.)
 
 OPT[0][0] = v_{0}{0}
 OPT[1][0] = v_{1}{0} + OPT[0][0]
 OPT[1][1] = v_{1}{1} + OPT[0][0]
-
-
 
 
 

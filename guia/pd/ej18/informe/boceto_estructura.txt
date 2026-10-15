@@ -13,7 +13,7 @@ PROBLEMA
 		~ estrellas
 
 DISENIANDO
-	~ primer aproach y por qué estaba mal
+	~ primer aproach y por qué estaba mal (circular dependency between OPT)
 	~ cómo llegue a la res. correcta
 	~ resolucion correcta
 
