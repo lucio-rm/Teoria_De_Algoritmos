@@ -354,8 +354,60 @@ def camino_minimo_piramide(piramide):
 def _reconstruccion(piramide, OPT, destino):
     if destino[0] == float('inf'):
         return [] # no se pudo llegar a la base.
-    inicio = (0, 0)
-    fin = (destino[1], destino[2])
+    """
+    idea de reconstruccion:
+    sé con qué valor mínimo llegué, y en qué posición.
+    tengo que usar la ec. recurrencia inversa, para fijarme \textbf{desde dónde} vine.
+    
+    """
+    CAMINO = []
+    
+    fila = destino[1]
+    columna = destino[2]
+    #fila y columna empiezan desde el final. desde la posición del destino.
+    CAMINO.append([fila, columna]) #agrego el final.
+    
+    while fila > 0 and columna > 0:
+        """
+        cuando sean (0,0) llegué al inicio. elemento en fila 0 es uno solo. el (0,0)
+        ~ me tengo que fijar desde cuál de las puntas (como máximo 4), vine.
+        para fijarme, me tengo que fijar cuál es igual a: 
+        (valor_actual = OPT[i][j])
+        valor_elegido == valor_actual - piramide[i][j]
+        """
+        # minimo = (float('inf'), fila, columna)
+        valor_actual = piramide[fila][columna] # por cada iteración, reescribo el valor actual y optimo actual que necesito.
+        opt_actual = OPT[fila][columna]
+        buscado = valor_actual - opt_actual # con el que coincida, significa que fuí por ahí.
+        
+        if columna < fila:
+            # puedo acceder al de la derecha, me fijo si ese es el elegido.
+            valor = OPT[fila][columna+1]
+            if buscado == valor:
+                columna += 1
+                CAMINO.append([fila, columna])
+        elif columna > 0: # no entra si ya encontré el buscado.
+            # me fijo con el de la izquierda
+            valor = OPT[fila][columna-1]
+            if buscado == valor:
+                columna -= 1 # fila queda igual.
+                CAMINO.append([fila, columna])
+        elif columna > 0 and columna > 0:
+            # me fijo con el de arriba-izquierda
+            valor = OPT[fila-1][columna-1]
+            if buscado == valor:
+                columna -= 1
+                fila -= 1
+                CAMINO.append([fila, columna])
+        elif columna > 0:
+            # me fijo con el de arriba.
+            valor = OPT[fila-1][columna]
+            if buscado == valor:
+                fila -= 1
+                CAMINO.append([fila, columna])
+        
+    return CAMINO[::-1] # en orden cronológico.
+
 
 # testeo:
 def main():
