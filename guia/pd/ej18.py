@@ -251,7 +251,20 @@ casos base:
      p = primero = 0
      d = p + 1 = 1
      u = ultimo = i
+     a = ante-ultimo = u-1
+.
+~~~~OPTIMO ESTRELLA: 
+caso base:
+OPT*[i][a] = valor_{i}{a} + min(OPT[i-1][a-1], OPT[i-1][a]) # demostrar por qué nunca se va de indice (ya cubri los casos (0, 0) (1, 0) y (1, 1))
 
+caso general:
+for j in range(a-1, 0, -1) ~~~> desde el antepenúltimo hasta el (d) (si ya el antepenultimo es 0, no entra en el for)
+OPT*[i][j] = valor_{i}{j} + min(OPT[i-1][j-1], OPT[i-1][j], OPT*[i][j+1])
+
+
+
+
+~~~~OPT:
 OPT[i][p] = valor_{i}{p} + min(OPT[i-1][p], OPT*[i][d])
 OPT[i][d] = OPT*[i][d]
 OPT[i][for j in range (p+2, u)] = min(valor_{i}{j} + OPT[i][j-1], OPT*[i][j])
@@ -275,12 +288,67 @@ def camino_minimo_piramide(piramide):
         return OPT[0][0], [0] # un solo elemento, el camino finaliza ahí.
     OPT[1][0] = piramide[1][0] + OPT[0][0]
     OPT[1][1] = piramide[1][1] + OPT[0][0]
-
+    """
+    casos base:
+    . OPT[0][0] = valor_{0}{0}
+    . OPT[1][0] = valor_{1}{0} + OPT[0][0]
+    . OPT[1][1] = valor_{1}{1} + OPT[0][0]
+        para cualquier fila i: sé que la fila va desde 0 hasta i
+        ~ siendo siempre:
+        p = primero = 0
+        d = p + 1 = 1
+        u = ultimo = i
+        a = ante-ultimo = u-1
+    ~~~~OPTIMO ESTRELLA: 
+    caso base:
+    OPT*[i][a] = valor_{i}{a} + min(OPT[i-1][a-1], OPT[i-1][a]) # demostrar por qué nunca se va de indice (ya cubri los casos (0, 0) (1, 0) y (1, 1))
+    caso general:
+    for j in range(a-1, 0, -1) ~~~> desde el antepenúltimo hasta el (d) (si ya el antepenultimo es 0, no entra en el for)
+    OPT*[i][j] = valor_{i}{j} + min(OPT[i-1][j-1], OPT[i-1][j], OPT*[i][j+1])
+    ~~~~OPT:
+    OPT[i][p] = valor_{i}{p} + min(OPT[i-1][p], OPT*[i][d])
+    OPT[i][d] = OPT*[i][d]
+    OPT[i][for j in range (2, u)] = min(valor_{i}{j} + OPT[i][j-1], OPT*[i][j])
+    ...
+    OPT[i][u] = valor_{i}{u} + min(OPT[i-1][u], OPT[i][u-1])
+    """
+    ult = n-1
     
+    for i in range(2, n):
+        p = 0 # primero
+        d = p+1 = 1 # el siguiente del primero
+        u = i # ultimo
+        a = u-1 # anteUltimo
+        
+        # lleno tabla OPTIMOS ESTRELLA para fila i
+        # caso base de siempre para cada fila i
+        ESTRELLA[i][a] = piramide[i][a] + min(OPT[i-1][a-1], OPT[i-1][a]) #nunca me voy de indice, ya que en el peor de los casos (en la primer iteracion)
+        # va a ser: i = 2, u = 2, a = 1. por lo que acceder a i-1 y a-1, se puede tranquilamente.
+        for j in range(a-1, 0, -1):
+            ESTRELLA[i][j] = piramide[i][j] + min(OPT[i-1][j-1], ESTRELLA[i][j+1]) 
+            # ecuacion de recurrencia para OPT_ESTRELLA. tampoco me voy de índice con j. porque en el peor de los casos (primera iteracion) (j+1) = a, y estoy accediendo al anteUltimo.
+        
+        # lleno tabla OPT para fila i
+        # casos base:
+        OPT[i][p] = piramide[i][p] + min(OPT[i-1][p], ESTRELLA[i][d]) # el primero de cada fila.
+        OPT[i][d] = ESTRELLA[i][d] # el segundo de cada fila
+        for j in range(2, u): #desde el 2, hasta el anteUltimo, que tienen comportamiento igual para cada caso. ya habiendo pre-calculado la tabla Estrella.
+            OPT[i][j] = min(piramide[i][j] + OPT[i][j-1], ESTRELLA[i][j])
+        #caso base, último de la fila (lo tengo que hacer despues de llenar la tabla de OPTIMOS).
+        OPT[i][u] = piramide[i][u] + min(OPT[i-1][u], OPT[i][u-1]) # puedo poner OPT[i][i] y esas cosas, y no usar 'u'. pero es mejor usarlo para entender mejor.
     
+    """
+    encontrar a dónde llegamos (el destino), uso la última fila (la base) de la tabla OPT.
+    como la tabla OPT guarda los optimos de haber llegado a cada pos, recorro la última fila, fjandome a cuál llegué con el menor valor posible.    
+    """
+    destino = (float('inf'), ult, 0)
+    idx = 0
+    while idx <= i:
+        if OPT[i][idx] < destino[0]: #el valor
+            destino[0] = OPT[i][idx]
+            destino[2] = idx # en qué pos de la ult. fila lo encontré. me guardo siempre el mínimo de todos.
+        idx += 1
     
-    i = n-1
-    destino = (float('inf'), i, 0)
     return destino[0], _reconstruccion(piramide, OPT, destino)
 
 def _reconstruccion(piramide, OPT, destino):
