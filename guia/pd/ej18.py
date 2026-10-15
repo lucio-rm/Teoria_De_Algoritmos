@@ -175,14 +175,16 @@ for i in range(1, n-1):
 ~ y ahora el comportamiento es con una iteración desde afuera hasta adentro.
 ~ sé que el * de 4-1 va a necesitar del *4-2, y asi. pero el 4-3, depende de él mismo.
 OPT*[4][3] = v_{4}{3} + min(OPT[3][2], OPT[3][3])
+OPT*[4][2] = v_{4}{2} + min(OPT[3][1], OPT[3][2], OPT*[4][3])
+OPT*[4][1] = v_{4}{1} + min(OPT[3][0], OPT[3][1], OPT*[4][2])
 
+OPT[4][0] = v_{4}{0} + min(OPT[3][0], OPT*[4][1])
+OPT[4][1] = OPT*[4][1]
+OPT[4][2] = min(v_{4}{2} + OPT[4][1], OPT*[4][2]) ^ 
+OPT[4][3] = min(v_{4}{3} + OPT[4][2], OPT*[4][3])
+OPT[4][4] = v_{4}{4} + min(OPT[3][3], OPT[4][3])
 
-OPT[4][0]
-OPT[4][1]
-OPT[4][2]
-OPT[4][3]
-OPT[4][4]
-
+^ repito, si *4-1 no tomó el camino del *4-2, tengo que tenerlo en cuenta. es una posibilidad je. si lo toma. no va a ser el min
 
 
 6.
@@ -192,7 +194,69 @@ OPT[4][4]
       [3-0][3-1][3-2][3-3]
     [4-0][4-1][4-2][4-3][4-4]
   [5-0][5-1][5-2][5-3][5-4][5-5]
-~
+~ voy a repetir todo. se puede predecir. y se va a presentar la ecuación de recurrencia y la conclusión.
+
+OPT*[5][4] = v_{5}{4} + min(OPT[4][3], OPT[4][4])
+OPT*[5][3] = v_{5}{3} + min(OPT[4][2], OPT[4][3], OPT*[5][4])
+OPT*[5][2] = v_{5}{2} + min(OPT[4][1], OPT[4][2], OPT*[5][3])
+OPT*[5][1] = v_{5}{1} + min(OPT[4][0], OPT[4][1], OPT*[5][2])
+
+OPT[5][0] = v_{5}{0} + min(OPT[4][0], OPT*[5][1])
+OPT[5][1] = OPT*[5][1]
+OPT[5][2] = min(v_{5}{2} + OPT[5][1], OPT*[5][2])
+OPT[5][3] = min(v_{5}{3} + OPT[5][2], OPT*[5][3])
+OPT[5][4] = min(v_{5}{4} + OPT[5][3], OPT*[5][4])
+OPT[5][5] = v_{5}{5} + min(OPT[4][4], OPT[5][4])
+
+"""
+"""
+conclusión:
+
+tengo que pre-calcular una tabla de óptimos estrella (OPT*), de la cual realizo este comportamiento:
+OPT*[2][1] = v_{2}{1} + min(OPT[1][0], OPT[1][1])
+
+OPT*[3][2] = v_{3}{2} + min(OPT[2][1], OPT[2][2])
+OPT*[3][1] = v_{3}{1} + min(OPT[2][0], OPT[2][1], OPT*[3][2])
+
+OPT*[4][3] = v_{4}{3} + min(OPT[3][2], OPT[3][3])
+OPT*[4][2] = v_{4}{2} + min(OPT[3][1], OPT[3][2], OPT*[4][3])
+OPT*[4][1] = v_{4}{1} + min(OPT[3][0], OPT[3][1], OPT*[4][2])
+
+OPT*[5][4] = v_{5}{4} + min(OPT[4][3], OPT[4][4])
+OPT*[5][3] = v_{5}{3} + min(OPT[4][2], OPT[4][3], OPT*[5][4])
+OPT*[5][2] = v_{5}{2} + min(OPT[4][1], OPT[4][2], OPT*[5][3])
+OPT*[5][1] = v_{5}{1} + min(OPT[4][0], OPT[4][1], OPT*[5][2])
+
+1 fila  - 0
+2 filas - 0
+3 filas - 1
+4 filas - 2
+5 filas - 3
+6 filas - 4
+
+sacando casos base (1 y 2 filas), que tienen comportamiento normal
+
+para la fila n, necesito (n-2) óptimos estrellas.
+
+
+~ Ecuación de Recurrencia:
+para la ecuación de recurrencia, analizo el comportamiento de forma tal que el primer elemento y el último tiene un comportamiento específico. pero el resto tiene comportamiento normal y predecible.
+casos base:
+. OPT[0][0] = valor_{0}{0}
+. OPT[1][0] = valor_{1}{0} + OPT[0][0]
+. OPT[1][1] = valor_{1}{1} + OPT[0][0]
+
+    para cualquier fila i: sé que la fila va desde 0 hasta i
+    ~ siendo siempre:
+     p = primero = 0
+     d = p + 1 = 1
+     u = ultimo = i
+
+OPT[i][p] = valor_{i}{p} + min(OPT[i-1][p], OPT*[i][d])
+OPT[i][d] = OPT*[i][d]
+OPT[i][for j in range (p+2, u)] = min(valor_{i}{j} + OPT[i][j-1], OPT*[i][j])
+...
+OPT[i][u] = valor_{i}{u} + min(OPT[i-1][u], OPT[i][u-1])
 
 
 """
