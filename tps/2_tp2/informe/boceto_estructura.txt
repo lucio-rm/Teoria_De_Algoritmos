@@ -1,0 +1,150 @@
+informe 100% AUTOCONTENIDO (no tiene que ir a buscar a otros archivos los ejemplos provistos)
+- Resumen 
+    ~ resumen de lo presentado (el problema)
+    ~ resumen de PD
+    ~ resumen de lo que se va a ver
+
+- El problema 
+    . Introducción
+        ~ consigna
+    . Planteamiento
+        ~ aproach del problema
+        ~ planteo preguntas, después respondidas
+        ~ análisis del problema
+    . Consecuencias de la optimalidad
+        ~ qué es lo buscado
+        ~ lo que se vaya a encontrar, se va a encontrar al final de todo
+- Teoría Programación Dinámica 
+    . Explicación PD
+        ~ qué es un algoritmo PD
+        ~ Partes y en qué consiste PD
+        ~ presentar brevemente el paso a paso (nombrar subP Memo, etc.)
+        ~ ventajas de usar PD
+        ~ dificultad de PD ¿?
+    . Subproblemas
+    . Memoization
+    . Ec. Recurrencia
+        ~ importantisimo
+    . Pensamiento PD irl
+        ~ supongo que ver en subproblemas ypensar en memoization debe ayudar en el día a día
+        ~ pensar en ec. recurrencia diaria por optimizacion?
+        ~ leer libros, filósofos, etc.
+
+
+- Diseño del Algoritmo 
+    . Logica
+        ~ explicar logica y como llegamos a eso
+        ~ explicar por qué el código fue hecho de esa manera
+    . Codigo
+        ~ mostrar el pseudocódigo
+            ~ le puedo poner colorcitos? o muy de bot
+
+
+- Analizando el Algoritmo 
+    . Complejidad
+        ~ temporal
+            ~ cómo se llegó a eso y las ventajas de PD
+        ~ espacial 
+            ~ explicar la estrcutura utilizada y el por qué.
+    . Demostración de la Optimalidad
+        ~ usar la ec. de recurrencia para demostrar que llega al maximo valor acumulado posible
+        ~ demostracion por induccion ez
+        ~ no me tengo que olvidar de poner ejemplos
+        . Impacto de la Variabilidad en la Optimalidad
+            ~ puede Mateo ganar mas veces?
+    . Experimentos  
+        ~ mediciones de tiempo
+        ~ ver cómo afecta a los tiempos del algoritmo la variabilidad de los valores de las monedas
+        ~ hacer mediciones mas exhaustivas (y no solo el ajuste por cuadrados minimos)
+
+
+- Conclusion 
+    ~ hablar en sí de lo visto en el TP
+    ~ ventajas de PD
+    ~ peligros de PD?
+Bibliografía
+
+
+
+
+
+
+---------------
+- Ec. recurrencia
+En la búsqueda de respuestas, no me tengo que fijar en todos los posibles arreglos con (M-2) elem. porque para que aríen elementos del medio, no apsa si no llego agararndo dos monedas.
+
+. para un OPT(M), con len(M) = 7, nunca voy a necesitar saber OPT(6elem) ni OPT(4) ni OPT(2).
+porque se puede saber que mateo agarara el máximo entre dos, sin pensar
+
+. con 7 elmeentos, busco el optimo del arreglo con 5 elem, con 3 elem y con 1 elem
+
+Ej:
+OPT(7), busco OPT(5)
+M = [m1, m2, m3, m4, m5, m6, m7], 7 elem
+
+para 5 elem, se tienen en cuenta posibles casos que podemos tener sii
+1. S y M agarran los dos ult(m7, m6)
+2. S agarra ult y M prim(m7, m1)
+3. S agarra prim y M ult(m1, m7)
+4. S y M agarran los dos prim(m1, m2)
+
+casos 2 y 3 , al ser dos casos distintos, dejan al mismo arreglo después de ejecutarse. 
+
+Por cada OPT(CantElem), voy a tener 3 posibles arreglos que tener pre-calculados. Memoization.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Correcciones TP1:
+informe 100% AUTOCONTENIDO (no tiene que ir a buscar a otros archivos los ejemplos provistos)
+- Resumen --> TODO OK
+
+- El problema --> TODO OK
+    . Introducción
+    . Planteamiento
+    . Consecuencias de la optimalidad
+- Teoría Greedy --> TODO OK
+    . Regla Greedy buscada
+    . Pensamiento Greedy
+- Diseño del Algoritmo --> TODO OK
+    . Logica
+    . Codigo
+- Analizando el Algoritmo --> MID
+    . Complejidad
+    . Demostración de la Optimalidad
+        . Impacto de la Variabilidad en la Optimalidad
+    . Experimentos>>>>>>>  
+        . hacer mediciones mas exhaustivas (y no solo el ajuste por cuadrados minimos)
+- Conclusion --> TODO OK
+Bibliografía
+
+> corregir:
+    . impacto de la variabilidad de los valores al tiempo del algoritmo
+
+1. Proponer un algoritmo greedy óptimo. (1/1)
+El algoritmo propuesto es correcto y está bien explicado.
+2. Demostración de optimalidad. (2/2)
+Excelente trabajo en esta parte.
+3. Implementación del algoritmo, análisis de complejidad y analisis de variabilidad de los valores de las monedas respecto al tiempo. (1.75/2)
+Todo OK. Me hubiese gustado que se extendieran un poco más analizando si la variabilidad de los valores impacta o no, y como, al tiempo del algoritmo. Este analisis y el que sigue pueden contrastarlos con mediciones realizadas para el punto 6 (o el respectivo a futuros tps). (-0.25)
+4. Analisis de Variabilidad de los valores de las monedas respecto a la optimalidad. (1/1)
+Todo OK.
+5. Ejemplos de ejecución. (0.75/1.5)
+Faltan ejemplos de ejecución (más alla de las mediciones hechas, se espera que estos ejemplos sirvan para ilustrar cómo se comporta el algoritmo en distintos casos particulares del problema, a.k.a. casos bordes o de interes). Recuerden que el informe debe contener estos más allá de lo que hayan ejecutado (se espera que el informe sea 100% autocontenido). (-0.75)
+6. Mediciones de tiempos para corroborar la complejidad teórica indicada. (2/2)
+Buen trabajo, les recomiendo que hagan otro tipo de mediciones más exhaustivias para analizar más en profundidad el problema y el algoritmo planteados (por ejemplo casos de variabilidad) y no solo el ajuste por cuadrados minimos convencional.
+7. Conclusiones y otras observaciones. (0.5/0.5)
+En general el TP esta muy bien, felicitaciones.
+

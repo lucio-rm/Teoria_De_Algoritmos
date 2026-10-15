@@ -1,0 +1,112 @@
+\section{Diseño del Algoritmo}
+
+¿Por qué Sophia piensa antes de actuar de manera avariciosa, y logra la mejor ganancia que pudo haber conseguido?
+
+Si la estrategia hubiera omitido los posibles subproblemas, los posibles escenarios dependiendo de qué puede convenir elegir entre cada ronda, no se le está dando la manera de encontrar la mejor ganancia. Y más que justificada está la estrategia, pudiendo saber siempre en cada caso qué moneda Mateo va a elegir. No existe riesgo alguno con la estrategia a implmementar de Sophia.
+
+Habiendo hablado sobre eso, hay que pasar esa estrategia, esa ecuación de recurrencia a la \textit{lógica algorítmica}. 
+¿Cuál es el paso a paso en cualquier caso de monedas? ¿Cuál puede ser el peor caso posible? ¿Cómo interactúa el algoritmo con los datos del problema? ¿Cómo se pasan los datos del problema al idioma computacional?
+
+\subsection{Lógica}
+
+Programación Dinámica tiene la ventaja de que una vez pensada y hecha la \textit{ecuación de recurrencia} se logra implementar el algoritmo de manera sencilla.
+Esto es debido a que se puede implementar la \textit{memoization} con un arreglo (o matriz en este caso), y llenar esta matriz con iteraciones en las cuales adentro se implementa la lógica de la ecuación de recurrencia en cuestión.
+
+Una fila de $n$ monedas, se puede implementar con un arreglo de números enteros. Donde cada posición representa una moneda, con su valor asociado.
+El turno va a empezar siendo de Sophia, y es donde va a empezar la elección. 
+
+La lógica se gestiona utilizando una matriz \texttt{OPT} de longitud $n \times n$ para guardar el \textbf{óptimo} en cada caso. 
+En primer instancia, se va a cubrir los casos bases (ya conocidos).
+Y después, se llena la matriz con cada caso, hasta la última moneda. En cada caso posible, siempre se elije la máxima ganancia para Sophia.
+Se empieza pensando en los subproblemas, en las posibles filas de \texttt{monedas} que pueden ir quedando en base a ``qué pasaría si...''. Empezando de menor cantidad de monedas, hasta llegar a la cantidad $n$ de monedas y habiendo cubierto, teniendo la respuesta final.
+
+También se muestra la \textbf{reconstrucción} del algoritmo, el por qué se responde de manera sencilla. Si le decimos a Sophia cuánto va a ser su ganancia máxima, la pregunta va a ser ¿Cómo logro esa ganancia? \textit{¿Qué monedas se eligen, en cada caso?}
+
+Con un manejo de índices, en base a la primer y última moneda, se les va a ir restando o sumando hasta que sean iguales (quede una sola moneda). Se resta $1$ el índice \texttt{ultima} si se agarra esa moneda, y se suma $1$ a \texttt{primera} si se agarra esa moneda en ese turno.
+Cada moneda que se va agarrando se guarda en un arreglo \texttt{CUALES}, que va a terminar teniendo longitud $n$ (longitud de la fila de monedas). 
+
+Para saber qué moneda se elije (para el turno de Sophia, para Mateo no hace falta aclarar), se utiliza la misma ecuación de recurrencia pero \textit{al revés}. ¿Qué hubiera pasado si en ``este caso'' hubiera hecho ``esto''? La respuesta a esa pregunta, verificar el comportamiento que sucedió en esa ronda de elección, nos permite saber qué moneda se eligió. \\
+
+\subsection{Código}\label{rec:codigo} % para llamarlo después. en el analisis de la complejidad.
+
+\begin{lstlisting}[mathescape=true, language=Python]
+def juego(monedas [1 , 2 , 3 ,... , n ]):
+    if len(monedas) == 0:
+        Devuelvo (0, 0)
+
+    n = len(monedas)
+
+    OPT = [[0] * n for _ in range(n)]
+
+    # casos base
+    for i in range(n):
+        OPT[i][i] = monedas[i] # posicion (i, i) a la moneda i
+        if i < n -1:
+            OPT[i][i+1] = max(monedas[i], monedas[i+1]) 
+
+    # caso general
+    for long in range(3, n+1): 
+        for i in range(n - long + 1):
+            j = i + long -1
+            # caso 1: S plantea elegir la primer moneda
+            if monedas[i+1] > monedas[j]:
+                # S agarra la moneda i. M agarra max. entre i+1 y j
+                ganancia_izq = monedas[i] + OPT[i+2][j]
+            else:
+                ganancia_izq = monedas[i] + OPT[i+1][j-1] 
+
+            # caso 2: S plantea elegir la ultima moneda
+            if monedas[i] > monedas[j-1]:
+                # S agarra la moneda j. M agarra max. entre i y j-1 
+                ganancia_der = monedas[j] + OPT[i+1][j-1]
+            else:
+                ganancia_der = monedas[j] + OPT[i][j-2]
+
+            OPT[i][j] = max(ganancia_izq, ganancia_der)
+
+    guia = _reconstruccion(monedas, OPT)
+    return partida(monedas, guia)
+
+
+
+def reconstruccion(monedas [1 , 2 , 3 ,..., n], OPT [Matriz de optimalidad nxn]):
+    CUALES = [] 
+    primera = 0
+    ultima = n -1
+
+    turno_sophia = True
+
+    while primera <= ultima: 
+        # mientras haya monedas para ver
+        if turno_sophia:
+            if primera == ultima:
+                # una moneda, y turno S, indistinto cual agarrar
+                CUALES.append(0)  
+                break
+
+            # si S hubiera elegido la primera
+            if monedas[primera+1] > monedas[ultima]:
+                ganancia_izq = monedas[primera] + (OPT[primera+2][ultima] if (primera+2) <= j else 0) # siempre que se pueda elijo el optimo, sino 0
+            else:
+                ganancia_izq = monedas[primera] + (OPT[primera+1][ultima-1] if (primera+1) <= j-1 else 0) 
+
+            #chequeo comportamiento gracias a la ecuacion de recurrencia al reves
+            if OPT[primera][ultima] == ganancia_izq:
+                CUALES.append(0)
+                primera += 1
+            else:
+                CUALES.append(1)
+                ultima -= 1
+        else:
+            # turno de M, piensa de manera Greedy, elije la mas grande disponible siempre que pueda.
+            if monedas[primera] > monedas[ultima]:
+                primera += 1
+            else:
+                ultima -= 1
+
+        # cambio de turno
+        turno_sophia = not turno_sophia  
+
+    Devuelvo CUALES
+
+\end{lstlisting}
