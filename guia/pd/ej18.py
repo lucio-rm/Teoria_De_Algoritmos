@@ -262,8 +262,32 @@ OPT[i][u] = valor_{i}{u} + min(OPT[i-1][u], OPT[i][u-1])
 """
 
 
+def camino_minimo_piramide(piramide):
+    if not piramide:
+        return []
+    n = len(piramide)
+    ESTRELLA = [[0] * n for _ in range(n)] # se podría optimizar, no voy a utilizar todos.
+    OPT = [[0] * n for _ in range(n)] # lo mismo que esto. estoy creando una matriz $n \times n$, cuando sólo voy a utilizar (n/2)
 
+    # casos base:
+    OPT[0][0] = piramide[0][0] # el inicio
+    if n == 1:
+        return OPT[0][0], [0] # un solo elemento, el camino finaliza ahí.
+    OPT[1][0] = piramide[1][0] + OPT[0][0]
+    OPT[1][1] = piramide[1][1] + OPT[0][0]
 
+    
+    
+    
+    i = n-1
+    destino = (float('inf'), i, 0)
+    return destino[0], _reconstruccion(piramide, OPT, destino)
+
+def _reconstruccion(piramide, OPT, destino):
+    if destino[0] == float('inf'):
+        return [] # no se pudo llegar a la base.
+    inicio = (0, 0)
+    fin = (destino[1], destino[2])
 
 # testeo:
 def main():
