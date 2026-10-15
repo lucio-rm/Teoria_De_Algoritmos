@@ -22,7 +22,8 @@ ANALIZANDO
 	~ complejidad
 	~ comprobar optimalidad
 	~ aaaalta pajovich hacer mediciones, pero estaria bueno. comprobar complejidad de forma empirica
-	~ tests + ejemplos y mas casos
+	~ tests hechos + otros que pude haber hecho (hacerlos ¿? time.)
+	~ ejemplos y mas casos
 	
 
 MEJORAS
