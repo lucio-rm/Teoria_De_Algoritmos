@@ -11,6 +11,7 @@ PROBLEMA
 	~ dificultad
 		~ es posible ¿?
 		~ estrellas
+		~ ciclo negativo (pesos negativos)
 
 DISENIANDO
 	~ primer aproach y por qué estaba mal (circular dependency between OPT)
