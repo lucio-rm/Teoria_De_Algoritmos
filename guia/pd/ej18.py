@@ -105,17 +105,58 @@ desde (2-0) puedo:
 # !!! el unico problema es del pelotudo que está a la derecha, y que puede formar del camino minimo óptimo que quiero lograr.
 ~ ¿ Cómo lo resuelvo ?
 
+=> good -> solo necesito el de la derecha.
+~ calcular el óptimo con delay.
+~ porque cada uno necesita:
+OPT[i][j] = v_{i}{j} + 
+    { OPT[i][j+1] , j < i  ===============> derecha ====> *
+min { OPT[i][j-1] , j > 0  ===============> izquierda ==> *
+    { OPT[i-1][j-1] , j > 0 and i > 0 ====> arriba-izq => ok
+    { OPT[i-1][j] , i > 0  ===============> arriba =====> ok
+
+* busco el de izq/der, ese óptimo
+* el óptimo, puede utilizar la lógica para "descartar" la dependencia circular.
+~ soy el izq. tengo 2 opciones: venir de (1-0) o (2-1).  tengo que agarrar el mínimo.
+    ~ suponer (1-0) = C
+    ~ para el OPT(2-1) no necesito averiguar el OPT(2-2), porque por qué recorrer una casilla más (con algún peso p) si puedo venir directo de la (1-1).
+        ~ OPT(2-1) va a agarrar el mín((1-0, 1-1)). (descarto dep. circular porque me estoy fijando en el izquierdo).
+            ~ OPT(2-1) va a ser un OPT* (no el oficial), porque tal vez lo mejor para el OPT(2-1), cuando miremos al der, pueda ser venir por la izq.
+~ soy der. mi única opcion va a ser venir de las dos opciones de arriba. sino sumo un peso p innecesario. OPT[2-1] = OPT*[2][1]
 OPT[0][0] = v_{0}{0}
 OPT[1][0] = v_{1}{0} + OPT[0][0]
 OPT[1][1] = v_{1}{1} + OPT[0][0]
-
+    OPT*[2][1] = v_{2}{1} + min(OPT[1][0], OPT[1][1])
+OPT[2][0] = v_{2}{0} + min(OPT[1][0], OPT*[2][1])
+OPT[2][1] = OPT*[2][1]
+OPT[2][2] = v_{2}{2} + min(OPT[1][1], OPT[2][1])
 
 
 4.
-        [ - ]
-      [ - ][ - ]
-    [ - ][ - ][ - ]
- [ - ][ - ][ - ][ - ]
+        [0-0]
+      [1-0][1-1]
+    [2-0][2-1][2-2]
+ [3-0][3-1][3-2][3-3]
+
+~ soy izq. (3-0). tengo 2 opciones: venir del (2-0) o del (3-1)
+    ~ si vengo del (2-0), ya lo tengo calculado.
+    ~ si vengo del (3-1), NO lo tengo calculado.
+        ~ calculo un OPT*[3, 1]. del cual, sé que:
+            ~ no puedo venir del [3, 0]
+            ~ puedo venir del OPT[2-0], del OPT[2-1] o del OPT[3-2] (no calculado.)
+                ~ tengo que hacer un OPT[3-2]*, que al descartar la opcion de venir desde el (3-0) y del (3,3) (suma p innecesaria), tengo que agarrar el mínimo de -> OPT[2-1] y OPT[2-2]
+    OPT*[3][2] = v_{3}{2} + min(OPT[2][1], OPT[2][2])
+    OPT*[3][1] = v_{3}{1} + min(OPT[2][0], OPT[2][1], OPT*[3][2])
+OPT[3][0] = v_{3}{0} + min(OPT[2][0], OPT*[3][0])
+OPT[3][1] = OPT*[3][1]
+OPT[3][2] = min(v_{3}{2} + OPT[3][1], OPT*[3][2]) ^
+OPT[3][3] = v_{3}{3} + min(OPT[2][2], OPT[3][2])
+
+++++++ puedo hacer tambien, en varios OPT* , como descarto también las puntas puedo descartar el arriba-izq, porque sería suma de peso p innecesario.
+++++++ si estoy desde (3-0), no quiero en OPT*[3-1] que calcule en el min() el 2-0. porque si gana ese, sé con certeza que min(OPT[2-1], OPT*[3-1]) gana 2-1.
+            * ese pensamiento lo descarto, ya que para el OPT[3][1], voy a descartar esa lógica. asi que si gana o no, no me importa. no recalculo y lo uso igual, ya fue.
+^ se puede pensar en este caso, una posible dependencia circular. pero es falso, porque si para el caso de OPT[3][1] se hubiera elegido el OPT*[3][2] tendría sumando constantes que no van a ganar nunca el mínimo. ir (2-2)->(3-2)->(3-1)->(3-2), siempre va a ser más costoso que (2-2)->(3-2).
+
+
 
 5.
         [ - ]
