@@ -84,13 +84,29 @@ OPT[0][0] = v_0
 ~ siempre caso base, el valor del mismo escalon pos(0, 0)
 
 2.
-        [ - ]
-      [ - ][ - ]
+         [0, 0]
+      [1, 0][1, 1]
+~ si no se llenó el OPT de la derecha, cómo puedo saberlo ¿?
+~ pienso en este caso. como ya estoy en la base, lo mejor es llegar desde arriba lo antes posible sin vueltas \footnote{porque sino sumaría valor innecesario: 
+(v_{0}{0} + v_{1}{0}) siempre $<=$ (v_{0}{0} + v_{1}{0} + v_{1}{1})
+OPT[0][0] = v_{0}{0}
+OPT[1][0] = v_{1}{0} + OPT[0][0]
+OPT[1][1] = v_{1}{1} + OPT[0][0]
+
 
 3.
-        [ - ]
-      [ - ][ - ]
-    [ - ][ - ][ - ]
+        [0-0]
+      [1-0][1-1]
+    [2-0][2-1][2-2]
+~
+
+OPT[0][0] = v_{0}{0}
+OPT[1][0] = v_{1}{0} + OPT[0][0]
+OPT[1][1] = v_{1}{1} + OPT[0][0]
+
+
+
+
 
 4.
         [ - ]

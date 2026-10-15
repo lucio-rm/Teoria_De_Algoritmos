@@ -1,0 +1,44 @@
+INDICE
+	~ normal
+
+RESUMEN
+	~ cómo llegue a este informe
+	~ qué paso
+	~ por qué estoy haciendo esto.
+
+PROBLEMA
+	~ enunciado
+	~ dificultad
+		~ es posible ¿?
+		~ estrellas
+
+DISENIANDO
+	~ primer aproach y por qué estaba mal
+	~ cómo llegue a la res. correcta
+	~ resolucion correcta
+
+ANALIZANDO
+	~ mostrar un ejemplo básico
+	~ complejidad
+	~ comprobar optimalidad
+	~ aaaalta pajovich hacer mediciones, pero estaria bueno. comprobar complejidad de forma empirica
+	~ tests + ejemplos y mas casos
+	
+
+MEJORAS
+	~ posibles aproach
+	~ condiciones + dificultad bajada
+	~ hacerlo por backtracking?
+
+CONCLUSION
+	~ decir qué aprendi
+	~ diversion
+	~ qué pasó y cómo prevenirlo
+	~ poderes de pensar
+
+BIBLIOGRAFIA
+	~ ej.18 catedra
+	~ buch genender
+	~ ¿?
+
+
