@@ -22,13 +22,13 @@ def obtiene_nota_acta(nex, nfi):
 # Recordá que "B--" no existe, usamos "B=" que vale 2 puntos.
 # =====================================================================
 mis_notas = {
-    "Dyc": "B",
+    "Dyc": "B-",
     "Greedy": "R",
     "Backtracking": "R",
-    "Programación Dinámica": "B-",
-    "Programación Lineal": None,
-    "Flujo": None,
-    "Reducciones": None
+    "Programación Dinámica": "B=",
+    "Programación Lineal": "B",
+    "Flujo": "B=",
+    "Reducciones": "R"
 }
 
 # 1. Analizar estado actual
