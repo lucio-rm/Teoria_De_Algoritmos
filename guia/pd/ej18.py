@@ -407,11 +407,3 @@ def _reconstruccion(piramide, OPT, destino):
                 CAMINO.append([fila, columna])
         
     return CAMINO[::-1] # en orden cronológico.
-
-
-# testeo:
-def main():
-    pruebo = 0
-    
-if __name__ == "__main__":
-    main()
