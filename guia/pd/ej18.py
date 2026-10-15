@@ -155,24 +155,44 @@ OPT[3][3] = v_{3}{3} + min(OPT[2][2], OPT[3][2])
 ++++++ si estoy desde (3-0), no quiero en OPT*[3-1] que calcule en el min() el 2-0. porque si gana ese, sé con certeza que min(OPT[2-1], OPT*[3-1]) gana 2-1.
             * ese pensamiento lo descarto, ya que para el OPT[3][1], voy a descartar esa lógica. asi que si gana o no, no me importa. no recalculo y lo uso igual, ya fue.
 ^ se puede pensar en este caso, una posible dependencia circular. pero es falso, porque si para el caso de OPT[3][1] se hubiera elegido el OPT*[3][2] tendría sumando constantes que no van a ganar nunca el mínimo. ir (2-2)->(3-2)->(3-1)->(3-2), siempre va a ser más costoso que (2-2)->(3-2).
-
+    ~ y en [3][3], como nunca antes nadie se fijó (logicamente) en este mismo, tampoco crea dependencia.
 
 
 5.
-        [ - ]
-      [ - ][ - ]
-    [ - ][ - ][ - ]
-  [ - ][ - ][ - ][ - ]
-[ - ][ - ][ - ][ - ][ - ]
+        [0-0]
+      [1-0][1-1]
+    [2-0][2-1][2-2]
+  [3-0][3-1][3-2][3-3]
+[4-0][4-1][4-2][4-3][4-4]
+~ puedo predecir qué OPT* voy a necesitar. en fila n-1, in range (1, n-1) -> 1, 2, 3
+siendo n = 5 filas:
+for i in range(1, n-1):
+    OPT*[4, i]
+~osea:
+    OPT*[4][1]
+    OPT*[4][2]
+    OPT*[4][3]
+~ y ahora el comportamiento es con una iteración desde afuera hasta adentro.
+~ sé que el * de 4-1 va a necesitar del *4-2, y asi. pero el 4-3, depende de él mismo.
+OPT*[4][3] = v_{4}{3} + min(OPT[3][2], OPT[3][3])
+
+
+OPT[4][0]
+OPT[4][1]
+OPT[4][2]
+OPT[4][3]
+OPT[4][4]
+
+
 
 6.
-            [ - ]
-          [ - ][ - ]
-        [ - ][ - ][ - ]
-      [ - ][ - ][ - ][ - ]
-    [ - ][ - ][ - ][ - ][ - ]
-  [ - ][ - ][ - ][ - ][ - ][ - ]
-
+            [0-0]
+          [1-0][1-1]
+        [2-0][2-1][2-2]
+      [3-0][3-1][3-2][3-3]
+    [4-0][4-1][4-2][4-3][4-4]
+  [5-0][5-1][5-2][5-3][5-4][5-5]
+~
 
 
 """
