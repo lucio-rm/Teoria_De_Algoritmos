@@ -102,6 +102,8 @@ OPT[1][1] = v_{1}{1} + OPT[0][0]
 desde (2-0) puedo:
 => from (1-0) ==> v_{2}{0} + OPT[1][0] 
 => from (2-1) !!! no esta analizado el óptimo. en una dependencia circular entre óptimos (no se cómo se dice.)
+# !!! el unico problema es del pelotudo que está a la derecha, y que puede formar del camino minimo óptimo que quiero lograr.
+~ ¿ Cómo lo resuelvo ?
 
 OPT[0][0] = v_{0}{0}
 OPT[1][0] = v_{1}{0} + OPT[0][0]
