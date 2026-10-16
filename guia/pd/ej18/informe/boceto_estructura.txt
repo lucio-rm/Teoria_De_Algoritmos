@@ -163,3 +163,17 @@ formato IEEE/LNCS de dos columnas).
   - Citar a Bellman (Dynamic Programming, 1957), Dijkstra (1959), y Kleinberg & 
     Tardos (Algorithm Design, 2005).
 ================================================================================
+
+
+
+
+
+
+
+
+
+
+Problema $\to$ 
+Obstáculo Teórico (ciclos horizontales) $\to$ 
+Método Propuesto (PD de doble barrido con poda en extremos) $\to$ 
+Resultado ($\Theta(n^2)$ en tiempo y espacio, superando a Dijkstra).
