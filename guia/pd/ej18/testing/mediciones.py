@@ -4,7 +4,7 @@ import seaborn as sns
 import numpy as np
 import scipy as sp
 
-from ejercicio import camino_minimo_piramide
+from algoritmo import camino_minimo_piramide
 from tests import dijkstra_piramide
 from util import time_algorithm
 

@@ -1,5 +1,5 @@
 import heapq
-from ejercicio import camino_minimo_piramide
+from algoritmo import camino_minimo_piramide
 
 def dijkstra_piramide(piramide):
     """Implementacion de referencia con Dijkstra O(n^2 log n) para validar correctitud y medir tiempos."""
