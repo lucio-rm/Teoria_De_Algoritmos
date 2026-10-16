@@ -68,57 +68,42 @@
   \input{#1-words} palabras%
 }
 
-
 %------------------------------------------------------------------------------
-%	HEADERS, FOOTERS EN SECCIONES
+%	HEADERS Y FOOTERS CIENTÍFICOS
 %------------------------------------------------------------------------------
 \pagestyle{fancy}
-\setlength{\headheight}{30pt}
+\setlength{\headheight}{14pt}
 
-\renewcommand{\headrulewidth}{1pt}
-\renewcommand{\footrulewidth}{1pt}
-\rhead{\footnotesize \textsc {Camino Mínimo en Pirámide por Programación Dinámica\\ Teoría de Algoritmos}} % Trabajo práctico
-\lhead{\includegraphics[width=2.5cm]{logo}}
-\cfoot{\small \textsc {Página \thepage\ de \pageref*{LastPage}}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
 
-\fancypagestyle{firststyle}
- {
+\lhead{\footnotesize \textsc{L. Romero Mascaró}}
+\rhead{\footnotesize \textit{Relajación Bidireccional y Poda Geométrica en Digrafos Triangulares}}
+\cfoot{\small \thepage\ de \pageref*{LastPage}}
+
+\fancypagestyle{firststyle}{
   \fancyhf{}
-   \renewcommand{\headrulewidth}{0pt}
-   % descomentar si les interesa poner la cantidad de palabras:
-   %\lfoot{\textit {\quickwordcount{main}}} 
-   %\rfoot{\small \textsc {Página \thepage\ de \pageref*{LastPage}}}
- }
-
-
-
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0.4pt}
+  \cfoot{\small \thepage\ de \pageref*{LastPage}}
+}
 
 %------------------------------------------------------------------------------
-%	CARÁTULA
+%	BLOQUE DE TÍTULO / ENCABEZADO FORMAL
 %------------------------------------------------------------------------------
-
 \renewcommand*{\maketitle}{
-\thispagestyle{firststyle}
-\begin{center}
-\includegraphics[width=7cm]{logo}
-\\[1cm]
-	\textsc{\Large Teoría de Algoritmos}\\           % Materia
-	\textsc{\small (75.29) Curso Buchwald - Genender}\\[0.4cm]    % Subtítulo materia
-	{ \Huge \bfseries Programación Dinámica\\ Problema: \\[0.3cm] Camino Mínimo en Pirámide}\\[0.3cm]      % Título
-    \rule{0.7\textwidth}{1pt} \\[0.3cm]
-
-
-	{\large \today  \\[0.8cm]}                          % Fecha 
-	
-	
-	\large
-	% pongo \center?
-	\begin{minipage}{0.4\textwidth}
-		\begin{center}
-            \large{Lucio Romero Mascaró \\113091}
-		\end{center}
-	\end{minipage}
-	
- \end{center}
-
+  \thispagestyle{firststyle}
+  \begin{center}
+    \vspace*{0.3cm}
+    {\LARGE \bfseries Relajación Bidireccional In-Place y Poda por Dominancia Geométrica para Caminos Mínimos en Digrafos Planares Triangulares\par}
+    \vspace{0.8cm}
+    
+    {\large \textbf{Lucio Romero Mascaró}}\\[0.15cm]
+    {\normalsize Investigador Independiente}\\[0.1cm]
+    {\small \texttt{lucioromeromascaro@gmail.com} \quad\textbar\quad \texttt{github.com/lucio-rm}}\\[0.3cm]
+    
+    {\small \today}\\[0.4cm]
+    \rule{\textwidth}{0.5pt}
+  \end{center}
+  \vspace{0.1cm}
 }
