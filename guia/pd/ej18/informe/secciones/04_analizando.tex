@@ -1,0 +1,16 @@
+\section{Analizando el Algoritmo}
+
+\subsection{Demostracion de Optimalidad}
+
+\subsection{Complejidad}
+\subsubsection{Caso Especial de Reconstruccion}
+
+nashe
+Demostracion de Optimalidad, Complejidad y Caso Patologico de Reconstruccion (aprox 1.5 paginas)
+	%~ Demostracion de Optimalidad por Induccion sobre las capas i
+	%	~ Caso base (i = 0 e i = 1) y Paso Inductivo (asumiendo fila i-1 optima, probar que la union de los dos barridos ortogonales agota todas las trayectorias validas hacia la fila i).
+	%~ Separacion Estricta de Complejidades (Exigencia de Catedra)[cite: 22]
+	%	~ Complejidad del Algoritmo de PD: Temporal Theta(n^2) = Theta(|V|) (cota inferior teorica Omega(|V|) alcanzada) y Espacial Theta(n^2) = Theta(|V|) en matriz escalonada. Explicar por que NO se puede bajar a O(n) espacial si se exige reconstruir el camino sin recalcular (Refutacion del error comun).
+	%	~ Complejidad de la Reconstruccion y el Caso Patologico "Serpiente": Demostrar que en el mejor caso (caida vertical) la reconstruccion toma Omega(n) pasos, pero en el peor caso patologico (camino en zig-zag que barre cada fila horizontalmente) toma Theta(n^2) = Theta(|V|) pasos.
+	%~ Impacto de la Variabilidad[cite: 22]
+	%	~ Explicar que la fase de llenado de la tabla PD es ciega a la variabilidad de los pesos (siempre ejecuta exactamente las mismas comparaciones Theta(n^2)), mientras que la fase de reconstruccion SI varia su tiempo de ejecucion entre O(n) y O(n^2) segun la topografia de los pesos.

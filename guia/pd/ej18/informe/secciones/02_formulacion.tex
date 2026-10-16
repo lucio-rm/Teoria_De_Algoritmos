@@ -1,0 +1,13 @@
+\section{Diseño del Algoritmo}
+
+Formulacion Matematica del Dominio y Analisis del Ciclo (aprox 1.5 paginas)
+~ Definicion formal del Digrafo Triangular Estratificado G = (V, E, w)
+    %~ Definir el conjunto de vertices V = {(i, j) : 0 <= i < n, 0 <= j <= i} con cardinalidad N = |V| = n(n+1)/2 = Theta(n^2).
+    %~ Definir el conjunto de aristas dirigidas permitidas E = E_down U E_horiz, donde E_down conecta (i-1, j-1) -> (i, j) y (i-1, j) -> (i, j), y E_horiz conecta (i, j) <-> (i, j+1).
+    %~ Condicion de pesos: Funcion w: V -> R+ (o Z+). Demostrar con un contraejemplo de 2 nodos por que si existieran pesos negativos la solucion simple se vuelve NP-Hard o diverge a -infinito.
+
+~ El Fracaso del Planteo Ingenuo (Dependencia Circular)
+    ~ Presentar la ecuacion de recurrencia ingenua de 4 direcciones (tu Planteo 1).
+    %~ Demostrar formalmente que OPT[i][j] depende de OPT[i][j+1] y viceversa, formando un ciclo mutuo que viola el principio de ordenamiento topologico de Bellman.
+
+

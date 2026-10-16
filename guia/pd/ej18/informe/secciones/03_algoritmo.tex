@@ -1,0 +1,29 @@
+\section{Algoritmo}
+
+
+Descomposicion Bidireccional y Teorema de Poda de Frontera (aprox 2.5 paginas)
+~ Lema 1: Monotonia Horizontal de Caminos Simples Optimos
+    ~ Demostrar por reduccion al absurdo que, dado w(v) > 0, ningun camino optimo dentro de la fila i puede cambiar de direccion horizontal (ir a la izquierda y luego a la derecha, o viceversa), ya que repetiria un vertice sumando peso positivo redundante.
+    ~ Corolario: Todo subcamino horizontal en la capa i es estrictamente monotono hacia la izquierda (capturado por OPT*) o hacia la derecha (capturado por OPT).
+~ Teorema 1: Poda por Dominancia Geometrica en las Esquinas del Triangulo (Tu Aporte Central)
+    %~ Demostracion algebraica del borde derecho (u = i): Probar que para llegar a (i, i-1), bajar directo desde (i-1, i-1) cuesta OPT[i-1][i-1] + v_{i, i-1}, lo cual es estrictamente menor que pasar por la esquina derecha (i, i) que cuesta OPT[i-1][i-1] + v_{i, i} + v_{i, i-1}. Por ende, la esquina derecha queda podada del precalculo.
+    %~ Demostracion algebraica del borde izquierdo (p = 0 y d = 1): Probar que para llegar a (i, 1), el camino lateral desde (i, 0) proviene obligatoriamente del mismo padre (i-1, 0), siendo dominado por la bajada directa (i-1, 0) -> (i, 1). Deducir que OPT[i][1] = OPT*[i][1] sin evaluar transiciones desde la izquierda, y que la fila i de longitud (i+1) solo requiere precalcular (i-1) estados estrella.
+~ Optimizacion Espacial In-Place (Eliminacion de la matriz ESTRELLA) y Codigo Limpio
+    ~ Explicar como se reutiliza el vector OPT[i] en dos fases sucesivas (derecha a izquierda y luego izquierda a derecha) eliminando el 100% de la matriz auxiliar ESTRELLA y usando listas escalonadas (ahorro del 75% de memoria).
+    ~ Incluir el algoritmo final optimizado en Python.
+
+
+\subsection{Descomposición Bidireccional}
+
+\subsection{Teorema de Poda}
+
+
+
+
+\subsection{Código}\label{rec:codigo} % para llamarlo después. en el analisis de la complejidad.
+
+\begin{lstlisting}[mathescape=true, language=Python]
+def acacodigo
+def recons
+
+\end{lstlisting}

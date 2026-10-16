@@ -1,4 +1,11 @@
 \vspace*{1.5cm}
 \section{Resumen}
+itulo y Abstract (Resumen Ejecutivo) (aprox 0.5 paginas)
+~ Titulo cientifico formal
+    ~ Propuesta: "Relajacion Bidireccional In-Place y Poda por Dominancia Geometrica para Caminos Minimos en Digrafos Planares Triangulares con Ciclos Intra-Capa"
 
-nashe
+    ~ Abstract bajo el framework AER (Contexto, Obstaculo, Metodo, Resultado)
+    ~ Contexto: Resolucion del problema del camino minimo en grillas triangulares estratificadas de n capas (|V| = n(n+1)/2 vertices) con pesos estrictamente positivos.
+    ~ Obstaculo teorico: La inclusion de transiciones bidireccionales horizontales dentro de una misma capa induce ciclos dirigidos de longitud 2, destruyendo el orden topologico exigido por la Programacion Dinamica clasica y forzando habitualmente el uso del algoritmo de Dijkstra en tiempo% O(|V| log |V|) = O(n^2 log n).
+    ~ Metodo propuesto: Descomposicion direccional en dos barridos monotonos (derecha-izquierda e izquierda-derecha) ejecutados in-place sobre una unica estructura escalonada, combinada con poda algebraica de los estados de frontera.
+    ~ Resultado: Obtencion de optimalidad global garantizada en tiempo y espacio estrictamente lineales respecto al tamano de la entrada %Theta(|V|) = Theta(n^2), reduciendo en un 75% las reservas de memoria frente a implementaciones matriciales ingenuas.
