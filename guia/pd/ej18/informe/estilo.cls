@@ -104,7 +104,7 @@
 \\[1cm]
 	\textsc{\Large Teoría de Algoritmos}\\           % Materia
 	\textsc{\small (75.29) Curso Buchwald - Genender}\\[0.4cm]    % Subtítulo materia
-	{ \Huge \bfseries Problema: \\ Programación Dinámica \\ Camino Mínimo en Pirámide}\\[0.3cm]      % Título
+	{ \Huge \bfseries Programación Dinámica\\ Problema: \\[0.3cm] Camino Mínimo en Pirámide}\\[0.3cm]      % Título
     \rule{0.7\textwidth}{1pt} \\[0.3cm]
 
 
@@ -114,9 +114,9 @@
 	\large
 	% pongo \center?
 	\begin{minipage}{0.4\textwidth}
-		\begin{flushleft}
-            \large{Lucio Romero Mascaró \\ 113091}
-		\end{flushleft}
+		\begin{center}
+            \large{Lucio Romero Mascaró \\113091}
+		\end{center}
 	\end{minipage}
 	
  \end{center}
