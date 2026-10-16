@@ -1,3 +1,95 @@
+seccion_0: Titulo y Abstract (Resumen Ejecutivo) (aprox 0.5 paginas)
+	~ Titulo cientifico formal
+		~ Propuesta: "Relajacion Bidireccional In-Place y Poda por Dominancia Geometrica para Caminos Minimos en Digrafos Planares Triangulares con Ciclos Intra-Capa"
+	~ Abstract bajo el framework AER (Contexto, Obstaculo, Metodo, Resultado)
+		~ Contexto: Resolucion del problema del camino minimo en grillas triangulares estratificadas de n capas (|V| = n(n+1)/2 vertices) con pesos estrictamente positivos.
+		~ Obstaculo teorico: La inclusion de transiciones bidireccionales horizontales dentro de una misma capa induce ciclos dirigidos de longitud 2, destruyendo el orden topologico exigido por la Programacion Dinamica clasica y forzando habitualmente el uso del algoritmo de Dijkstra en tiempo O(|V| log |V|) = O(n^2 log n).
+		~ Metodo propuesto: Descomposicion direccional en dos barridos monotonos (derecha-izquierda e izquierda-derecha) ejecutados in-place sobre una unica estructura escalonada, combinada con poda algebraica de los estados de frontera.
+		~ Resultado: Obtencion de optimalidad global garantizada en tiempo y espacio estrictamente lineales respecto al tamano de la entrada Theta(|V|) = Theta(n^2), reduciendo en un 75% las reservas de memoria frente a implementaciones matriciales ingenuas.
+
+seccion_1: Introduccion, Motivacion e Impacto Interdisciplinario (aprox 1 pagina)
+	~ Planteamiento del conflicto entre Grafos Generales y Programacion Dinamica
+		~ Explicar por que la Programacion Dinamica supera a Dijkstra al eliminar el costo logaritmico del heap (cola de prioridad), pero requiere un Grafo Dirigido Aciclico (DAG).
+		~ Mostrar como las aristas laterales convierten cada capa i en un subgrafo ciclico fuertemente conexo.
+	~ Repercusion e Isomorfismo en problemas reales de la ciencia y la industria
+		~ Vision por Computadora: Costuras con desvio lateral en Seam Carving (Avidan & Shamir).
+		~ Imagenes Medicas: Segmentacion en tiempo real de capas retinianas en tomografias OCT con pliegues tisulares.
+		~ Finanzas Cuantitativas: Arboles binomiales recombinantes de Cox-Ross-Rubinstein con costos de rebalanceo horizontal intra-periodo.
+
+seccion_2: Formulacion Matematica del Dominio y Analisis del Ciclo (aprox 1.5 paginas)
+	~ Definicion formal del Digrafo Triangular Estratificado G = (V, E, w)
+		~ Definir el conjunto de vertices V = {(i, j) : 0 <= i < n, 0 <= j <= i} con cardinalidad N = |V| = n(n+1)/2 = Theta(n^2).
+		~ Definir el conjunto de aristas dirigidas permitidas E = E_down U E_horiz, donde E_down conecta (i-1, j-1) -> (i, j) y (i-1, j) -> (i, j), y E_horiz conecta (i, j) <-> (i, j+1).
+		~ Condicion de pesos: Funcion w: V -> R+ (o Z+). Demostrar con un contraejemplo de 2 nodos por que si existieran pesos negativos la solucion simple se vuelve NP-Hard o diverge a -infinito.
+	~ El Fracaso del Planteo Ingenuo (Dependencia Circular)
+		~ Presentar la ecuacion de recurrencia ingenua de 4 direcciones (tu Planteo 1).
+		~ Demostrar formalmente que OPT[i][j] depende de OPT[i][j+1] y viceversa, formando un ciclo mutuo que viola el principio de ordenamiento topologico de Bellman.
+
+seccion_3: Descomposicion Bidireccional y Teorema de Poda de Frontera (aprox 2.5 paginas)
+	~ Lema 1: Monotonia Horizontal de Caminos Simples Optimos
+		~ Demostrar por reduccion al absurdo que, dado w(v) > 0, ningun camino optimo dentro de la fila i puede cambiar de direccion horizontal (ir a la izquierda y luego a la derecha, o viceversa), ya que repetiria un vertice sumando peso positivo redundante.
+		~ Corolario: Todo subcamino horizontal en la capa i es estrictamente monotono hacia la izquierda (capturado por OPT*) o hacia la derecha (capturado por OPT).
+	~ Teorema 1: Poda por Dominancia Geometrica en las Esquinas del Triangulo (Tu Aporte Central)
+		~ Demostracion algebraica del borde derecho (u = i): Probar que para llegar a (i, i-1), bajar directo desde (i-1, i-1) cuesta OPT[i-1][i-1] + v_{i, i-1}, lo cual es estrictamente menor que pasar por la esquina derecha (i, i) que cuesta OPT[i-1][i-1] + v_{i, i} + v_{i, i-1}. Por ende, la esquina derecha queda podada del precalculo.
+		~ Demostracion algebraica del borde izquierdo (p = 0 y d = 1): Probar que para llegar a (i, 1), el camino lateral desde (i, 0) proviene obligatoriamente del mismo padre (i-1, 0), siendo dominado por la bajada directa (i-1, 0) -> (i, 1). Deducir que OPT[i][1] = OPT*[i][1] sin evaluar transiciones desde la izquierda, y que la fila i de longitud (i+1) solo requiere precalcular (i-1) estados estrella.
+	~ Optimizacion Espacial In-Place (Eliminacion de la matriz ESTRELLA) y Codigo Limpio
+		~ Explicar como se reutiliza el vector OPT[i] en dos fases sucesivas (derecha a izquierda y luego izquierda a derecha) eliminando el 100% de la matriz auxiliar ESTRELLA y usando listas escalonadas (ahorro del 75% de memoria).
+		~ Incluir el algoritmo final optimizado en Python.
+
+seccion_4: Demostracion de Optimalidad, Complejidad y Caso Patologico de Reconstruccion (aprox 1.5 paginas)
+	~ Demostracion de Optimalidad por Induccion sobre las capas i
+		~ Caso base (i = 0 e i = 1) y Paso Inductivo (asumiendo fila i-1 optima, probar que la union de los dos barridos ortogonales agota todas las trayectorias validas hacia la fila i).
+	~ Separacion Estricta de Complejidades (Exigencia de Catedra)[cite: 22]
+		~ Complejidad del Algoritmo de PD: Temporal Theta(n^2) = Theta(|V|) (cota inferior teorica Omega(|V|) alcanzada) y Espacial Theta(n^2) = Theta(|V|) en matriz escalonada. Explicar por que NO se puede bajar a O(n) espacial si se exige reconstruir el camino sin recalcular (Refutacion del error comun).
+		~ Complejidad de la Reconstruccion y el Caso Patologico "Serpiente": Demostrar que en el mejor caso (caida vertical) la reconstruccion toma Omega(n) pasos, pero en el peor caso patologico (camino en zig-zag que barre cada fila horizontalmente) toma Theta(n^2) = Theta(|V|) pasos.
+	~ Impacto de la Variabilidad[cite: 22]
+		~ Explicar que la fase de llenado de la tabla PD es ciega a la variabilidad de los pesos (siempre ejecuta exactamente las mismas comparaciones Theta(n^2)), mientras que la fase de reconstruccion SI varia su tiempo de ejecucion entre O(n) y O(n^2) segun la topografia de los pesos.
+
+seccion_5: Evaluacion Experimental y Comparativa Empirica (aprox 1.5 paginas)
+	~ Metodologia experimental
+		~ Especificaciones de hardware/software (Ubuntu Linux, Python 3, ejecucion multiproceso con ProcessPoolExecutor promediando 10 corridas por tamano).
+	~ Experimento 1: Ajuste por Cuadrados Minimos de tu Algoritmo
+		~ Grafico de tiempo de ejecucion desde n = 100 hasta n = 2500 filas (hasta ~3.1 millones de vertices) ajustado contra f(n) = c1 * n^2 + c2.
+		~ Grafico de error absoluto residual para demostrar la fidelidad del modelo cuadratico.
+	~ Experimento 2: Batalla Empirica — Tu Algoritmo Theta(n^2) vs. Dijkstra Theta(n^2 log n)
+		~ Grafico comparativo midiendo ambos algoritmos sobre las mismas piramides aleatorias, demostrando visual y numericamente como el factor logaritmico y la sobrecarga del heap de Dijkstra lo hacen significativamente mas lento que tu barrido doble in-place.
+
+seccion_6: Conclusiones y Lineas Futuras de Investigacion (aprox 0.5 paginas)
+	~ Sintesis del aporte: Como el analisis geometrico del dominio permite podar bordes y evitar estructuras de datos complejas[cite: 22].
+	~ Lineas abiertas: Extension a grillas tridimensionales (piramides de base cuadrada, como en OCT 3D) y adaptacion del algoritmo de Hirschberg para lograr espacio O(n) manteniendo la reconstruccion en tiempo O(n^2).
+
+bibliografia (aprox 0.5 paginas)
+	~ Bellman, R. (1957). Dynamic Programming. Princeton University Press[cite: 22].
+	~ Kleinberg, J., & Tardos, E. (2005). Algorithm Design. Pearson Education[cite: 22].
+	~ Cormen, T. H., et al. (2022). Introduction to Algorithms (4th ed.). MIT Press.
+	~ Dijkstra, E. W. (1959). A note on two problems in connexion with graphs. Numerische Mathematik.
+	~ Avidan, S., & Shamir, A. (2007). Seam carving for content-aware image resizing. ACM TOG.
+	~ Buchwald, M., & Genender, E. (2026). Apuntes de Teoria de Algoritmos (75.29). FIUBA.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 INDICE
 	~ normal
 
