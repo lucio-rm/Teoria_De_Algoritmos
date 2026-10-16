@@ -16,6 +16,7 @@ PROBLEMA
 DISENIANDO
 	~ primer aproach y por qué estaba mal (circular dependency between OPT)
 	TECNICA
+		~ hablar de otros errores (como usar dijkstra)
 		~ cómo llegue a la res. correcta + técnica utilizada OPT*
 	~ resolucion correcta
 
@@ -45,3 +46,120 @@ BIBLIOGRAFIA
 	~ ¿?
 
 
+================================================================================
+GUIA ESTRUCTURAL Y CONCEPTUAL PARA EL DOCUMENTO CIENTIFICO
+Autor: Lucio Romero Mascaro
+Titulo tentativo: Relajacion Bidireccional con Poda por Dominancia Geometrica 
+para Caminos Minimos en Grafos Triangulares con Ciclos Horizontales
+================================================================================
+
+1. CONCEPTOS TEORICOS UTILIZADOS (LO QUE YA EXISTIA EN LA LITERATURA)
+--------------------------------------------------------------------------------
+- Principio de Optimalidad (Bellman): La base de la Programacion Dinamica, que 
+  exige subestructura optima y ausencia de dependencias circulares (requiere un 
+  DAG - Grafo Aciclico Dirigido).
+- Monotonia de Costos y Propiedad de Caminos Simples: En grafos con pesos 
+  estrictamente positivos (Z+), cualquier ciclo aumenta el costo total. Por 
+  ende, todo camino optimo es simple (no repite vertices).
+- Descomposicion Direccional de Estados (Two-Pass Dynamic Programming / 
+  Forward-Backward Sweep): Tecnica que toma un grafo con ciclos locales dentro 
+  de una misma capa (fila) y lo descompone en dos subgrafos aciclicos 
+  independientes: uno que solo permite transiciones hacia la izquierda (tu 
+  tabla OPT*) y otro que consolida las transiciones hacia la derecha (tu tabla 
+  OPT).
+- Relaciones de Dominancia (Dominance Pruning): Tecnica de optimizacion 
+  combinatoria donde se descartan transiciones o estados antes de evaluarlos 
+  porque se demuestra matematicamente que otra transicion directa siempre 
+  producira un resultado menor o igual.
+
+
+2. EL APORTE PROPIO / LO "NUEVO" (TU COMBINACION ESPECIFICA)
+--------------------------------------------------------------------------------
+- Poda de Frontera por Asimetria Diagonal en Topologia Triangular: 
+  A diferencia de una grilla rectangular estandar donde el barrido doble debe 
+  recorrer los N elementos de punta a punta en ambas direcciones, identificaste 
+  que la geometria del triangulo (donde el nodo (i, j) conecta hacia abajo con 
+  (i+1, j) y (i+1, j+1)) genera una dominancia estricta en los bordes.
+- Reduccion del Espacio de Estados Auxiliar (Regla n-2): Demostraste 
+  constructivamente que los extremos de cada capa (el primero p=0 y el ultimo 
+  u=i) nunca pueden mejorar el optimo de sus vecinos internos mediante un 
+  movimiento horizontal. Ir de (i-1, i-1) a (i, i) y luego a (i, i-1) suma un 
+  peso positivo redundante frente a bajar directamente de (i-1, i-1) a (i, i-1). 
+  Esto permite podar los bordes en la pasada de precalculo, requiriendo solo 
+  (n-2) estados estrella para la fila n.
+- Consolidacion Directa del Segundo Elemento (d=1): Deduccion de que OPT[i] 
+  es exactamente igual a OPT*[i] sin necesidad de evaluar la transicion 
+  proveniente de OPT[i][0], ahorrando comparaciones constantes por cada capa.
+
+
+3. ESTRUCTURA PROFESIONAL DEL DOCUMENTO Y EXTENSION APROXIMADA
+--------------------------------------------------------------------------------
+Extension total recomendada: 6 a 8 paginas (formato estandar de una columna o 
+formato IEEE/LNCS de dos columnas).
+
+* SECCION 0: Titulo y Abstract (Resumen) [~0.5 paginas]
+  - De que hablar: Definir el problema en tres oraciones. Explicar el obstaculo 
+    principal (las aristas laterales crean ciclos que invalidan la PD clasica y 
+    forzarian el uso de Dijkstra en O(V log V)). Presentar tu solucion en 
+    tiempo lineal respecto al numero de vertices O(V) = O(N^2) mediante barrido 
+    doble y poda geometrica.
+
+* SECCION 1: Introduccion y Motivacion [~1 pagina]
+  - De que hablar: Contextualizar los problemas de caminos minimos en grafos 
+    planares estratificados (por capas). Discutir la tension entre la 
+    generalidad de los algoritmos de caminos minimos (Dijkstra, Bellman-Ford) y 
+    la eficiencia de la Programacion Dinamica. Introducir la nocion de como la 
+    estructura espacial del dominio restringe las decisiones racionales (podes 
+    incluir una breve nota conectando la geometria del espacio de busqueda con 
+    las intuiciones a priori del espacio de Immanuel Kant o el analisis 
+    teleologico de Aristoteles sobre el camino mas directo sin rodeos 
+    superfluos).
+
+* SECCION 2: Formulacion Matematica y el Problema de la Ciclicidad [~1.5 paginas]
+  - De que hablar: Definir formalmente el triangulo como un grafo dirigido 
+    G = (V, E) con funcion de pesos en los vertices w: V -> Z+. Escribir la 
+    ecuacion de recurrencia ingenua (tu Planteo 1) y demostrar formalmente por 
+    que falla: mostrar el ciclo de dependencia mutua entre (i, j) e (i, j+1) 
+    que rompe el orden topologico requerido por Bellman.
+
+* SECCION 3: Descomposicion Bidireccional y Poda de Frontera [~2 paginas]
+  - De que hablar: El corazon de tu trabajo (tu Planteo 2). 
+    1) Enunciar y demostrar el Lema de Monotonia Horizontal (ningun camino 
+       optimo cambia de direccion en la misma fila).
+    2) Definir formalmente el estado auxiliar OPT* (pasada de derecha a 
+       izquierda) y el estado final OPT (pasada de izquierda a derecha).
+    3) Enunciar y demostrar el Teorema de Poda Geometrica de Bordes: probar con 
+       desigualdades algebraicas simples por que las puntas se descartan, 
+       justificando por que el bucle de OPT* itera solo (n-2) veces y por que 
+       OPT[i] = OPT*[i]. Incluir el pseudocodigo limpio usando bloques 
+       lstlisting.
+
+* SECCION 4: Analisis de Complejidad, Optimalidad y Reconstruccion [~1 pagina]
+  - De que hablar: Demostrar que la complejidad temporal es Theta(N^2) —que es 
+    Theta(|V|), el limite inferior teorico porque hay que leer todos los datos 
+    al menos una vez— y mostrar como reducir la complejidad espacial de O(N^2) 
+    a O(N) guardando solo la fila anterior. Explicar la logica inversa en 
+    tiempo O(N) para reconstruir el camino sin caer en bucles infinitos. 
+    Incluir una tabla comparativa teorica contra Dijkstra y Bellman-Ford.
+
+* SECCION 5: Aplicaciones en Economia y Teoria Algoritmica de Juegos [~1 pagina]
+  - De que hablar: Modelar como esta topologia triangular con movimientos 
+    laterales aparece fuera de la guia de ejercicios. 
+    - En Finanzas: Arboles trinomiales o binomiales de precios de activos donde 
+      el inversor puede hacer rebalanceo horizontal intradia pagando un costo 
+      de transaccion positivo (demostrando con tu poda que en los estados 
+      extremos del mercado el rebalanceo lateral es irracional).
+    - En Teoria de Juegos: Juegos secuenciales por etapas donde los agentes 
+      pueden renegociar estados dentro de una misma etapa pagando un peaje 
+      positivo.
+
+* SECCION 6: Conclusiones y Trabajo Futuro [~0.5 paginas]
+  - De que hablar: Sintesis de como la explotacion de invariantes geometricos 
+    locales evita el sobrecosto de estructuras de datos complejas (como los 
+    heaps de Fibonacci o binarios de Dijkstra). Mencionar que pasa si se relaja 
+    la condicion de pesos positivos (aparicion de ciclos negativos o pesos cero).
+
+* Referencias Bibliograficas [~0.5 paginas]
+  - Citar a Bellman (Dynamic Programming, 1957), Dijkstra (1959), y Kleinberg & 
+    Tardos (Algorithm Design, 2005).
+================================================================================
