@@ -1,10 +1,39 @@
-\section{Experimentos y Mediciones}
+\section{Evaluación Experimental y Comparativa Empírica}
 
-Evaluacion Experimental y Comparativa Empirica (aprox 1.5 paginas)
-	% ~ Metodologia experimental
-	% 	~ Especificaciones de hardware/software (Ubuntu Linux, Python 3, ejecucion multiproceso con ProcessPoolExecutor promediando 10 corridas por tamano).
-	% ~ Experimento 1: Ajuste por Cuadrados Minimos de tu Algoritmo
-	% 	~ Grafico de tiempo de ejecucion desde n = 100 hasta n = 2500 filas (hasta ~3.1 millones de vertices) ajustado contra f(n) = c1 * n^2 + c2.
-	% 	~ Grafico de error absoluto residual para demostrar la fidelidad del modelo cuadratico.
-	% ~ Experimento 2: Batalla Empirica — Tu Algoritmo Theta(n^2) vs. Dijkstra Theta(n^2 log n)
-	% 	~ Grafico comparativo midiendo ambos algoritmos sobre las mismas piramides aleatorias, demostrando visual y numericamente como el factor logaritmico y la sobrecarga del heap de Dijkstra lo hacen significativamente mas lento que tu barrido doble in-place.
+Con el propósito de validar empíricamente la demostración teórica de complejidad y cuantificar la ganancia de rendimiento frente a algoritmos de grafos generales, se diseñó un banco de pruebas automatizado en un entorno Linux Ubuntu con Python 3. Para mitigar el ruido estadístico del sistema operativo y las fluctuaciones de planificación de la CPU, las mediciones se ejecutaron en paralelo mediante \verb|ProcessPoolExecutor| (evitando la limitación del \textit{Global Interpreter Lock}), promediando $10$ ejecuciones independientes por cada tamaño de entrada $n$ con semillas pseudoaleatorias fijas (\verb|seed = 12345|).
+
+\subsection{Ajuste por Cuadrados Mínimos de la Programación Dinámica}
+
+Se generaron instancias aleatorias desde $n = 100$ hasta $n = 2000$ filas (lo que equivale a escalar el volumen de datos desde $N = 5.050$ hasta $N = 2.001.000$ vértices), ajustando los tiempos mediante regresión no lineal de Cuadrados Mínimos (\verb|scipy.optimize.curve_fit|) contra el modelo cuadrático $f(n) = c_1 n^2 + c_2$.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{ajuste_pd_n2.png}
+        \caption{Tiempo de ejecución empírico vs. curva de ajuste cuadrático $\mathcal{O}(n^2)$.}
+        \label{fig:ajuste_pd}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{error_ajuste_pd.png}
+        \caption{Error absoluto residual del modelo cuadrático en función de $n$.}
+        \label{fig:error_pd}
+    \end{minipage}
+\end{figure}
+
+Como se observa en la Figura \ref{fig:ajuste_pd}, la curva empírica se superpone con precisión sobre la parábola teórica de grado $2$, confirmando que el tiempo crece cuadráticamente respecto al número de filas $n$ (y por ende, linealmente respecto a la cantidad de vértices $N$). La Figura \ref{fig:error_pd} demuestra que el error residual absoluto se mantiene acotado en el orden de los milisegundos sin presentar deriva sistemática.
+
+\subsection{Comparativa Empírica: Relajación Bidireccional vs. Dijkstra}
+
+Para contrastar nuestra solución frente al enfoque estándar para grafos con ciclos de peso positivo, se implementó el algoritmo de Dijkstra utilizando una cola de prioridad binaria (\verb|heapq|) de complejidad $\Theta(|V| \log |V|) = \Theta(n^2 \log n)$ y se sometió a ambos algoritmos exactamente a las mismas pirámides de prueba.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.68\textwidth]{comparativa_pd_vs_dijkstra.png}
+    \caption{Comparación de tiempos de ejecución: PD Bidireccional con Poda $\Theta(n^2)$ vs. Dijkstra $\Theta(n^2 \log n)$.}
+    \label{fig:comp_dijkstra}
+\end{figure}
+
+La Figura \ref{fig:comp_dijkstra} evidencia una brecha de rendimiento contundente a favor de nuestro algoritmo. Mientras que Dijkstra sufre tanto por el factor asintótico adicional $\log n$ como por la sobrecarga constante de mantener las invariantes del \textit{heap} y alojar tuplas dinámicas en memoria, nuestra Programación Dinámica Bidireccional \textit{in-place} opera mediante accesos contiguos en caché con aritmética entera elemental, logrando una aceleración práctica de un orden de magnitud.
