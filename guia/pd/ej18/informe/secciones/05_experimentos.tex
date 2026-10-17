@@ -36,4 +36,6 @@ Para contrastar nuestra solución frente al enfoque estándar para grafos con ci
     \label{fig:comp_dijkstra}
 \end{figure}
 
-La Figura \ref{fig:comp_dijkstra} evidencia una brecha de rendimiento contundente a favor de nuestro algoritmo. Mientras que Dijkstra sufre tanto por el factor asintótico adicional $\log n$ como por la sobrecarga constante de mantener las invariantes del \textit{heap} y alojar tuplas dinámicas en memoria, nuestra Programación Dinámica Bidireccional \textit{in-place} opera mediante accesos contiguos en caché con aritmética entera elemental, logrando una aceleración práctica de un orden de magnitud.
+La Figura \ref{fig:comp_dijkstra} evidencia una brecha de rendimiento contundente a favor de nuestro algoritmo. Mientras que Dijkstra sufre tanto por el factor asintótico adicional $\log n$ como por la sobrecarga constante de mantener las invariantes del \textit{heap} y alojar tuplas dinámicas en memoria, mi Programación Dinámica Bidireccional \textit{in-place} opera mediante accesos contiguos en caché con aritmética entera elemental, logrando una aceleración práctica de un orden de magnitud.
+
+
