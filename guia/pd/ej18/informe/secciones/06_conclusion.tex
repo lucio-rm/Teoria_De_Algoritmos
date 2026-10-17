@@ -1,6 +1,8 @@
-\section{Conclusión}
+\section{Conclusión y Líneas Futuras}
 
-naseh
-Conclusiones y Lineas Futuras de Investigacion (aprox 0.5 paginas)
-	% ~ Sintesis del aporte: Como el analisis geometrico del dominio permite podar bordes y evitar estructuras de datos complejas[cite: 22].
-	% ~ Lineas abiertas: Extension a grillas tridimensionales (piramides de base cuadrada, como en OCT 3D) y adaptacion del algoritmo de Hirschberg para lograr espacio O(n) manteniendo la reconstruccion en tiempo O(n^2).
+El desarrollo de esta investigación demostró que la presencia de ciclos dirigidos entre capas en grillas triangulares estratificadas no obliga a abandonar el paradigma de Programación Dinámica en favor de algoritmos más costosos como Dijkstra. A través del Lema de Monotonía Horizontal y del Teorema de Poda por Dominancia Geométrica en las Fronteras, se logró desacoplar la dependencia circular en dos barridos monótonos opuestos, podando algebraicamente las transiciones originadas en las esquinas del triángulo y eliminando el $100\%$ de la matriz auxiliar de pre-cálculo mediante sobrescritura \textit{in-place}.
+
+El resultado alcanzado, optimalidad global garantizada en tiempo y espacio $\Theta(N) = \Theta(n^2)$, coincidente con la cota inferior teórica de lectura de la entrada $\Omega(N)$, ofrece una herramienta algorítmica directamente transferible al procesamiento de imágenes médicas (OCT), visión por computadora (\textit{Seam Carving}) y valuación en árboles binomiales financieros.
+
+Como líneas futuras de investigación, se propone extender el Teorema de Poda de Frontera a pirámides tridimensionales de base cuadrada ($N = \Theta(n^3)$ vértices) para tomografías volumétricas, así como acoplar el esquema de división y conquista espacial de \textcite{hirschberg1975} sobre nuestra relajación bidireccional para reducir la complejidad espacial de la reconstrucción a $\Theta(n)$ conservando el tiempo óptimo $\Theta(n^2)$.
+

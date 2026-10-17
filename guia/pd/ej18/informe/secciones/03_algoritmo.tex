@@ -4,7 +4,7 @@ Para romper la dependencia circular sin alterar la optimalidad global, analizamo
 
 \subsection{Descomposición Bidireccional por Monotonía Horizontal}
 
-\textbf{Lema 1 (Monotonía Horizontal Intra-Capa):} \textit{En un digrafo triangular estratificado con pesos positivos $v_{i,j} > 0$, ningún camino óptimo puede cambiar de dirección horizontal dentro de una misma fila $i$.}
+\textbf{Lema 1 (Monotonía Horizontal entre capas):} \textit{En un digrafo triangular estratificado con pesos positivos $v_{i,j} > 0$, ningún camino óptimo puede cambiar de dirección horizontal dentro de una misma fila $i$.}
 
 \textbf{Demostración (Por reducción al absurdo):} \\
 Supongamos que existe un camino óptimo $P^*$ que, encontrándose en la fila $i$, realiza un movimiento hacia la derecha $(i, j) \to (i, j+1)$ e inmediatamente (o tras varios pasos horizontales) invierte su sentido hacia la izquierda regresando a $(i, j)$. Dicho subcamino tendría la forma $\langle \dots, (i, j), \dots, (i, j+k), \dots, (i, j), \dots \rangle$ con $k \geq 1$. Dado que $v_{i,m} > 0$ para todo vértice, si recortamos el ciclo intermedio reemplazando todo el bucle por una única visita al nodo $(i, j)$, obtenemos un camino válido $P'$ cuyo costo verifica:
@@ -17,20 +17,20 @@ Esto contradice la hipótesis de que $P^*$ era óptimo. El razonamiento es idén
 \noindent\textbf{Corolario (Descomposición en Dos Fases Acíclicas):} \\
 Todo segmento horizontal de un camino óptimo en la fila $i$ es estrictamente monótono: o bien ingresa a la fila $i$ por una columna $k \geq j$ y se desplaza exclusivamente hacia la izquierda ($\leftarrow$), o bien ingresa por una columna $k \leq j$ y se desplaza exclusivamente hacia la derecha ($\rightarrow$). Esto permite descomponer el cálculo de la fila $i$ en dos subgrafos acíclicos independientes:
 \begin{enumerate}
-    \item \textbf{Estado Auxiliar Estrella ($\mathcal{OPT}^*[i][j]$):} Representa el costo mínimo para llegar a $(i,j)$ permitiendo únicamente descensos desde la fila $i-1$ y movimientos horizontales \textit{hacia la izquierda}. Se calcula barriendo la fila de derecha a izquierda.
-    \item \textbf{Estado Definitivo ($\mathcal{OPT}[i][j]$):} Consolida el costo mínimo absoluto comparando el mejor camino proveniente de la derecha ($\mathcal{OPT}^*[i][j]$) contra la opción de venir desde el vecino izquierdo ya consolidado ($\mathcal{OPT}[i][j-1] + v_{i,j}$). Se calcula barriendo de izquierda a derecha.
+    \item \textbf{Estado Auxiliar Estrella ($\mathcal{OPT}^*[i][j]$):} Representa el costo mínimo para llegar a $(i,j)$ permitiendo únicamente descensos desde la fila $i-1$ y movimientos horizontales \textit{hacia la izquierda}. Se calcula yendo de la fila de derecha a izquierda.
+    \item \textbf{Estado Definitivo ($\mathcal{OPT}[i][j]$):} Consolida el costo mínimo absoluto comparando el mejor camino proveniente de la derecha ($\mathcal{OPT}^*[i][j]$) contra la opción de venir desde el vecino izquierdo ya consolidado ($\mathcal{OPT}[i][j-1] + v_{i,j}$). Se calcula yendo de izquierda a derecha.
 \end{enumerate}
 
 \subsection{Teorema de Poda por Dominancia Geométrica en las Fronteras}
 
 A diferencia de una grilla rectangular donde el doble barrido debe evaluar los $m$ elementos completos en ambas direcciones, demostramos que la geometría triangular induce una relación de dominancia estricta en ambas esquinas de cada fila $i \geq 2$.
 
-\textbf{Teorema 1 (Poda de Esquinas y Reducción de Estados Estrella):} \textit{Para toda capa $i \geq 2$, los vértices extremos $p = 0$ (esquina izquierda) y $u = i$ (esquina derecha) jamás pueden formar parte de un camino óptimo que se desplace horizontalmente hacia el interior de la fila $i$. En consecuencia: (a) el pre-cálculo de $\mathcal{OPT}^*$ en el anteúltimo elemento $a = i-1$ prescinde de evaluar a $u = i$; y (b) el segundo elemento $d = 1$ verifica $\mathcal{OPT}[i][1] = \mathcal{OPT}^*[i][1]$ sin evaluar a $p = 0$.}
+\textbf{Teorema 1 (Poda de Esquinas y Reducción de Estados Estrella):} \textit{Para toda capa $i \geq 2$, los vértices extremos $p = 0$ (esquina izquierda) y $u = i$ (esquina derecha) nunca pueden formar parte de un camino óptimo que se desplace horizontalmente hacia el interior de la fila $i$. En consecuencia: (a) el pre-cálculo de $\mathcal{OPT}^*$ en el anteúltimo elemento $a = i-1$ prescinde de evaluar a $u = i$, y (b) el segundo elemento $d = 1$ verifica $\mathcal{OPT}[i][1] = \mathcal{OPT}^*[i][1]$ sin evaluar a $p = 0$.}
 
 \textbf{Demostración Algebraica:}
 \begin{itemize}
     \item \textbf{Parte (a) — Dominancia en la Frontera Derecha ($u = i$ y $a = i-1$):} \\
-    Por la topología triangular (Sección 3), el extremo derecho $(i, i)$ carece de padre superior derecho, pues la fila $i-1$ solo llega hasta la columna $i-1$. Su único predecesor en la capa superior es $(i-1, i-1)$. Si un camino desciende desde $(i-1, i-1)$ hacia la esquina $(i, i)$ y luego retrocede horizontalmente hacia el anteúltimo nodo $(i, i-1)$, su costo acumulado es:
+    Por la topología triangular, el extremo derecho $(i, i)$ carece de padre superior derecho, la fila $i-1$ solo llega hasta la columna $i-1$. Su único padre en la capa superior es $(i-1, i-1)$. Si un camino desciende desde $(i-1, i-1)$ hacia la esquina $(i, i)$ y luego retrocede horizontalmente hacia el anteúltimo nodo $(i, i-1)$, su costo acumulado es:
     \[
         C_{\text{esquina}} = \mathcal{OPT}[i-1][i-1] + v_{i,i} + v_{i,i-1}
     \]
@@ -44,12 +44,12 @@ A diferencia de una grilla rectangular donde el doble barrido debe evaluar los $
     \]
 
     \item \textbf{Parte (b) — Dominancia en la Frontera Izquierda ($p = 0$ y $d = 1$):} \\
-    De manera simétrica, el extremo izquierdo $(i, 0)$ posee un único padre superior: $(i-1, 0)$. Cualquier camino que descienda a $(i, 0)$ y luego avance horizontalmente hacia la derecha al segundo nodo $(i, 1)$ incurre en un costo $\mathcal{OPT}[i-1][0] + v_{i,0} + v_{i,1}$.Dado que $(i-1, 0)$ también conecta directamente con $(i, 1)$ con costo $\mathcal{OPT}[i-1][0] + v_{i,1}$ (el cual ya fue evaluado dentro de $\mathcal{OPT}^*[i][1]$), y siendo $v_{i,0} > 0$, el paso desde $(i,0)$ hacia $(i,1)$ queda estrictamente dominado. En consecuencia, el segundo elemento consolida su óptimo directamente sin comparaciones adicionales:
+    De manera simétrica, el extremo izquierdo $(i, 0)$ tiene un único padre superior: $(i-1, 0)$. Cualquier camino que descienda a $(i, 0)$ y luego avance horizontalmente hacia la derecha al segundo nodo $(i, 1)$ da un costo $\mathcal{OPT}[i-1][0] + v_{i,0} + v_{i,1}$. Dado que $(i-1, 0)$ también conecta directamente con $(i, 1)$ con costo $\mathcal{OPT}[i-1][0] + v_{i,1}$ (el cual ya fue evaluado dentro de $\mathcal{OPT}^*[i][1]$), y siendo $v_{i,0} > 0$, el paso desde $(i,0)$ hacia $(i,1)$ queda estrictamente dominado. En consecuencia, el segundo elemento consolida su óptimo directamente sin comparaciones adicionales:
     \[
         \mathcal{OPT}[i][1] = \mathcal{OPT}^*[i][1]
     \]
 \end{itemize}
-Gracias a ambas podas, para una fila de $k = i+1$ elementos solo se requieren calcular $k - 2 = i - 1$ estados estrella (desde $j = i-1$ hasta $j = 1$). $\blacksquare$
+Gracias a las dos podas, para una fila de $k = i+1$ elementos solo se requieren calcular $k - 2 = i - 1$ estados estrella (desde $j = i-1$ hasta $j = 1$). $\blacksquare$
 
 \vspace{1ex}
 \noindent\textbf{Resumen de la Ecuación de Recurrencia Final (Para toda capa $i \geq 2$):} \\
@@ -76,7 +76,7 @@ Definiendo los punteros notables $p = 0$, $d = 1$, $u = i$ y $a = i-1$:
 En una primera aproximación podrían instanciarse dos matrices cuadradas de $n \times n$ (\verb|ESTRELLA| y \verb|OPT|), consumiendo $2n^2$ celdas en memoria. Sin embargo, observamos dos propiedades clave que permiten reducir drásticamente el consumo espacial:
 \begin{enumerate}
     \item \textbf{Dimensionamiento Escalonado:} La fila $i$ solo posee $i+1$ columnas válidas. Al reservar listas de longitud exacta $i+1$, reducimos el espacio base de $n^2$ a $\frac{n(n+1)}{2} \approx 0.5n^2$.
-    \item \textbf{Sobrescritura In-Place (Eliminación total de \texttt{ESTRELLA}):} Los valores de $\mathcal{OPT}^*[i]$ solo se utilizan durante el cálculo de la misma fila $i$. Por lo tanto, en la Fase 1 escribimos los valores de $\mathcal{OPT}^*$ directamente dentro del arreglo definitivo \verb|OPT[i]| de derecha a izquierda. Luego, en la Fase 2, recorremos \verb|OPT[i]| de izquierda a derecha actualizando \verb|OPT[i][j] = min(OPT[i][j], piramide[i][j] + OPT[i][j-1])|, donde el valor previo alojado en \verb|OPT[i][j]| es exactamente $\mathcal{OPT}^*[i][j]$. Esto elimina el $100\%$ de la matriz auxiliar \verb|ESTRELLA|, logrando un ahorro total del $75\%$ de memoria respecto al planteo matricial ingenuo.
+    \item \textbf{Sobrescritura In-Place (Eliminación total de \texttt{ESTRELLA}):} Los valores de $\mathcal{OPT}^*[i]$ solo se utilizan durante el cálculo de la misma fila $i$. Por lo tanto, en la Fase 1 escribimos los valores de $\mathcal{OPT}^*$ directamente dentro del arreglo definitivo \verb|OPT[i]| de derecha a izquierda. Después, en la Fase 2, recorremos \verb|OPT[i]| de izquierda a derecha actualizando \verb|OPT[i][j] = min(OPT[i][j], piramide[i][j] + OPT[i][j-1])|, donde el valor previo que estaba en \verb|OPT[i][j]| es exactamente $\mathcal{OPT}^*[i][j]$. Esto elimina el $100\%$ de la matriz auxiliar \verb|ESTRELLA|, logrando un ahorro total del $75\%$ de memoria respecto al planteo matricial ingenuo.
 \end{enumerate}
 
 A continuación se presenta la implementación completa en lenguaje Python:

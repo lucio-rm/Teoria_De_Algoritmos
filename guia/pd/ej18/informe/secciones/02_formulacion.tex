@@ -1,6 +1,6 @@
 \section{Formulación Matemática del Dominio}
 
-Definimos formalmente la pirámide de $n$ filas como un digrafo planar estratificado y ponderado en sus vértices $G = (V, E, w)$, compuesto por los siguientes elementos:
+Defino formalmente la pirámide de $n$ filas como un digrafo planar estratificado y ponderado en sus vértices $G = (V, E, w)$, compuesto por los siguientes elementos:
 
 \begin{enumerate}
     \item \textbf{Conjunto de Vértices ($V$):} El dominio espacial se organiza en $n$ capas discretas indexadas por $i \in \{0, 1, \dots, n-1\}$, donde cada capa $i$ contiene exactamente $i+1$ vértices indexados por columna $j \in \{0, 1, \dots, i\}$:
@@ -14,11 +14,11 @@ Definimos formalmente la pirámide de $n$ filas como un digrafo planar estratifi
 
     \item \textbf{Conjunto de Aristas Dirigidas ($E$):} El conjunto de transiciones válidas se particiona en dos subconjuntos disjuntos, $E = E_{\text{down}} \cup E_{\text{horiz}}$:
     \begin{itemize}
-        \item \textit{Aristas descendentes inter-capa ($E_{\text{down}}$):} Conectan un vértice superior con sus dos hijos inmediatos en la capa inferior, impidiendo cualquier retroceso hacia filas superiores:
+        \item \textit{Aristas descendentes entre capas ($E_{\text{down}}$):} Conectan un vértice superior con sus dos hijos inmediatos en la capa inferior, impidiendo cualquier retroceso hacia filas superiores:
         \[
             E_{\text{down}} = \{((i-1, j-1) \to (i, j)) \mid 0 < j \leq i\} \cup \{((i-1, j) \to (i, j)) \mid 0 \leq j < i\}
         \]
-        \item \textit{Aristas bidireccionales intra-capa ($E_{\text{horiz}}$):} Conectan vértices adyacentes dentro de un mismo nivel $i$:
+        \item \textit{Aristas bidireccionales entre capas ($E_{\text{horiz}}$):} Conectan vértices adyacentes dentro de un mismo nivel $i$:
         \[
             E_{\text{horiz}} = \{((i, j) \to (i, j+1)) \mid 0 \leq j < i\} \cup \{((i, j+1) \to (i, j)) \mid 0 \leq j < i\}
         \]
