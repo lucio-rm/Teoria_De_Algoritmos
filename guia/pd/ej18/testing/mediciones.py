@@ -1,8 +1,15 @@
+#!/usr/bin/env python3
 from random import seed, randint
 from matplotlib import pyplot as plt
 import seaborn as sns
 import numpy as np
 import scipy as sp
+from pathlib import Path
+
+# Obtiene la ruta al directorio ej18 (un nivel arriba de testing/)
+BASE_DIR = Path(__file__).resolve().parent.parent
+OUTPUT_DIR = BASE_DIR / "informe" / "images"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 from algoritmo import camino_minimo_piramide
 from tests import dijkstra_piramide
@@ -36,7 +43,8 @@ ax.set_title('Tiempo de ejecución: Camino Mínimo en Pirámide (PD)')
 ax.set_xlabel('Cantidad de filas de la pirámide (n)')
 ax.set_ylabel('Tiempo de ejecución (s)')
 ax.legend()
-plt.savefig("informe/images/ajuste_pd_n2.png", dpi=300, bbox_inches='tight')
+plt.savefig(OUTPUT_DIR / "ajuste_pd_n2.png", dpi=300, bbox_inches='tight')
+
 
 # Grafico 2: Error absoluto del ajuste
 fig, ax = plt.subplots()
@@ -44,7 +52,8 @@ ax.plot(x, errors_n2)
 ax.set_title('Error de ajuste por Cuadrados Mínimos ($n^2$)')
 ax.set_xlabel('Cantidad de filas de la pirámide (n)')
 ax.set_ylabel('Error absoluto (s)')
-plt.savefig("informe/images/error_ajuste_pd.png", dpi=300, bbox_inches='tight')
+plt.savefig(OUTPUT_DIR / "error_ajuste_pd.png", dpi=300, bbox_inches='tight')
+
 
 # 2. Comparativa contra Dijkstra (usamos tamanos hasta 1000 porque Dijkstra es mucho mas lento)
 x_comp = np.linspace(100, 1000, 10).astype(int)
@@ -54,12 +63,12 @@ res_dij_comp = time_algorithm(dijkstra_piramide, x_comp, lambda s: [get_random_p
 
 # Grafico 3: Comparativa PD Bidireccional vs Dijkstra
 fig, ax = plt.subplots(figsize=(9, 5))
-ax.plot(x_comp, [res_dij_comp[n] for n in x_comp], "o-", label="Dijkstra $\Theta(n^2 \log n)$")
-ax.plot(x_comp, [res_pd_comp[n] for n in x_comp], "s-", label="PD Bidireccional con Poda $\Theta(n^2)$")
+ax.plot(x_comp, [res_dij_comp[n] for n in x_comp], "o-", label=r"Dijkstra $\Theta(n^2 \log n)$")
+ax.plot(x_comp, [res_pd_comp[n] for n in x_comp], "s-", label=r"PD Bidireccional con Poda $\Theta(n^2)$")
 ax.set_title('Comparación Empírica: PD Bidireccional vs. Dijkstra')
 ax.set_xlabel('Cantidad de filas de la pirámide (n)')
 ax.set_ylabel('Tiempo de ejecución (s)')
 ax.legend()
-plt.savefig("informe/images/comparativa_pd_vs_dijkstra.png", dpi=300, bbox_inches='tight')
+plt.savefig(OUTPUT_DIR / "comparativa_pd_vs_dijkstra.png", dpi=300, bbox_inches='tight')
 print("¡Gráficos generados con éxito en informe/images/!")
 
