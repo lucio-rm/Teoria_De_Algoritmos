@@ -1,15 +1,59 @@
-\begin{tikzpicture}[node distance=2cm]
-  % Vertices arranged as a triangle
-  \node[vertex] (source) at (0,3.6) {A};
-  \node[vertex] (left)   at (-2,1.8) {B};
-  \node[vertex] (right)  at (2,1.8) {C};
-  \node[vertex] (sink)   at (0,0) {D};
+\begin{tikzpicture}[
+    scale=0.88, 
+    transform shape,
+    node distance=1.3cm,
+    stdnode/.style={circle, draw=blue!70!black, fill=blue!8, thick, minimum size=7.5mm, font=\scriptsize\sffamily\bfseries},
+    pruned/.style={circle, draw=red!75!black, fill=red!10, thick, dashed, minimum size=7.5mm, font=\scriptsize\sffamily\bfseries},
+    downedge/.style={-{Stealth[length=1.8mm,width=1.3mm]}, semithick, draw=gray!70!black},
+    cycledge/.style={-{Stealth[length=1.6mm,width=1.2mm]}, semithick, draw=blue!65!black, bend left=18},
+    pruneedge/.style={-{Stealth[length=1.6mm,width=1.2mm]}, semithick, draw=red!75!black, dashed, bend left=18}
+]
 
-  % All edges point downward, so the triangular graph is acyclic
-  \draw[dag edge] (source) -- (left);
-  \draw[dag edge] (source) -- (right);
-  \draw[dag edge] (source) -- (sink);
-  \draw[dag edge] (left) -- (right);
-  \draw[dag edge] (left) -- (sink);
-  \draw[dag edge] (right) -- (sink);
+% Nivel 0
+\node[stdnode] (n00) at (0, 0) {0,0};
+
+% Nivel 1
+\node[stdnode] (n10) at (-1.1, -1.4) {1,0};
+\node[stdnode] (n11) at (1.1, -1.4) {1,1};
+
+% Nivel 2
+\node[pruned] (n20) at (-2.2, -2.8) {2,0};
+\node[stdnode] (n21) at (0, -2.8) {2,1};
+\node[pruned] (n22) at (2.2, -2.8) {2,2};
+
+% Nivel 3
+\node[pruned] (n30) at (-3.3, -4.2) {3,0};
+\node[stdnode] (n31) at (-1.1, -4.2) {3,1};
+\node[stdnode] (n32) at (1.1, -4.2) {3,2};
+\node[pruned] (n33) at (3.3, -4.2) {3,3};
+
+% Aristas descendentes (DAG inter-capa)
+\draw[downedge] (n00) -- (n10);
+\draw[downedge] (n00) -- (n11);
+
+\draw[downedge] (n10) -- (n20);
+\draw[downedge] (n10) -- (n21);
+\draw[downedge] (n11) -- (n21);
+\draw[downedge] (n11) -- (n22);
+
+\draw[downedge] (n20) -- (n30);
+\draw[downedge] (n20) -- (n31);
+\draw[downedge] (n21) -- (n31);
+\draw[downedge] (n21) -- (n32);
+\draw[downedge] (n22) -- (n32);
+\draw[downedge] (n22) -- (n33);
+
+% Aristas horizontales (Ciclos intra-capa y podas en rojo)
+\draw[pruneedge] (n20) to (n21);
+\draw[cycledge] (n21) to (n20);
+\draw[cycledge] (n21) to (n22);
+\draw[pruneedge] (n22) to (n21);
+
+\draw[pruneedge] (n30) to (n31);
+\draw[cycledge] (n31) to (n30);
+\draw[cycledge] (n31) to (n32);
+\draw[cycledge] (n32) to (n31);
+\draw[cycledge] (n32) to (n33);
+\draw[pruneedge] (n33) to (n32);
+
 \end{tikzpicture}
