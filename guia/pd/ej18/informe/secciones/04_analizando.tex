@@ -1,16 +1,43 @@
-\section{Analizando el Algoritmo}
+\section{Análisis del Algoritmo}
 
-\subsection{Demostracion de Optimalidad}
+\subsection{Demostración de Optimalidad Global}
 
-\subsection{Complejidad}
-\subsubsection{Caso Especial de Reconstruccion}
+Demostramos mediante el \textbf{Principio de Inducción Matemática} sobre el índice de capa $i$ que, al finalizar la ejecución de la Fase 2 en el nivel $i$, toda celda $\mathcal{OPT}[i][j]$ almacena el costo mínimo exacto desde $(0,0)$ hasta $(i,j)$.
 
-nashe
-Demostracion de Optimalidad, Complejidad y Caso Patologico de Reconstruccion (aprox 1.5 paginas)
-	%~ Demostracion de Optimalidad por Induccion sobre las capas i
-	%	~ Caso base (i = 0 e i = 1) y Paso Inductivo (asumiendo fila i-1 optima, probar que la union de los dos barridos ortogonales agota todas las trayectorias validas hacia la fila i).
-	%~ Separacion Estricta de Complejidades (Exigencia de Catedra)[cite: 22]
-	%	~ Complejidad del Algoritmo de PD: Temporal Theta(n^2) = Theta(|V|) (cota inferior teorica Omega(|V|) alcanzada) y Espacial Theta(n^2) = Theta(|V|) en matriz escalonada. Explicar por que NO se puede bajar a O(n) espacial si se exige reconstruir el camino sin recalcular (Refutacion del error comun).
-	%	~ Complejidad de la Reconstruccion y el Caso Patologico "Serpiente": Demostrar que en el mejor caso (caida vertical) la reconstruccion toma Omega(n) pasos, pero en el peor caso patologico (camino en zig-zag que barre cada fila horizontalmente) toma Theta(n^2) = Theta(|V|) pasos.
-	%~ Impacto de la Variabilidad[cite: 22]
-	%	~ Explicar que la fase de llenado de la tabla PD es ciega a la variabilidad de los pesos (siempre ejecuta exactamente las mismas comparaciones Theta(n^2)), mientras que la fase de reconstruccion SI varia su tiempo de ejecucion entre O(n) y O(n^2) segun la topografia de los pesos.
+\begin{itemize}
+    \item \textbf{Casos Base ($i = 0$ e $i = 1$):} Para $i = 0$, el único estado es el origen $(0,0)$ con costo $\mathcal{OPT}[0][0] = v_{0,0}$. Para $i = 1$, por el Teorema 1, bajar directamente de $(0,0)$ a $(1,0)$ cuesta $v_{0,0} + v_{1,0}$, lo cual domina estrictamente al desvío $(0,0) \to (1,1) \to (1,0)$ de costo $v_{0,0} + v_{1,1} + v_{1,0}$. Simétricamente ocurre para $(1,1)$. Por ende, las filas $0$ y $1$ son óptimas.
+    \item \textbf{Hipótesis Inductiva $P(i-1)$:} Asumimos que para la fila $i-1$ todos los estados $\mathcal{OPT}[i-1][k]$ ($0 \leq k \leq i-1$) contienen el costo mínimo global hacia $(i-1, k)$.
+    \item \textbf{Paso Inductivo $P(i)$:} Sea $P^*$ el camino óptimo hacia $(i, j)$. Por definición del digrafo, $P^*$ debe ingresar por primera vez a la fila $i$ descendiendo desde algún padre en la fila $i-1$ hacia alguna columna de entrada $k \in \{0, \dots, i\}$, y luego desplazarse horizontalmente desde $(i, k)$ hasta $(i, j)$. Por el Lema 1 (Monotonía Horizontal), existen solo dos casos mutuamente excluyentes:
+    \begin{enumerate}
+        \item \textit{Caso $k \geq j$ (Ingreso por la derecha o directo):} El camino baja a $(i, k)$ y se mueve exclusivamente hacia la izquierda hasta $(i, j)$. Como la Fase 1 barre de derecha a izquierda evaluando en cada paso $\min(\mathcal{OPT}[i-1][\text{padres}], \mathcal{OPT}^*[i][\text{derecha}])$ y los padres en $i-1$ son óptimos por Hipótesis Inductiva, por inducción interna este camino es capturado exactamente por $\mathcal{OPT}^*[i][j]$ (exceptuando $k=i$ cuando $j \leq i-1$, ya descartado por el Teorema 1).
+        \item \textit{Caso $k < j$ (Ingreso por la izquierda):} El camino baja a $(i, k)$ y se mueve exclusivamente hacia la derecha pasando obligatoriamente por $(i, j-1)$ antes de pisar $(i, j)$. Como la Fase 2 barre de izquierda a derecha, al evaluar $j$ el estado $\mathcal{OPT}[i][j-1]$ ya es óptimo y la transición $v_{i,j} + \mathcal{OPT}[i][j-1]$ captura este subcamino.
+    \end{enumerate}
+    Dado que la Fase 2 toma el mínimo entre ambos casos exhaustivos, $\mathcal{OPT}[i][j]$ es óptimo para todo $j$. Al tomar finalmente $\min_{j}(\mathcal{OPT}[n-1][j])$ en la base, el algoritmo garantiza el óptimo global. $\blacksquare$
+\end{itemize}
+
+\subsection{Análisis de Complejidad Temporal y Espacial}
+
+Cumpliendo con el rigor metodológico de separar la etapa de tabulación de la etapa de reconstrucción, analizamos ambas complejidades en función de la altura $n$ y del tamaño de entrada $N = |V| = \frac{n(n+1)}{2}$.
+
+\textbf{1. Complejidad del Llenado de la Tabla de Programación Dinámica:}
+\begin{itemize}
+    \item \textbf{Complejidad Temporal:} Para cada fila $i \in [2, n-1]$, el primer bucle interno (Fase 1) realiza $i - 2$ iteraciones de costo $\mathcal{O}(1)$, y el segundo bucle interno (Fase 2) realiza $i - 2$ iteraciones de costo $\mathcal{O}(1)$, sumado a $4$ asignaciones constantes de borde. El trabajo total es:
+    \[
+        T_{\text{PD}}(n) = \mathcal{O}(1) + \sum_{i=2}^{n-1} \big(2(i - 2) + 4\big) \cdot \mathcal{O}(1) = \sum_{i=2}^{n-1} \mathcal{O}(i) = \Theta(n^2) = \Theta(N)
+    \]
+    Dado que cualquier algoritmo exacto debe inspeccionar al menos una vez cada uno de los $N = \Theta(n^2)$ números de la entrada (estableciendo una cota inferior teórica $\Omega(N) = \Omega(n^2)$), nuestro algoritmo alcanza la \textbf{optimalidad asintótica estricta}: es cuadrático respecto a la cantidad de filas $n$, pero \textbf{lineal $\Theta(N)$ respecto al tamaño de la entrada}.
+    \item \textbf{Complejidad Espacial y Refutación del Mito $\mathcal{O}(n)$:} La estructura escalonada \verb|OPT| aloja exactamente $\sum_{i=0}^{n-1} (i+1) = \frac{n(n+1)}{2}$ enteros, por lo que la complejidad espacial es $\Theta(n^2) = \Theta(N)$. Cabe destacar que si el problema solo solicitara devolver el \textit{valor escalar} del camino mínimo, bastaría con conservar en memoria únicamente la fila anterior \verb|OPT[i-1]| para computar \verb|OPT[i]|, reduciendo el espacio a $\mathcal{O}(n)$. Sin embargo, dado que se exige \textbf{reconstruir el camino completo}, descartar las filas superiores destruiría la historia de estados previa, haciendo imposible rastrear las decisiones hacia atrás sin recurrir a técnicas de recomputación recursiva del tipo \textcite{hirschberg1975}.
+\end{itemize}
+
+\textbf{2. Complejidad de la Reconstrucción y el Caso Patológico ``Serpiente'':} \\
+En una pirámide tradicional donde solo se permite descender, el camino reconstruido disminuye la variable \verb|fila| en cada iteración, tardando siempre $\Theta(n)$. En nuestro problema, la presencia de movimientos laterales introduce una diferencia fundamental entre el mejor y el peor caso:
+\begin{itemize}
+    \item \textbf{Mejor Caso Temporal $\Omega(n)$:} El camino óptimo desciende directamente desde $(0,0)$ hasta la base sin realizar movimientos horizontales, dando exactamente $n$ pasos en el bucle \verb|while|.
+    \item \textbf{Peor Caso Temporal (Caso Patológico ``Serpiente'') $\Theta(n^2) = \Theta(N)$:} Consideremos una pirámide donde todas las celdas tienen peso $999$, excepto un corredor en forma de ``S'' (zig-zag) con peso $1$ que baja por la derecha a la fila $2$, recorre toda la fila $2$ hacia la izquierda, baja a la fila $3$, recorre la fila $3$ hacia la derecha, y así sucesivamente:
+    \[\text{Pirámide Serpiente} = \begin{bmatrix} \mathbf{1} \\ 999 & \mathbf{1} \\ \mathbf{1} & \mathbf{1} & \mathbf{1} \\ \mathbf{1} & 999 & 999 & 999 \\ \mathbf{1} & \mathbf{1} & \mathbf{1} & \mathbf{1} & 999 \end{bmatrix}\]
+    En este escenario patológico, el camino óptimo atraviesa horizontalmente casi todos los elementos de cada fila $i$ (hasta $i$ celdas por capa por el Teorema 1). En consecuencia, el bucle \verb|while| de \verb|_reconstruccion| realiza $\sum_{i=0}^{n-1} \mathcal{O}(i) = \Theta(n^2) = \Theta(N)$ iteraciones de costo $\mathcal{O}(1)$, y la lista \verb|camino| devuelta ocupa espacio $\mathcal{O}(n^2)$.
+\end{itemize}
+
+\subsubsection{Impacto de la Variabilidad de los Datos}
+El análisis anterior revela una asimetría notable frente a la variabilidad de los pesos de entrada: mientras que la fase de llenado de la tabla de Programación Dinámica es completamente \textbf{invariante (ciega)} a los valores numéricos —ejecutando siempre la misma cantidad determinista de comparaciones $\Theta(n^2)$—, la fase de \textbf{reconstrucción es altamente sensible a la topografía de los pesos}, pudiendo oscilar su tiempo y longitud de salida entre $\Omega(n)$ (terreno uniforme o canal vertical) y $\Theta(n^2)$ (terreno laberíntico en zig-zag).
+
