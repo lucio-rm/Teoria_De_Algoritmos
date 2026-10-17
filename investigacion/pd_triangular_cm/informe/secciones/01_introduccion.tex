@@ -1,0 +1,40 @@
+\section{Introducción y Motivación}
+
+El cálculo de caminos de costo mínimo sobre grafos ponderados constituye uno de los problemas centrales de la ciencia de la computación y la investigación operativa \parencite{cormen2022, kleinberg2005}. Cuando un grafo dirigido carece de ciclos conformando un Grafo Dirigido Acíclico (DAG), es posible establecer un ordenamiento topológico sobre sus vértices y resolver el camino mínimo mediante Programación Dinámica en tiempo lineal $\Theta(|V| + |E|)$, evaluando cada estado exactamente una vez a través de la ecuación de optimalidad de Bellman \parencite{bellman1957}. Por el contrario, cuando el grafo presenta ciclos dirigidos con pesos positivos, la ausencia de un orden topológico impide la tabulación directa. La resolución estándar recae entonces en el algoritmo greedy de Dijkstra \parencite{dijkstra1959}, cuya dependencia de un \textit{heap} (cola de prioridad) impone un sobrecosto asintótico de $\mathcal{O}(|E| + |V| \log |V|)$.
+
+\vspace{1ex}
+\noindent
+\begin{minipage}[c]{0.55\textwidth}
+\justifying
+En el presente trabajo se estudia una estructura topológica híbrida: una pirámide o grilla triangular de $n$ niveles donde las transiciones entre capas sucesivas ($i-1 \to i$) son estrictamente dirigidas hacia abajo, pero las transiciones entre capas permiten movimientos laterales en ambos sentidos ($(i,j) \leftrightarrow (i,j+1)$). 
+
+Si bien desde una perspectiva intuitiva ningún camino óptimo con pesos positivos retrocedería sobre sus propios pasos (ya que sumar pesos positivos adicionales es subóptimo), una formulación directa de Programación Dinámica \textit{fracasa}: el estado $(i,j)$ requiere conocer el óptimo de $(i,j+1)$, el cual a su vez requiere conocer el óptimo de $(i,j)$, generando una dependencia circular mutua \parencite{buchwald2026}.
+
+Como se ilustra en la Figura \ref{fig:grafo1}, demostramos que es posible desacoplar estos componentes cíclicos entre capas \textit{sin} recurrir a Dijkstra, combinando una relajación bidireccional en dos fases con una poda algebraica sobre los vértices de las esquinas (marcados en rojo punteado), cuyas transiciones hacia el interior resultan geométricamente dominadas.
+\end{minipage}%
+\hfill%
+\begin{minipage}[c]{0.41\textwidth}
+    \centering
+    \shorthandoff{><}
+    \input{images/grafo_1.tex}
+    \shorthandon{><}
+    \captionof{figure}{Digrafo triangular con ciclos horizontales y poda de frontera (en rojo).}
+    \label{fig:grafo1}
+\end{minipage}
+
+\vspace{1.5ex}
+\subsection{Impacto Interdisciplinario e Isomorfismo Estructural}
+
+La resolución en tiempo lineal estricto $\Theta(N)$ de grillas estratificadas con desvíos laterales trasciende el ámbito académico y presenta isomorfismos directos con problemas críticos en cuatro disciplinas:
+
+\begin{itemize}
+    \item \textbf{Visión por Computadora (\textit{Piecewise-Horizontal Seam Carving}):} El algoritmo clásico de redimensionamiento inteligente de imágenes de \textcite{avidan2007} busca ``costuras'' verticales de mínima energía mediante Programación Dinámica descendente ($(i-1, j-1), (i-1, j), (i-1, j+1) \to (i,j)$), prohibiendo desplazamientos horizontales en la misma fila para evitar ciclos. Cuando una imagen contiene objetos anchos que exigen desviar la costura lateralmente dentro de una misma fila de píxeles, el esquema de doble barrido presentado en este informe permite incorporar aristas horizontales manteniendo la complejidad lineal por píxel, vital para procesamiento de video en tiempo real.
+    
+    \item \textbf{Diagnóstico Médico por Imágenes (Segmentación Retiniana en OCT):} En oftalmología, la Tomografía de Coherencia Óptica (SD-OCT) requiere segmentar automáticamente las capas celulares de la retina \parencite{chiu2010}. La tomografía se modela como un digrafo por capas donde los pesos reflejan gradientes de intensidad tisular. En pacientes con edemas maculares o drusas, las capas celulares sufren pliegues abruptos que obligan al contorno óptimo a desplazarse lateralmente dentro del mismo estrato. Reemplazar el algoritmo de Dijkstra ($\mathcal{O}(N \log N)$) por mi relajación bidireccional de ($\Theta(N)$) elimina el cuello de botella del \textit{heap} durante la reconstrucción volumétrica 3D en quirófano.
+    
+    \item \textbf{Economía y Finanzas Cuantitativas (Árboles Binomiales con Rebalanceo):} El modelo común de valuación de derivados financieros de \textcite{cox1979} estructura la evolución temporal del precio de un activo como un árbol binomial recombinante donde el período $i$ posee exactamente $i+1$ estados posibles, conformando un triángulo isomorfo al analizado. Si un inversor puede rebalancear su cobertura de riesgo dentro de un mismo período pagando un costo de transacción positivo ($w > 0$), el Teorema de Poda de Frontera demuestra analíticamente que en los estados extremos del mercado ($j=0$ y $j=i$) jamás es racional llegar a un estado interior rebotando contra los límites de colapso o burbuja máxima.
+    
+    \item \textbf{Teoría Algorítmica de Juegos (Juegos Secuenciales con Renegociación):} En juegos finitos extensivos por etapas donde el estado $(i,j)$ representa la distribución de recursos en la ronda $i$, las aristas laterales modelan instancias de renegociación horizontal con peaje positivo antes de avanzar a la etapa $i+1$. La poda demostrada garantiza que las configuraciones extremas carecen de poder de transición hacia el interior del subjuego.
+\end{itemize}
+
+

@@ -1,0 +1,271 @@
+seccion_0: Titulo y Abstract (Resumen Ejecutivo) (aprox 0.5 paginas)
+	~ Titulo cientifico formal
+		~ Propuesta: "Relajacion Bidireccional In-Place y Poda por Dominancia Geometrica para Caminos Minimos en Digrafos Planares Triangulares con Ciclos Intra-Capa"
+	~ Abstract bajo el framework AER (Contexto, Obstaculo, Metodo, Resultado)
+		~ Contexto: Resolucion del problema del camino minimo en grillas triangulares estratificadas de n capas (|V| = n(n+1)/2 vertices) con pesos estrictamente positivos.
+		~ Obstaculo teorico: La inclusion de transiciones bidireccionales horizontales dentro de una misma capa induce ciclos dirigidos de longitud 2, destruyendo el orden topologico exigido por la Programacion Dinamica clasica y forzando habitualmente el uso del algoritmo de Dijkstra en tiempo O(|V| log |V|) = O(n^2 log n).
+		~ Metodo propuesto: Descomposicion direccional en dos barridos monotonos (derecha-izquierda e izquierda-derecha) ejecutados in-place sobre una unica estructura escalonada, combinada con poda algebraica de los estados de frontera.
+		~ Resultado: Obtencion de optimalidad global garantizada en tiempo y espacio estrictamente lineales respecto al tamano de la entrada Theta(|V|) = Theta(n^2), reduciendo en un 75% las reservas de memoria frente a implementaciones matriciales ingenuas.
+
+seccion_1: Introduccion, Motivacion e Impacto Interdisciplinario (aprox 1 pagina)
+	~ Planteamiento del conflicto entre Grafos Generales y Programacion Dinamica
+		~ Explicar por que la Programacion Dinamica supera a Dijkstra al eliminar el costo logaritmico del heap (cola de prioridad), pero requiere un Grafo Dirigido Aciclico (DAG).
+		~ Mostrar como las aristas laterales convierten cada capa i en un subgrafo ciclico fuertemente conexo.
+	~ Repercusion e Isomorfismo en problemas reales de la ciencia y la industria
+		~ Vision por Computadora: Costuras con desvio lateral en Seam Carving (Avidan & Shamir).
+		~ Imagenes Medicas: Segmentacion en tiempo real de capas retinianas en tomografias OCT con pliegues tisulares.
+		~ Finanzas Cuantitativas: Arboles binomiales recombinantes de Cox-Ross-Rubinstein con costos de rebalanceo horizontal intra-periodo.
+
+seccion_2: Formulacion Matematica del Dominio y Analisis del Ciclo (aprox 1.5 paginas)
+	~ Definicion formal del Digrafo Triangular Estratificado G = (V, E, w)
+		~ Definir el conjunto de vertices V = {(i, j) : 0 <= i < n, 0 <= j <= i} con cardinalidad N = |V| = n(n+1)/2 = Theta(n^2).
+		~ Definir el conjunto de aristas dirigidas permitidas E = E_down U E_horiz, donde E_down conecta (i-1, j-1) -> (i, j) y (i-1, j) -> (i, j), y E_horiz conecta (i, j) <-> (i, j+1).
+		~ Condicion de pesos: Funcion w: V -> R+ (o Z+). Demostrar con un contraejemplo de 2 nodos por que si existieran pesos negativos la solucion simple se vuelve NP-Hard o diverge a -infinito.
+	~ El Fracaso del Planteo Ingenuo (Dependencia Circular)
+		~ Presentar la ecuacion de recurrencia ingenua de 4 direcciones (tu Planteo 1).
+		~ Demostrar formalmente que OPT[i][j] depende de OPT[i][j+1] y viceversa, formando un ciclo mutuo que viola el principio de ordenamiento topologico de Bellman.
+
+seccion_3: Descomposicion Bidireccional y Teorema de Poda de Frontera (aprox 2.5 paginas)
+	~ Lema 1: Monotonia Horizontal de Caminos Simples Optimos
+		~ Demostrar por reduccion al absurdo que, dado w(v) > 0, ningun camino optimo dentro de la fila i puede cambiar de direccion horizontal (ir a la izquierda y luego a la derecha, o viceversa), ya que repetiria un vertice sumando peso positivo redundante.
+		~ Corolario: Todo subcamino horizontal en la capa i es estrictamente monotono hacia la izquierda (capturado por OPT*) o hacia la derecha (capturado por OPT).
+	~ Teorema 1: Poda por Dominancia Geometrica en las Esquinas del Triangulo (Tu Aporte Central)
+		~ Demostracion algebraica del borde derecho (u = i): Probar que para llegar a (i, i-1), bajar directo desde (i-1, i-1) cuesta OPT[i-1][i-1] + v_{i, i-1}, lo cual es estrictamente menor que pasar por la esquina derecha (i, i) que cuesta OPT[i-1][i-1] + v_{i, i} + v_{i, i-1}. Por ende, la esquina derecha queda podada del precalculo.
+		~ Demostracion algebraica del borde izquierdo (p = 0 y d = 1): Probar que para llegar a (i, 1), el camino lateral desde (i, 0) proviene obligatoriamente del mismo padre (i-1, 0), siendo dominado por la bajada directa (i-1, 0) -> (i, 1). Deducir que OPT[i][1] = OPT*[i][1] sin evaluar transiciones desde la izquierda, y que la fila i de longitud (i+1) solo requiere precalcular (i-1) estados estrella.
+	~ Optimizacion Espacial In-Place (Eliminacion de la matriz ESTRELLA) y Codigo Limpio
+		~ Explicar como se reutiliza el vector OPT[i] en dos fases sucesivas (derecha a izquierda y luego izquierda a derecha) eliminando el 100% de la matriz auxiliar ESTRELLA y usando listas escalonadas (ahorro del 75% de memoria).
+		~ Incluir el algoritmo final optimizado en Python.
+
+seccion_4: Demostracion de Optimalidad, Complejidad y Caso Patologico de Reconstruccion (aprox 1.5 paginas)
+	~ Demostracion de Optimalidad por Induccion sobre las capas i
+		~ Caso base (i = 0 e i = 1) y Paso Inductivo (asumiendo fila i-1 optima, probar que la union de los dos barridos ortogonales agota todas las trayectorias validas hacia la fila i).
+	~ Separacion Estricta de Complejidades (Exigencia de Catedra)[cite: 22]
+		~ Complejidad del Algoritmo de PD: Temporal Theta(n^2) = Theta(|V|) (cota inferior teorica Omega(|V|) alcanzada) y Espacial Theta(n^2) = Theta(|V|) en matriz escalonada. Explicar por que NO se puede bajar a O(n) espacial si se exige reconstruir el camino sin recalcular (Refutacion del error comun).
+		~ Complejidad de la Reconstruccion y el Caso Patologico "Serpiente": Demostrar que en el mejor caso (caida vertical) la reconstruccion toma Omega(n) pasos, pero en el peor caso patologico (camino en zig-zag que barre cada fila horizontalmente) toma Theta(n^2) = Theta(|V|) pasos.
+	~ Impacto de la Variabilidad[cite: 22]
+		~ Explicar que la fase de llenado de la tabla PD es ciega a la variabilidad de los pesos (siempre ejecuta exactamente las mismas comparaciones Theta(n^2)), mientras que la fase de reconstruccion SI varia su tiempo de ejecucion entre O(n) y O(n^2) segun la topografia de los pesos.
+
+seccion_5: Evaluacion Experimental y Comparativa Empirica (aprox 1.5 paginas)
+	~ Metodologia experimental
+		~ Especificaciones de hardware/software (Ubuntu Linux, Python 3, ejecucion multiproceso con ProcessPoolExecutor promediando 10 corridas por tamano).
+	~ Experimento 1: Ajuste por Cuadrados Minimos de tu Algoritmo
+		~ Grafico de tiempo de ejecucion desde n = 100 hasta n = 2500 filas (hasta ~3.1 millones de vertices) ajustado contra f(n) = c1 * n^2 + c2.
+		~ Grafico de error absoluto residual para demostrar la fidelidad del modelo cuadratico.
+	~ Experimento 2: Batalla Empirica — Tu Algoritmo Theta(n^2) vs. Dijkstra Theta(n^2 log n)
+		~ Grafico comparativo midiendo ambos algoritmos sobre las mismas piramides aleatorias, demostrando visual y numericamente como el factor logaritmico y la sobrecarga del heap de Dijkstra lo hacen significativamente mas lento que tu barrido doble in-place.
+
+seccion_6: Conclusiones y Lineas Futuras de Investigacion (aprox 0.5 paginas)
+	~ Sintesis del aporte: Como el analisis geometrico del dominio permite podar bordes y evitar estructuras de datos complejas[cite: 22].
+	~ Lineas abiertas: Extension a grillas tridimensionales (piramides de base cuadrada, como en OCT 3D) y adaptacion del algoritmo de Hirschberg para lograr espacio O(n) manteniendo la reconstruccion en tiempo O(n^2).
+
+bibliografia (aprox 0.5 paginas)
+	~ Bellman, R. (1957). Dynamic Programming. Princeton University Press[cite: 22].
+	~ Kleinberg, J., & Tardos, E. (2005). Algorithm Design. Pearson Education[cite: 22].
+	~ Cormen, T. H., et al. (2022). Introduction to Algorithms (4th ed.). MIT Press.
+	~ Dijkstra, E. W. (1959). A note on two problems in connexion with graphs. Numerische Mathematik.
+	~ Avidan, S., & Shamir, A. (2007). Seam carving for content-aware image resizing. ACM TOG.
+	~ Buchwald, M., & Genender, E. (2026). Apuntes de Teoria de Algoritmos (75.29). FIUBA.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+INDICE
+	~ normal
+
+RESUMEN
+	~ cómo llegue a este informe
+	~ qué paso
+	~ por qué estoy haciendo esto.
+
+PROBLEMA
+	~ enunciado
+	~ dificultad
+		~ es posible ¿?
+		~ estrellas
+		~ ciclo negativo (pesos negativos)
+
+DISENIANDO
+	~ primer aproach y por qué estaba mal (circular dependency between OPT)
+	TECNICA
+		~ hablar de otros errores (como usar dijkstra)
+		~ cómo llegue a la res. correcta + técnica utilizada OPT*
+	~ resolucion correcta
+
+ANALIZANDO
+	~ mostrar un ejemplo básico
+	~ complejidad
+	~ comprobar optimalidad
+	~ aaaalta pajovich hacer mediciones, pero estaria bueno. comprobar complejidad de forma empirica
+	~ tests hechos + otros que pude haber hecho (hacerlos ¿? time.)
+	~ ejemplos y mas casos
+	
+
+MEJORAS
+	~ posibles aproach
+	~ condiciones + dificultad bajada
+	~ hacerlo por backtracking?
+
+CONCLUSION
+	~ decir qué aprendi
+	~ diversion
+	~ qué pasó y cómo prevenirlo
+	~ poderes de pensar
+
+BIBLIOGRAFIA
+	~ ej.18 catedra
+	~ buch genender
+	~ ¿?
+
+
+================================================================================
+GUIA ESTRUCTURAL Y CONCEPTUAL PARA EL DOCUMENTO CIENTIFICO
+Autor: Lucio Romero Mascaro
+Titulo tentativo: Relajacion Bidireccional con Poda por Dominancia Geometrica 
+para Caminos Minimos en Grafos Triangulares con Ciclos Horizontales
+================================================================================
+
+1. CONCEPTOS TEORICOS UTILIZADOS (LO QUE YA EXISTIA EN LA LITERATURA)
+--------------------------------------------------------------------------------
+- Principio de Optimalidad (Bellman): La base de la Programacion Dinamica, que 
+  exige subestructura optima y ausencia de dependencias circulares (requiere un 
+  DAG - Grafo Aciclico Dirigido).
+- Monotonia de Costos y Propiedad de Caminos Simples: En grafos con pesos 
+  estrictamente positivos (Z+), cualquier ciclo aumenta el costo total. Por 
+  ende, todo camino optimo es simple (no repite vertices).
+- Descomposicion Direccional de Estados (Two-Pass Dynamic Programming / 
+  Forward-Backward Sweep): Tecnica que toma un grafo con ciclos locales dentro 
+  de una misma capa (fila) y lo descompone en dos subgrafos aciclicos 
+  independientes: uno que solo permite transiciones hacia la izquierda (tu 
+  tabla OPT*) y otro que consolida las transiciones hacia la derecha (tu tabla 
+  OPT).
+- Relaciones de Dominancia (Dominance Pruning): Tecnica de optimizacion 
+  combinatoria donde se descartan transiciones o estados antes de evaluarlos 
+  porque se demuestra matematicamente que otra transicion directa siempre 
+  producira un resultado menor o igual.
+
+
+2. EL APORTE PROPIO / LO "NUEVO" (TU COMBINACION ESPECIFICA)
+--------------------------------------------------------------------------------
+- Poda de Frontera por Asimetria Diagonal en Topologia Triangular: 
+  A diferencia de una grilla rectangular estandar donde el barrido doble debe 
+  recorrer los N elementos de punta a punta en ambas direcciones, identificaste 
+  que la geometria del triangulo (donde el nodo (i, j) conecta hacia abajo con 
+  (i+1, j) y (i+1, j+1)) genera una dominancia estricta en los bordes.
+- Reduccion del Espacio de Estados Auxiliar (Regla n-2): Demostraste 
+  constructivamente que los extremos de cada capa (el primero p=0 y el ultimo 
+  u=i) nunca pueden mejorar el optimo de sus vecinos internos mediante un 
+  movimiento horizontal. Ir de (i-1, i-1) a (i, i) y luego a (i, i-1) suma un 
+  peso positivo redundante frente a bajar directamente de (i-1, i-1) a (i, i-1). 
+  Esto permite podar los bordes en la pasada de precalculo, requiriendo solo 
+  (n-2) estados estrella para la fila n.
+- Consolidacion Directa del Segundo Elemento (d=1): Deduccion de que OPT[i] 
+  es exactamente igual a OPT*[i] sin necesidad de evaluar la transicion 
+  proveniente de OPT[i][0], ahorrando comparaciones constantes por cada capa.
+
+
+3. ESTRUCTURA PROFESIONAL DEL DOCUMENTO Y EXTENSION APROXIMADA
+--------------------------------------------------------------------------------
+Extension total recomendada: 6 a 8 paginas (formato estandar de una columna o 
+formato IEEE/LNCS de dos columnas).
+
+* SECCION 0: Titulo y Abstract (Resumen) [~0.5 paginas]
+  - De que hablar: Definir el problema en tres oraciones. Explicar el obstaculo 
+    principal (las aristas laterales crean ciclos que invalidan la PD clasica y 
+    forzarian el uso de Dijkstra en O(V log V)). Presentar tu solucion en 
+    tiempo lineal respecto al numero de vertices O(V) = O(N^2) mediante barrido 
+    doble y poda geometrica.
+
+* SECCION 1: Introduccion y Motivacion [~1 pagina]
+  - De que hablar: Contextualizar los problemas de caminos minimos en grafos 
+    planares estratificados (por capas). Discutir la tension entre la 
+    generalidad de los algoritmos de caminos minimos (Dijkstra, Bellman-Ford) y 
+    la eficiencia de la Programacion Dinamica. Introducir la nocion de como la 
+    estructura espacial del dominio restringe las decisiones racionales (podes 
+    incluir una breve nota conectando la geometria del espacio de busqueda con 
+    las intuiciones a priori del espacio de Immanuel Kant o el analisis 
+    teleologico de Aristoteles sobre el camino mas directo sin rodeos 
+    superfluos).
+
+* SECCION 2: Formulacion Matematica y el Problema de la Ciclicidad [~1.5 paginas]
+  - De que hablar: Definir formalmente el triangulo como un grafo dirigido 
+    G = (V, E) con funcion de pesos en los vertices w: V -> Z+. Escribir la 
+    ecuacion de recurrencia ingenua (tu Planteo 1) y demostrar formalmente por 
+    que falla: mostrar el ciclo de dependencia mutua entre (i, j) e (i, j+1) 
+    que rompe el orden topologico requerido por Bellman.
+
+* SECCION 3: Descomposicion Bidireccional y Poda de Frontera [~2 paginas]
+  - De que hablar: El corazon de tu trabajo (tu Planteo 2). 
+    1) Enunciar y demostrar el Lema de Monotonia Horizontal (ningun camino 
+       optimo cambia de direccion en la misma fila).
+    2) Definir formalmente el estado auxiliar OPT* (pasada de derecha a 
+       izquierda) y el estado final OPT (pasada de izquierda a derecha).
+    3) Enunciar y demostrar el Teorema de Poda Geometrica de Bordes: probar con 
+       desigualdades algebraicas simples por que las puntas se descartan, 
+       justificando por que el bucle de OPT* itera solo (n-2) veces y por que 
+       OPT[i] = OPT*[i]. Incluir el pseudocodigo limpio usando bloques 
+       lstlisting.
+
+* SECCION 4: Analisis de Complejidad, Optimalidad y Reconstruccion [~1 pagina]
+  - De que hablar: Demostrar que la complejidad temporal es Theta(N^2) —que es 
+    Theta(|V|), el limite inferior teorico porque hay que leer todos los datos 
+    al menos una vez— y mostrar como reducir la complejidad espacial de O(N^2) 
+    a O(N) guardando solo la fila anterior. Explicar la logica inversa en 
+    tiempo O(N) para reconstruir el camino sin caer en bucles infinitos. 
+    Incluir una tabla comparativa teorica contra Dijkstra y Bellman-Ford.
+
+* SECCION 5: Aplicaciones en Economia y Teoria Algoritmica de Juegos [~1 pagina]
+  - De que hablar: Modelar como esta topologia triangular con movimientos 
+    laterales aparece fuera de la guia de ejercicios. 
+    - En Finanzas: Arboles trinomiales o binomiales de precios de activos donde 
+      el inversor puede hacer rebalanceo horizontal intradia pagando un costo 
+      de transaccion positivo (demostrando con tu poda que en los estados 
+      extremos del mercado el rebalanceo lateral es irracional).
+    - En Teoria de Juegos: Juegos secuenciales por etapas donde los agentes 
+      pueden renegociar estados dentro de una misma etapa pagando un peaje 
+      positivo.
+
+* SECCION 6: Conclusiones y Trabajo Futuro [~0.5 paginas]
+  - De que hablar: Sintesis de como la explotacion de invariantes geometricos 
+    locales evita el sobrecosto de estructuras de datos complejas (como los 
+    heaps de Fibonacci o binarios de Dijkstra). Mencionar que pasa si se relaja 
+    la condicion de pesos positivos (aparicion de ciclos negativos o pesos cero).
+
+* Referencias Bibliograficas [~0.5 paginas]
+  - Citar a Bellman (Dynamic Programming, 1957), Dijkstra (1959), y Kleinberg & 
+    Tardos (Algorithm Design, 2005).
+================================================================================
+
+
+
+
+
+
+
+
+
+
+Problema $\to$ 
+Obstáculo Teórico (ciclos horizontales) $\to$ 
+Método Propuesto (PD de doble barrido con poda en extremos) $\to$ 
+Resultado ($\Theta(n^2)$ en tiempo y espacio, superando a Dijkstra).

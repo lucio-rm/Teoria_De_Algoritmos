@@ -1,0 +1,125 @@
+\documentclass{estilo}
+
+\usepackage[spanish, es-nodecimaldot]{babel}
+\usepackage{float}
+\usepackage{amsmath}        % para los vectores columnas
+\usepackage{amsfonts}       % para las negrita de pizarra
+\usepackage{amssymb}        % para simbolos matematicos
+\usepackage{mathtools}      % floor y ceil
+\usepackage{multirow}       % para las tablas
+\usepackage{dsfont}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem,multicol,setspace}
+\usepackage{ragged2e}       % para que no tire error con \justifying
+\usepackage{tikz}
+\usepackage{caption}
+% TIKZ:
+\usetikzlibrary{arrows.meta} % <--- Asegurate de tener esta librería en el main
+
+% Colocá los estilos globales acá en el main si querés que afecten a todo
+\tikzset{
+  vertex/.style={circle, draw=blue!70!black, fill=blue!10, very thick, minimum size=9mm, font=\sffamily\bfseries},
+  dag edge/.style={-{Stealth[length=2.4mm,width=1.7mm]}, semithick, draw=gray!75!black, shorten >=2pt, shorten <=2pt}
+}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{codeblue}{rgb}{0.16,0.36,0.67}
+% config. para que el pseudocodigo tenga colorcitos.
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   % color de fondo, ese lo ponemos?
+    commentstyle=\color{codegreen},       % color de comentarios
+    keywordstyle=\color{codepurple}\bfseries, % color de palabras clave (if, return, def)
+    numberstyle=\tiny\color{codegray}, % color de números de línea
+    stringstyle=\color{codeblue}, % color de strings
+    basicstyle=\ttfamily\small, % tipografia monoespaciada
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=right,
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=4,
+    language=Python % detecta automáticamente def, return, if, else, etc.
+}
+\lstset{style=mystyle}
+
+\onehalfspacing % Interlineado 1.5
+\setlength{\parskip}{1.2ex plus 0.4ex minus 0.2ex} % Espacio entre párrafos
+\setlength{\parindent}{0pt} % Elimina la sangría obligatoria para que no quede raro 
+
+
+\usepackage{hyperref} 
+\hypersetup{
+    hidelinks,
+    pdfstartview={XYZ null null null},
+    pdfview={XYZ null null null}
+}
+
+% bibliografía con BibLaTeX
+\usepackage[style=authoryear-comp]{biblatex}
+\addbibresource{referencias.bib}
+
+
+\newcounter{subenum}[enumi] % para las multicolumnas
+\renewcommand{\thesubenum}{\arabic{subenum}}
+\usepackage[nomessages]{fp}
+\FPeval\thecolwidth{round(1/4:4)}% Specify number of columns -> column width
+\newcommand{\newitem}[1]{%
+  \refstepcounter{subenum}%
+  \parbox{\dimexpr\thecolwidth\linewidth-.5\columnsep}{%
+    \makebox[\labelwidth][r]{(\thesubenum)\hspace*{\labelsep}}%
+    #1}\hfill%
+}
+
+% notacion matemática complementaria
+\usepackage{scalerel,stackengine} % para el sombrero
+\stackMath
+\newcommand\rhat[1]{%
+\savestack{\tmpbox}{\stretchto{%
+  \scaleto{%
+    \scalerel*[\widthof{\ensuremath{#1}}]{\kern-.6pt\bigwedge\kern-.6pt}%
+    {\rule[-\textheight/2]{1ex}{\textheight}}%WIDTH-LIMITED BIG WEDGE
+  }{\textheight}% 
+}{0.5ex}}%
+\stackon[1pt]{#1}{\tmpbox}%
+}
+\parskip 1ex
+
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor} 
+
+
+
+
+\begin{document}
+\nocite{*} % para la bibliografía.
+
+\maketitle
+\justifying
+
+%\newpage
+% el resumen va directo despues del titulo. no se usa caratula separada.
+\input{secciones/00_resumen}
+\vspace{0.3cm}
+\input{secciones/00_indice}
+\newpage
+
+\input{secciones/01_introduccion}
+\input{secciones/02_formulacion}
+\input{secciones/03_algoritmo}
+\input{secciones/04_analizando}
+\input{secciones/05_experimentos}
+\input{secciones/06_conclusion}
+
+\vspace{0.5cm}
+\printbibliography[heading=bibintoc, title={Bibliografía}]
+
+\end{document}
