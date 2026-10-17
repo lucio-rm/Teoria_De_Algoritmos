@@ -1,4 +1,11 @@
 \vspace*{1.5cm}
-\section{Resumen}
+\section*{Resumen}
+\addcontentsline{toc}{section}{Resumen}
 
-nashe
+\noindent\textbf{Contexto:} Se aborda la resolución exacta del problema del camino de costo mínimo desde la cima hasta la base en digrafos planares triangulares estratificados de $n$ capas ($N = |V| = \frac{n(n+1)}{2}$ vértices) con pesos estrictamente positivos en los vértices ($w: V \to \mathbb{R}^+$). \\
+\textbf{Obstáculo teórico:} La admisión de transiciones horizontales bidireccionales dentro de una misma capa induce ciclos dirigidos de longitud $2$. Esta topología destruye el ordenamiento topológico exigido por la Programación Dinámica clásica y fuerza habitualmente el empleo del algoritmo de Dijkstra mediante colas de prioridad en tiempo $\mathcal{O}(|V| \log |V|) = \mathcal{O}(n^2 \log n)$. \\
+\textbf{Método propuesto:} Se formula una descomposición direccional de estados en dos barridos monótonos sucesivos (derecha-izquierda para capturar transiciones no crecientes en columna, e izquierda-derecha para consolidar transiciones crecientes) ejecutados \textit{in-place} sobre una única estructura escalonada, acoplada con un teorema de poda algebraica por dominancia geométrica en las fronteras del triángulo. \\
+\textbf{Resultado:} Se demuestra formalmente la obtención del óptimo global en tiempo y espacio estrictamente lineales respecto al tamaño de la entrada, $\Theta(N) = \Theta(n^2)$, eliminando el factor logarítmico de Dijkstra y reduciendo en un $75\%$ las reservas de memoria frente a implementaciones matriciales estándar.
+
+\vspace{1.5ex}
+\noindent\textbf{Palabras clave:} Programación Dinámica Bidireccional, Relaciones de Dominancia, Poda Geométrica, Digrafos Planares Estratificados, Caminos Mínimos.

@@ -1,0 +1,139 @@
+\section{Diseño del Algoritmo: Relajación Bidireccional y Poda}
+
+Para romper la dependencia circular sin alterar la optimalidad global, analizamos la estructura geométrica de cualquier camino óptimo dentro de una misma capa $i$.
+
+\subsection{Descomposición Bidireccional por Monotonía Horizontal}
+
+\textbf{Lema 1 (Monotonía Horizontal Intra-Capa):} \textit{En un digrafo triangular estratificado con pesos positivos $v_{i,j} > 0$, ningún camino óptimo puede cambiar de dirección horizontal dentro de una misma fila $i$.}
+
+\textbf{Demostración (Por reducción al absurdo):} \\
+Supongamos que existe un camino óptimo $P^*$ que, encontrándose en la fila $i$, realiza un movimiento hacia la derecha $(i, j) \to (i, j+1)$ e inmediatamente (o tras varios pasos horizontales) invierte su sentido hacia la izquierda regresando a $(i, j)$. Dicho subcamino tendría la forma $\langle \dots, (i, j), \dots, (i, j+k), \dots, (i, j), \dots \rangle$ con $k \geq 1$. Dado que $v_{i,m} > 0$ para todo vértice, si recortamos el ciclo intermedio reemplazando todo el bucle por una única visita al nodo $(i, j)$, obtenemos un camino válido $P'$ cuyo costo verifica:
+\[
+    C(P') = C(P^*) - \sum_{\text{ciclo}} v_{i,m} < C(P^*)
+\]
+Esto contradice la hipótesis de que $P^*$ era óptimo. El razonamiento es idéntico si primero se desplaza hacia la izquierda y luego hacia la derecha. $\blacksquare$
+
+\vspace{1ex}
+\noindent\textbf{Corolario (Descomposición en Dos Fases Acíclicas):} \\
+Todo segmento horizontal de un camino óptimo en la fila $i$ es estrictamente monótono: o bien ingresa a la fila $i$ por una columna $k \geq j$ y se desplaza exclusivamente hacia la izquierda ($\leftarrow$), o bien ingresa por una columna $k \leq j$ y se desplaza exclusivamente hacia la derecha ($\rightarrow$). Esto permite descomponer el cálculo de la fila $i$ en dos subgrafos acíclicos independientes:
+\begin{enumerate}
+    \item \textbf{Estado Auxiliar Estrella ($\mathcal{OPT}^*[i][j]$):} Representa el costo mínimo para llegar a $(i,j)$ permitiendo únicamente descensos desde la fila $i-1$ y movimientos horizontales \textit{hacia la izquierda}. Se calcula barriendo la fila de derecha a izquierda.
+    \item \textbf{Estado Definitivo ($\mathcal{OPT}[i][j]$):} Consolida el costo mínimo absoluto comparando el mejor camino proveniente de la derecha ($\mathcal{OPT}^*[i][j]$) contra la opción de venir desde el vecino izquierdo ya consolidado ($\mathcal{OPT}[i][j-1] + v_{i,j}$). Se calcula barriendo de izquierda a derecha.
+\end{enumerate}
+
+\subsection{Teorema de Poda por Dominancia Geométrica en las Fronteras}
+
+A diferencia de una grilla rectangular donde el doble barrido debe evaluar los $m$ elementos completos en ambas direcciones, demostramos que la geometría triangular induce una relación de dominancia estricta en ambas esquinas de cada fila $i \geq 2$.
+
+\textbf{Teorema 1 (Poda de Esquinas y Reducción de Estados Estrella):} \textit{Para toda capa $i \geq 2$, los vértices extremos $p = 0$ (esquina izquierda) y $u = i$ (esquina derecha) jamás pueden formar parte de un camino óptimo que se desplace horizontalmente hacia el interior de la fila $i$. En consecuencia: (a) el pre-cálculo de $\mathcal{OPT}^*$ en el anteúltimo elemento $a = i-1$ prescinde de evaluar a $u = i$; y (b) el segundo elemento $d = 1$ verifica $\mathcal{OPT}[i][1] = \mathcal{OPT}^*[i][1]$ sin evaluar a $p = 0$.}
+
+\textbf{Demostración Algebraica:}
+\begin{itemize}
+    \item \textbf{Parte (a) — Dominancia en la Frontera Derecha ($u = i$ y $a = i-1$):} \\
+    Por la topología triangular (Sección 3), el extremo derecho $(i, i)$ carece de padre superior derecho, pues la fila $i-1$ solo llega hasta la columna $i-1$. Su único predecesor en la capa superior es $(i-1, i-1)$. Si un camino desciende desde $(i-1, i-1)$ hacia la esquina $(i, i)$ y luego retrocede horizontalmente hacia el anteúltimo nodo $(i, i-1)$, su costo acumulado es:
+    \[
+        C_{\text{esquina}} = \mathcal{OPT}[i-1][i-1] + v_{i,i} + v_{i,i-1}
+    \]
+    Sin embargo, el vértice $(i-1, i-1)$ es simultáneamente padre directo de $(i, i-1)$ mediante una arista descendente. El costo de bajar directamente de $(i-1, i-1)$ a $(i, i-1)$ es:
+    \[
+        C_{\text{directo}} = \mathcal{OPT}[i-1][i-1] + v_{i,i-1}
+    \]
+    Como $v_{i,i} > 0$, se cumple invariablemente que $C_{\text{directo}} < C_{\text{esquina}}$. Por lo tanto, la transición $(i, i) \to (i, i-1)$ es estrictamente subóptima y se poda del cálculo, definiendo el caso base derecho de $\mathcal{OPT}^*$ como:
+    \[
+        \mathcal{OPT}^*[i][a] = v_{i,a} + \min\big(\mathcal{OPT}[i-1][a-1], \; \mathcal{OPT}[i-1][a]\big)
+    \]
+
+    \item \textbf{Parte (b) — Dominancia en la Frontera Izquierda ($p = 0$ y $d = 1$):} \\
+    De manera simétrica, el extremo izquierdo $(i, 0)$ posee un único padre superior: $(i-1, 0)$. Cualquier camino que descienda a $(i, 0)$ y luego avance horizontalmente hacia la derecha al segundo nodo $(i, 1)$ incurre en un costo $\mathcal{OPT}[i-1][0] + v_{i,0} + v_{i,1}$.Dado que $(i-1, 0)$ también conecta directamente con $(i, 1)$ con costo $\mathcal{OPT}[i-1][0] + v_{i,1}$ (el cual ya fue evaluado dentro de $\mathcal{OPT}^*[i][1]$), y siendo $v_{i,0} > 0$, el paso desde $(i,0)$ hacia $(i,1)$ queda estrictamente dominado. En consecuencia, el segundo elemento consolida su óptimo directamente sin comparaciones adicionales:
+    \[
+        \mathcal{OPT}[i][1] = \mathcal{OPT}^*[i][1]
+    \]
+\end{itemize}
+Gracias a ambas podas, para una fila de $k = i+1$ elementos solo se requieren calcular $k - 2 = i - 1$ estados estrella (desde $j = i-1$ hasta $j = 1$). $\blacksquare$
+
+\vspace{1ex}
+\noindent\textbf{Resumen de la Ecuación de Recurrencia Final (Para toda capa $i \geq 2$):} \\
+Definiendo los punteros notables $p = 0$, $d = 1$, $u = i$ y $a = i-1$:
+\[
+    \text{\textbf{Fase 1 ($\mathcal{OPT}^*$):}} \quad
+    \begin{cases}
+        \mathcal{OPT}^*[i][a] = v_{i,a} + \min\big(\mathcal{OPT}[i-1][a-1], \; \mathcal{OPT}[i-1][a]\big) \\
+        \mathcal{OPT}^*[i][j] = v_{i,j} + \min\big(\mathcal{OPT}[i-1][j-1], \; \mathcal{OPT}[i-1][j], \; \mathcal{OPT}^*[i][j+1]\big) & \forall j \in [a-1 \dots 1]
+    \end{cases}
+\]
+\[
+    \text{\textbf{Fase 2 ($\mathcal{OPT}$):}} \quad
+    \begin{cases}
+        \mathcal{OPT}[i][p] = v_{i,p} + \min\big(\mathcal{OPT}[i-1][p], \; \mathcal{OPT}^*[i][d]\big) \\
+        \mathcal{OPT}[i][d] = \mathcal{OPT}^*[i][d] \\
+        \mathcal{OPT}[i][j] = \min\big(v_{i,j} + \mathcal{OPT}[i][j-1], \; \mathcal{OPT}^*[i][j]\big) & \forall j \in [2 \dots u-1] \\
+        \mathcal{OPT}[i][u] = v_{i,u} + \min\big(\mathcal{OPT}[i-1][u-1], \; \mathcal{OPT}[i][u-1]\big)
+    \end{cases}
+\]
+
+\subsection{Optimización Espacial In-Place e Implementación}\label{rec:codigo}
+
+En una primera aproximación podrían instanciarse dos matrices cuadradas de $n \times n$ (\verb|ESTRELLA| y \verb|OPT|), consumiendo $2n^2$ celdas en memoria. Sin embargo, observamos dos propiedades clave que permiten reducir drásticamente el consumo espacial:
+\begin{enumerate}
+    \item \textbf{Dimensionamiento Escalonado:} La fila $i$ solo posee $i+1$ columnas válidas. Al reservar listas de longitud exacta $i+1$, reducimos el espacio base de $n^2$ a $\frac{n(n+1)}{2} \approx 0.5n^2$.
+    \item \textbf{Sobrescritura In-Place (Eliminación total de \texttt{ESTRELLA}):} Los valores de $\mathcal{OPT}^*[i]$ solo se utilizan durante el cálculo de la misma fila $i$. Por lo tanto, en la Fase 1 escribimos los valores de $\mathcal{OPT}^*$ directamente dentro del arreglo definitivo \verb|OPT[i]| de derecha a izquierda. Luego, en la Fase 2, recorremos \verb|OPT[i]| de izquierda a derecha actualizando \verb|OPT[i][j] = min(OPT[i][j], piramide[i][j] + OPT[i][j-1])|, donde el valor previo alojado en \verb|OPT[i][j]| es exactamente $\mathcal{OPT}^*[i][j]$. Esto elimina el $100\%$ de la matriz auxiliar \verb|ESTRELLA|, logrando un ahorro total del $75\%$ de memoria respecto al planteo matricial ingenuo.
+\end{enumerate}
+
+A continuación se presenta la implementación completa en lenguaje Python:
+
+\begin{lstlisting}[language=Python, caption={Implementación del algoritmo de PD Bidireccional In-Place y su reconstrucción.}]
+def camino_minimo_piramide(piramide: list[list[int]]) -> tuple[int, list[list[int]]]:
+    if not piramide:
+        return 0, []
+    n = len(piramide)
+    OPT = [[0] * (i + 1) for i in range(n)]  # Matriz escalonada unica (sin tabla ESTRELLA)
+
+    # Casos base (filas 0 y 1)
+    OPT[0][0] = piramide[0][0]
+    if n == 1:
+        return OPT[0][0], [[0, 0]]
+    OPT[1][0] = piramide[1][0] + OPT[0][0]
+    OPT[1][1] = piramide[1][1] + OPT[0][0]
+
+    for i in range(2, n):
+        p, d, u, a = 0, 1, i, i - 1
+
+        # Fase 1: Barrido Derecha a Izquierda (OPT* almacenado in-place sobre OPT[i])
+        OPT[i][a] = piramide[i][a] + min(OPT[i - 1][a - 1], OPT[i - 1][a])
+        for j in range(a - 1, 0, -1):
+            OPT[i][j] = piramide[i][j] + min(OPT[i - 1][j - 1], OPT[i - 1][j], OPT[i][j + 1])
+
+        # Fase 2: Barrido Izquierda a Derecha (Consolidacion de OPT definitivo)
+        OPT[i][p] = piramide[i][p] + min(OPT[i - 1][p], OPT[i][d])
+        # OPT[i][d] ya contiene OPT*[i][d], queda consolidado por Teorema 1(b)
+        for j in range(2, u):
+            OPT[i][j] = min(OPT[i][j], piramide[i][j] + OPT[i][j - 1])
+        OPT[i][u] = piramide[i][u] + min(OPT[i - 1][u - 1], OPT[i][u - 1])
+
+    ult = n - 1
+    min_valor = min(OPT[ult])
+    min_col = OPT[ult].index(min_valor)
+    return min_valor, _reconstruccion(piramide, OPT, [min_valor, ult, min_col])
+
+def _reconstruccion(piramide: list[list[int]], OPT: list[list[int]], destino: list) -> list[list[int]]:
+    if destino[0] == float('inf'):
+        return []
+    camino = []
+    fila, col = destino[1], destino[2]
+    camino.append([fila, col])
+
+    while fila > 0:
+        buscado = OPT[fila][col] - piramide[fila][col]
+        if col > 0 and OPT[fila - 1][col - 1] == buscado:
+            fila, col = fila - 1, col - 1
+        elif col < fila and OPT[fila - 1][col] == buscado:
+            fila -= 1
+        elif col > 0 and OPT[fila][col - 1] == buscado:
+            col -= 1
+        elif col < fila and OPT[fila][col + 1] == buscado:
+            col += 1
+        camino.append([fila, col])
+
+    return camino[::-1]
+\end{lstlisting}
+

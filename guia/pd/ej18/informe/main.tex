@@ -1,16 +1,27 @@
 \documentclass{estilo}
-\usepackage[spanish]{babel}
-\usepackage{graphicx}
+
+\usepackage[spanish, es-nodecimaldot]{babel}
 \usepackage{float}
 \usepackage{amsmath}        % para los vectores columnas
 \usepackage{amsfonts}       % para las negrita de pizarra
 \usepackage{amssymb}        % para simbolos matematicos
+\usepackage{mathtools}      % floor y ceil
 \usepackage{multirow}       % para las tablas
-%\usepackage{hyperref} 
 \usepackage{dsfont}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{enumitem,multicol,setspace}
 \usepackage{ragged2e}       % para que no tire error con \justifying
+\usepackage{tikz}
+\usepackage{caption}
+% TIKZ:
+\usetikzlibrary{arrows.meta} % <--- Asegurate de tener esta librería en el main
+
+% Colocá los estilos globales acá en el main si querés que afecten a todo
+\tikzset{
+  vertex/.style={circle, draw=blue!70!black, fill=blue!10, very thick, minimum size=9mm, font=\sffamily\bfseries},
+  dag edge/.style={-{Stealth[length=2.4mm,width=1.7mm]}, semithick, draw=gray!75!black, shorten >=2pt, shorten <=2pt}
+}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -18,8 +29,8 @@
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
 \definecolor{codeblue}{rgb}{0.16,0.36,0.67}
 % config. para que el pseudocodigo tenga colorcitos.
-\lstset{
-    backgroundcolor=\color{backcolor},   % color de fondo, ese lo ponemos?
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   % color de fondo, ese lo ponemos?
     commentstyle=\color{codegreen},       % color de comentarios
     keywordstyle=\color{codepurple}\bfseries, % color de palabras clave (if, return, def)
     numberstyle=\tiny\color{codegray}, % color de números de línea
@@ -37,29 +48,10 @@
     tabsize=4,
     language=Python % detecta automáticamente def, return, if, else, etc.
 }
-\lstdefinestyle{mystyle}{
-    backgroundcolor=\color{backcolour},   
-    commentstyle=\color{codegreen},
-    keywordstyle=\color{magenta},
-    numberstyle=\tiny\color{codegray},
-    stringstyle=\color{codepurple},
-    basicstyle=\ttfamily\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
-    showstringspaces=false,
-    showtabs=false,                  
-    tabsize=2
-}
 \lstset{style=mystyle}
 
-\usepackage{enumitem,multicol,setspace}
 \onehalfspacing % Interlineado 1.5
-\setlength{\parskip}{1.5ex plus 0.5ex minus 0.2ex} % Espacio entre párrafos
+\setlength{\parskip}{1.2ex plus 0.4ex minus 0.2ex} % Espacio entre párrafos
 \setlength{\parindent}{0pt} % Elimina la sangría obligatoria para que no quede raro 
 
 
@@ -70,12 +62,12 @@
     pdfview={XYZ null null null}
 }
 
+% bibliografía con BibLaTeX
 \usepackage[style=authoryear-comp]{biblatex}
 \addbibresource{referencias.bib}
 
 
 \newcounter{subenum}[enumi] % para las multicolumnas
-
 \renewcommand{\thesubenum}{\arabic{subenum}}
 \usepackage[nomessages]{fp}
 \FPeval\thecolwidth{round(1/4:4)}% Specify number of columns -> column width
@@ -86,7 +78,7 @@
     #1}\hfill%
 }
 
-
+% notacion matemática complementaria
 \usepackage{scalerel,stackengine} % para el sombrero
 \stackMath
 \newcommand\rhat[1]{%
@@ -100,7 +92,7 @@
 }
 \parskip 1ex
 
-\usepackage{mathtools}      % floor y ceil
+
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor} 
 
@@ -113,22 +105,21 @@
 \maketitle
 \justifying
 
-\newpage
+%\newpage
+% el resumen va directo despues del titulo. no se usa caratula separada.
+\input{secciones/00_resumen}
+\vspace{0.3cm}
 \input{secciones/00_indice}
 \newpage
-\input{secciones/00_resumen}
-\newpage
-\input{secciones/01_problema}
-\newpage
-\input{secciones/02_diseniando}
-\newpage
-\input{secciones/03_analizando}
-\newpage
-\input{secciones/04_mejoras}
-\newpage
-\input{secciones/05_conclusion}
-\vfill %para que la bibliografia vaya para abajo.
+
+\input{secciones/01_introduccion}
+\input{secciones/02_formulacion}
+\input{secciones/03_algoritmo}
+\input{secciones/04_analizando}
+\input{secciones/05_experimentos}
+\input{secciones/06_conclusion}
+
+\vspace{0.5cm}
 \printbibliography[heading=bibintoc, title={Bibliografía}]
 
-\newpage
 \end{document}
