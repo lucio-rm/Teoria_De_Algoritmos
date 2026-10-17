@@ -1,30 +1,47 @@
-\section{Dominio Matemático}
-\textbf{1 página}
+\section{Formulación Matemática del Dominio}
 
-Formulación Matemática del Dominio
+Definimos formalmente la pirámide de $n$ filas como un digrafo planar estratificado y ponderado en sus vértices $G = (V, E, w)$, compuesto por los siguientes elementos:
 
-Definición formal del Digrafo Triangular Estratificado G = (V, E, w)
+\begin{enumerate}
+    \item \textbf{Conjunto de Vértices ($V$):} El dominio espacial se organiza en $n$ capas discretas indexadas por $i \in \{0, 1, \dots, n-1\}$, donde cada capa $i$ contiene exactamente $i+1$ vértices indexados por columna $j \in \{0, 1, \dots, i\}$:
+    \[
+        V = \{(i, j) \in \mathbb{Z}^2 \mid 0 \leq i < n, \; 0 \leq j \leq i\}
+    \]
+    La cardinalidad total del grafo (que define el tamaño real de la entrada $N$) responde a la serie aritmética de Gauss:
+    \[
+        N = |V| = \sum_{i=0}^{n-1} (i + 1) = \frac{n(n+1)}{2} = \Theta(n^2)
+    \]
 
-- Definir el conjunto de vertices 
-$V = {(i, j) : 0 \leq i < n, 0 \leq j \leq i}$ con cardinalidad 
-$N = |V| = \frac{n(n+1)}{2} = \Theta(n^2)$.
+    \item \textbf{Conjunto de Aristas Dirigidas ($E$):} El conjunto de transiciones válidas se particiona en dos subconjuntos disjuntos, $E = E_{\text{down}} \cup E_{\text{horiz}}$:
+    \begin{itemize}
+        \item \textit{Aristas descendentes inter-capa ($E_{\text{down}}$):} Conectan un vértice superior con sus dos hijos inmediatos en la capa inferior, impidiendo cualquier retroceso hacia filas superiores:
+        \[
+            E_{\text{down}} = \{((i-1, j-1) \to (i, j)) \mid 0 < j \leq i\} \cup \{((i-1, j) \to (i, j)) \mid 0 \leq j < i\}
+        \]
+        \item \textit{Aristas bidireccionales intra-capa ($E_{\text{horiz}}$):} Conectan vértices adyacentes dentro de un mismo nivel $i$:
+        \[
+            E_{\text{horiz}} = \{((i, j) \to (i, j+1)) \mid 0 \leq j < i\} \cup \{((i, j+1) \to (i, j)) \mid 0 \leq j < i\}
+        \]
+    \end{itemize}
 
-- Definir el conjunto de aristas dirigidas permitidas $E = E_down U E_horiz$, donde $E_down$ conecta
+    \item \textbf{Función de Pesos Positivos ($w$):} A cada vértice $(i,j) \in V$ se le asigna un costo escalar estrictamente positivo $v_{i,j} = w(i,j) \in \mathbb{R}^+$ (o $\mathbb{Z}^+$). El objetivo consiste en hallar una trayectoria dirigida $P = \langle (0,0), \dots, (n-1, j^*) \rangle$ desde la cima hasta cualquier vértice de la base que minimice el funcional de costo acumulado $C(P) = \sum_{(i,j) \in P} v_{i,j}$.
+\end{enumerate}
 
-\[ (i-1, j-1) \rightarrow (i, j) y 
-(i-1, j) \rightarrow (i, j), y E_horiz conecta 
-(i, j) \Leftrightarrow (i, j+1). \]
-- Condición de pesos: Función 
-\[ w: V \rightarrow \mathbb{R}+ (o \mathbb{Z}+) \]. 
-Demostrar con un contraejemplo de 2 nodos por qué si existieran pesos negativos la solución simple se vuelve NP-Hard o diverge a -infinito. 
+\textbf{Necesidad teórica de la restricción $v_{i,j} > 0$ (Ausencia de Ciclos Negativos):} \\
+La hipótesis de positividad estricta resulta indispensable para la buena definición del problema. Si se admitieran pesos negativos ($v_{i,j} < 0$), cualquier par de vértices adyacentes en una misma fila tal que $v_{i,j} + v_{i,j+1} < 0$ (por ejemplo, $v_{1,0} = -5$ y $v_{1,1} = 2$, cuya suma cíclica es $-3$) conformaría un ciclo dirigido de peso negativo alcanzable desde $(0,0)$. En dicho escenario, alternar indefinidamente $(1,0) \leftrightarrow (1,1)$ haría diverger el costo óptimo a $-\infty$. Si por el contrario se exigiera hallar un \textit{camino simple} (sin repetir vértices) en presencia de ciclos negativos, el problema se reduciría al problema del Camino Más Largo, convirtiéndose en \textbf{NP-Hard} \parencite{cormen2022}.
 
+\subsection{Análisis del Ciclo: El Fracaso del Planteo Ingenuo}
 
+Si se intenta formular una ecuación de recurrencia directa considerando simultáneamente las cuatro direcciones de arribo posibles hacia el estado $(i,j)$, se obtiene el siguiente planteo ingenuo:
+\[
+    \mathcal{OPT}[i][j] = v_{i,j} + \min \begin{cases}
+        \mathcal{OPT}[i-1][j-1] & \text{si } i > 0 \land j > 0 \quad \text{(arriba-izquierda)} \\
+        \mathcal{OPT}[i-1][j]   & \text{si } i > 0 \land j < i \quad \text{(arriba-derecha)} \\
+        \mathcal{OPT}[i][j-1]   & \text{si } j > 0 \quad \text{(izquierda)} \\
+        \mathcal{OPT}[i][j+1]   & \text{si } j < i \quad \text{(derecha)}
+    \end{cases}
+\]
 
-\subsection{Análisis del Ciclo}
-
-El Fracaso del Planteo Ingenuo (Dependencia Circular)
-
-- Presentar la ecuacion de recurrencia ingenua de 4 direcciones (tu Planteo 1).
-- Demostrar formalmente que $OPT[i][j]$ depende de $OPT[i][j+1]$ y viceversa, formando un ciclo mutuo que viola el principio de ordenamiento topologico de Bellman.
-
+\textbf{Demostración de la Invalidez Topológica:} \\
+Al evaluar la fila $i$ de izquierda a derecha ($j = 0 \dots i$), en el instante en que se intenta computar el estado $\mathcal{OPT}[i][j]$, los estados de la capa superior $\mathcal{OPT}[i-1][\cdot]$ ya se encuentran resueltos. Sin embargo, el término $\mathcal{OPT}[i][j+1]$ aún no ha sido calculado (contiene un valor centinela $\infty$ o $0$). Simétricamente, para calcular $\mathcal{OPT}[i][j+1]$ la ecuación exige conocer $\mathcal{OPT}[i][j]$. Esto establece una relación de dependencia circular $\mathcal{OPT}[i][j] \leftrightarrows \mathcal{OPT}[i][j+1]$ que viola la propiedad de aciclicidad de Bellman, haciendo que un único barrido unidireccional omita caminos óptimos que descienden por la derecha y luego se desplazan hacia la izquierda.
 
