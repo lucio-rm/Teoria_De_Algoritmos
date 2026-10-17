@@ -1,14 +1,12 @@
 \section{Introducción}
-\textbf{(1 pagina)}
-Planteamiento del conflicto entre Grafos Generales y Programación Dinámica.
-
-- Mostrar cómo las aristas laterales convierten cada capa $i$ en un subgrafo cíclico fuertemente conexo.
 
 Programación Dinámica requiere de un Grafo Dirigido Acíclico para poder superar a los tiempos de Dijkstra, ya que aprovecha la estructura para poder plasmarla a una \textit{ecuación de recurrencia}, y si se aplica el Digrafo Triangular se puede llegar a un tiempo estricto de $\Theta(N)$ siendo $N$ el tamaño de la entrada. Pudiendo eliminar el costo logarítmico que inducía el heap (cola de prioridad) en el algoritmo de Dijkstra. Con un Grafo General, sin las propiedades requeridas, no se logrará dicha complejidad / mejora.
 
 \textbf{Disclaimer: no hace falta que sea dirigido. total, logicamente no va a volver (porque no sería logico sumar peso basura)}
 \textbf{tambien, quiero poner la imagen a la derecha, y el texto a la izquierda. es un grafico normal. dame las instrucciones para que tikz sepa bien qué mostrar. yo pego la imagen aca, chilling.}
-Cada capa $i$ del grafo
+
+Cada capa $i$ del grafo se puede ver en la figura \ref{fig:grafo1} que se pueden generar subgrafos cíclicos fuertemente conexos. Eso va a tener peso con respecto a la \textbf{poda geométrica} realizada posteriormente en el algoritmo de Programación Dinámica.
+
 
 \begin{figure}[htbp]
     \centering
