@@ -12,6 +12,16 @@
 \usepackage{xcolor}
 \usepackage{enumitem,multicol,setspace}
 \usepackage{ragged2e}       % para que no tire error con \justifying
+\usepackage{tikz}
+
+% TIKZ:
+\usetikzlibrary{arrows.meta} % <--- Asegurate de tener esta librería en el main
+
+% Colocá los estilos globales acá en el main si querés que afecten a todo
+\tikzset{
+  vertex/.style={circle, draw=blue!70!black, fill=blue!10, very thick, minimum size=9mm, font=\sffamily\bfseries},
+  dag edge/.style={-{Stealth[length=2.4mm,width=1.7mm]}, semithick, draw=gray!75!black, shorten >=2pt, shorten <=2pt}
+}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}

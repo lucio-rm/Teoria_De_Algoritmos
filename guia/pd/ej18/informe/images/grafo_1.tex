@@ -1,0 +1,15 @@
+\begin{tikzpicture}[node distance=2cm]
+  % Vertices arranged as a triangle
+  \node[vertex] (source) at (0,3.6) {A};
+  \node[vertex] (left)   at (-2,1.8) {B};
+  \node[vertex] (right)  at (2,1.8) {C};
+  \node[vertex] (sink)   at (0,0) {D};
+
+  % All edges point downward, so the triangular graph is acyclic
+  \draw[dag edge] (source) -- (left);
+  \draw[dag edge] (source) -- (right);
+  \draw[dag edge] (source) -- (sink);
+  \draw[dag edge] (left) -- (right);
+  \draw[dag edge] (left) -- (sink);
+  \draw[dag edge] (right) -- (sink);
+\end{tikzpicture}
