@@ -14,23 +14,24 @@ si trabajo hoy, obtengo la paga del día.
 quiero maximizar la paga
 
 - Constantes:
-n elementos
-cada elemento tiene un valor_{n}
+cantidad total de n días.
+cada dia tiene una ganancia 'g_i', con i ∊ {1, 2, ..., n}
+
 
 - Variables:
-Al tener la opcion de elegir o no elegir el día para trabajar, utilizo variables binarias.
-X_{i} E {0, 1}, cada X_{i} representa el día 'i'.
+Al tener la opcion de elegir o no elegir el día para trabajar, utilizo variables binarias enteras.
+X_{i} E {0, 1}, cada X_{i} representa el día 'i'. Si vale 0, no trabaja. si vale 1, si.
 
 - Inecuaciones:
 Si trabajo en X_{i}, no puedo trabajar en (i-1) y (i+1).
-X_{i-1} + X_{i} <= 1
-X_{i} + X_{i+1} <= 1
-y eso me permite trabajar en (i-1) y (i+1)
+∀i ∊ {1, 2, ..., n-1}: X_i + X_{i+1} ≤ 1
 
 - Función Objetivo:
 quiero maximizar el valor a trabajar.
+    n
+max ∑(X_{i} . g_i)
+   i=1
 
-max sum(X_{i})
 """
 
 
