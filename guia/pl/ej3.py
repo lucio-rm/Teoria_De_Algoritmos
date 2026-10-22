@@ -10,24 +10,25 @@ Un Vertex Cover de un Grafo G es un conjunto de vértices del grafo en el cual t
 
 
 - Constantes:
-V vértices
-E aristas
-cada vertice tiene adyacentes.
+Grafo G = (V, E), con V vértices y E el conjunto de aristas
 
 - Variables:
-V_{i} a cada vertice 'i' del grafo G.
-E_{i} a cada arista 'i' del grafo G.
+Sea X_{v} ∊ {0, 1} una variable binaria entera para cada vértice v ∊ V.
+Vale 1 si se elije el vértice (y forma parte del Vertex Cover), 0 en caso contrario.
 
 - Inecuaciones:
-quiero que cada arista tenga la menor cantidad de vertices.
-∀(i, k) e E: X_{i} + X_{k} <= 1.
+quiero que cada arista tenga la menor cantidad de vertices. al menos uno de sus vértices tiene que ser elegido. para cada arista ∊ E.
+
+∀(i, k) ∊ E:    X_{i} + X_{k} ≥ 1.
+
 Para todo par de vertices conectados por la arista (i, k), trato de forzar elegir siempre 1 de esos dos.
+(como mucho van a ser |E| inecuaciones)
 
 - Función Objetivo:
-lo que yo busco en este ejercicio, es minimizar la cantidad de aristas elegidas.
-Por consecuencia, minimizar la cantidad de vértices elegidos.
+El objetivo es minmizar la cantidad de vértices a agarrar.
 
-min sum(X_{i})
+min ∑(X_{v})
+  v ∊ V (vertices del grafo)
 
 """
 

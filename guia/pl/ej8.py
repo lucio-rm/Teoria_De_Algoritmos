@@ -6,28 +6,31 @@ Indicar la cantidad de restricciones generadas en función de la cantidad de vé
 """
 """
 planteo:
-En teoría de grafos, un clique (o camarilla) es un subconjunto de vértices de un grafo en el que cada par de vértices está directamente conectado por una arista.
+En teoría de grafos, un clique es un subconjunto de vértices de un grafo en el que cada par de vértices está directamente conectado por una arista.
 
+(todos son adyacentes entre sí. si dos vértices NO tienen un aarista que los una, NO pueden etar juntos en el Clique. es igual al Ind.Set pero restringiendo a los NO adyacentes en lugar de los adyacentes)
 
 - Constantes:
-V vertices
-E aristas
-del grafo.
-
+Grafo G = (V, E). Para cada vértice i ∈ V, se define su conjunto de no adyacentes como 
+ady(i) = {k ∈ V \ {i} | (i, k) ∉ E}. Constante M = |V| + 1.
 
 - Variables:
-sea X_i E {0, 1} una variable entera binaria, la cual representa 0 si el vértice_i no fue elegido, o 1 de caso contrario.
-sea Y_i E {0, 1} lo mismo, pero representando las aristas.
+Sea X_{i} ∈ {0, 1} una variable binaria entera para cada vértice i ∈ V, que vale 1 si el vértice i pertenece
+al Clique, y 0 en caso contrario.
 
 - Inecuaciones:
-idea: entre cada subgrafo, la cantidad de aristas tiene que ser igual a la cantidad de vértices.
-∀i, j (X_i, Y_j)    X_i <= Y_i(M - (X_i, Y_j))
-siendo M = |v| + |E| + 1
-y la cantidad de inecuaciones utilizadas son en el peor de los casos: V + E
+Si un vértice i es incluido en el Clique (X_i = 1), ninguno de los vértices que no tienen arista con él puede ser incluido en el Clique
+
+∀i ∈ V:    X_{i} + ∑ X_{k} ≤ 1 + M.(1-X_{i})
+                k ∈ ¬ady(i)
+(exactamente |V| restricciones)
 
 - Función Objetivo:
-maximizar la cantidad de vertices en el subgrafo:
-\max(X_i), total maximizando los vértices que cumplan con la inecuación, también maximizo la cantidad de aristas utilizadas.
+Quiero minimizar la cantidad de vértices adentro del Clique:
+
+max ∑ X_{i}
+  i ∈ V
+
 
 """
 

@@ -13,24 +13,24 @@ f = (X_1 o n(X_2) o X_3) y (n(X_1) o X_2 o n(X_3))
 tengo que hacer que f sea verdadera.
 
 - Constantes:
-tengo los valores, caliendo true o false. siendo 3-SAT, siempre tengo hasta 3 variables. por condicion.
+Conjunto de variables booleanas I = {1, 2, ..., n} y conjunto de cláusulas C = {C_1, C_2, ..., C_m}. 
+Para cada cláusula c ∈ C, definimos P_c ⊆ I como el subconjunto de variables que aparecen sin negar (positivas) en c 
+y N_c ⊆ I como el subconjunto de variables que aparecen negadas en c 
+(donde |P_c| + |N_c| = 3).
 
 - Variables:
-como pueden valer true o false, cada X_{i} E {1, 0}. 1 si es verdadera, 0 si es falsa.
-para representar las negadas, uso (como probabilidad): 1 - X_{i}
-
+Sea X_1 ∈ {0, 1} una variable binaria entera para cada i ∈ I, que vale 1 si la variable booleana es True, y 0 si es False.
 
 - Inecuaciones:
-dependiendo la cantidad (no sé como es el problema)
-tengo:
-X_1 + (1-X_2) + X_3 >= 1. si o si uno de los 3 tiene que valer true.
-(1 - X_1) + X_2 + (1 - X_3) >= 2. lo mismo.
-
+Para que toda fórmula sea verdadera, cada cláusula c ∈ C tiene que tener al menos un literal en true (|C| inecuaciones)
+∀c ∈ C:    ∑ X_i + ∑(1-X_j) ≥ 1.
+        i∈ P_c    j∈ N_c
 
 - Función Objetivo:
-min cant.(X_{i})
-la función objetivo trata de minimizar la cantidad de variables a utilizar.
-no creo que sea correcta esta funcion.
+Quiero minimizar la cantidad total de variables que son True
+    n
+min ∑ X_i
+   i=1
 
 """
 

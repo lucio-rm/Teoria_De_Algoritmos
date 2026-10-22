@@ -23,11 +23,16 @@ n elementos. (peso_n, valor_n)
 
 - Variables:
 Sea X_{i} E {0, 1} una variable binaria que vale 1 si elijo el elemento. 0 si no.
+i E {1, 2, ..., n}
 Representa a los elementos elegidos.
 
 - Inecuaciones:
 La suma de todos los elementos elegidos tiene que ser menorIgual a W.
-Sum(X_{i} . peso_{i}) <= W
+ n
+ ∑(X_{i} . peso_{i}) <= W
+i=1
+
+
 ej: 
 X_{1} . p_{1} + X_{2} . p_{2} + X_{3} . p_{3} + X_{4} . p_{4} <= W
 suponiendo que uso x1 y x3, van a valer 1. x2 y x4 van a valer 0. entonces:
@@ -35,7 +40,9 @@ X_{1} . p_{1} + X_{3} . p_{3} <= W
 
 
 - Función Objetivo:
-\max sum(X_{i} . valor_{i})
+    n
+max ∑(X_{i} . valor_{i})
+   i=1
 Quiero maximizar el valor de cada elemento que utilizo (cumpliendo con la inecuacion).
 
 """
