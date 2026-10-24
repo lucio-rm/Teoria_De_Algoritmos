@@ -9,3 +9,9 @@ build/
 *.fls
 *.out
 *.run.xml
+
+investigacion/*
+
+guia/pd/ej18/*
+
+
