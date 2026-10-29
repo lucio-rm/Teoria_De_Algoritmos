@@ -1,6 +1,7 @@
 """
-Ej.2 (★):
 Implementar un modelo de programación lineal que resuelva el problema de Juan El Vago (ejercicio 4 de PD).
+
+Recordar que aquí estamos usando PuLP para resolver el problema porque es la forma programática de poder evaluarlo en RPL. A la hora del parcial lo que nos es relevante es el modelo.
 
 """
 """
@@ -34,5 +35,8 @@ max ∑(X_{i} . g_i)
 
 """
 
+import pulp
 
-# pulp
+def juan_el_vago(trabajos):
+    # devolver un arreglo de los índices de días a trabajar
+    return []

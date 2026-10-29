@@ -1,7 +1,21 @@
 """
-Ej.8 (★★):
-Implementar un modelo de programación lineal que permita determinar el clique de tamaño máximo dentro de un grafo. 
-Indicar la cantidad de restricciones generadas en función de la cantidad de vértices y aristas (podés usar notación O para esto, no es importante el número exacto).
+Implementar un modelo de programación lineal que permita determinar el clique de tamaño máximo dentro de un grafo. Indicar la cantidad de restricciones generadas en función de la cantidad de vértices y aristas (podés usar notación O para esto, no es importante el número exacto).
+
+Métodos del grafo:
+Grafo(dirigido = False, vertices_init = []) para crear (hacer 'from grafo import Grafo')
+agregar_vertice(self, v)
+borrar_vertice(self, v)
+agregar_arista(self, v, w, peso = 1)
+el resultado será v <--> w
+borrar_arista(self, v, w)
+estan_unidos(self, v, w)
+peso_arista(self, v, w)
+obtener_vertices(self)
+Devuelve una lista con todos los vértices del grafo
+vertice_aleatorio(self)
+adyacentes(self, v)
+str
+Recordar que aquí estamos usando PuLP para resolver el problema porque es la forma programática de poder evaluarlo en RPL. A la hora del parcial lo que nos es relevante es el modelo.
 
 """
 """
@@ -34,5 +48,8 @@ max ∑ X_{i}
 
 """
 
+import pulp
 
-# pulp.
+def clique_maximo(grafo):
+    # devolver una lista con los vertices que conforman dicho clique
+    return []

@@ -1,6 +1,23 @@
 """
-Ej.3 (★):
-Implementar un modelo de programación lineal que resuelva el problema de Vertex Cover mínimo (ejercicio 13 de BT).
+Un Vertex Cover de un Grafo G es un conjunto de vértices del grafo en el cual todas las aristas del grafo tienen al menos uno de sus extremos en dicho conjunto. Por ejemplo, el conjunto de todos los vértices del grafo siempre será un Vertex Cover.
+
+Implementar un modelo de programación lineal que dado un Grafo no dirigido nos devuelva un conjunto de vértices que representen un mínimo Vertex Cover del mismo.
+
+Métodos del grafo:
+Grafo(dirigido = False, vertices_init = []) para crear (hacer 'from grafo import Grafo')
+agregar_vertice(self, v)
+borrar_vertice(self, v)
+agregar_arista(self, v, w, peso = 1)
+el resultado será v <--> w
+borrar_arista(self, v, w)
+estan_unidos(self, v, w)
+peso_arista(self, v, w)
+obtener_vertices(self)
+Devuelve una lista con todos los vértices del grafo
+vertice_aleatorio(self)
+adyacentes(self, v)
+str
+Recordar que aquí estamos usando PuLP para resolver el problema porque es la forma programática de poder evaluarlo en RPL. A la hora del parcial lo que nos es relevante es el modelo.
 
 """
 """
@@ -32,6 +49,7 @@ min ∑(X_{v})
 
 """
 
+import pulp
 
-# pulp
-
+def vertex_cover_min(grafo):
+    return []
