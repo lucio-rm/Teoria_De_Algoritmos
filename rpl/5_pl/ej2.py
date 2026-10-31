@@ -39,4 +39,6 @@ import pulp
 
 def juan_el_vago(trabajos):
     # devolver un arreglo de los índices de días a trabajar
+    problem = pulp.LpProblem("el_vagician", pulp.LpMaximize)
+    
     return []

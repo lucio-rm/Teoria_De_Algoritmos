@@ -41,6 +41,14 @@ quiero que cada arista tenga la menor cantidad de vertices. al menos uno de sus 
 Para todo par de vertices conectados por la arista (i, k), trato de forzar elegir siempre 1 de esos dos.
 (como mucho van a ser |E| inecuaciones)
 
+mejoro:
+
+∀i E V: X_{i} + ∑Y_k => len(ady) - M.X_{i}   ,  M = |V| + 1
+              k ∈ ady(i)
+cuando agarro el vertice X_i, cumple siempre la condicion. cuando no, vale 0 y si o si tiene que agarrar todos los adyacentes.
+
+
+
 - Función Objetivo:
 El objetivo es minmizar la cantidad de vértices a agarrar.
 
@@ -52,4 +60,6 @@ min ∑(X_{v})
 import pulp
 
 def vertex_cover_min(grafo):
+    problem = pulp.LpProblem("vertex_cover", pulp.LpMinimize)
+    
     return []

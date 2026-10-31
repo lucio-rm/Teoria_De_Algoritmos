@@ -52,4 +52,6 @@ import pulp
 
 def clique_maximo(grafo):
     # devolver una lista con los vertices que conforman dicho clique
+    problem = pulp.LpProblem("clique_max", pulp.LpMaximize)
+    
     return []
