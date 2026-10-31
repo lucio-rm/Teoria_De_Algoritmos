@@ -65,24 +65,29 @@ def vertex_cover_min(grafo):
     vertices = grafo.obtener_vertices()
     if not vertices:
         return []
-    
-    problem = pulp.LpProblem("vertex_cover", pulp.LpMinimize)
+
+    #quiero minimizar la cantidad de vertices
+    problem = pulp.LpProblem("vertex_cover_min", pulp.LpMinimize)
 
     #x = pulp.LpVariable("x_1", cat="Binary")
     # como los vertices se pueden ser cualquier cosa, quiero guardarlo en un dicc para acceder en O(1).
     x = {v: pulp.LpVariable(f"x_{v}", cat="Binary") for v in vertices}
 
     M = len(vertices) + 1 # la big_M
-
+    
     #inecuaciones
     for v in vertices:
         adyacentes = grafo.adyacentes(v)
+        if not adyacentes:
+            continue
         problem += x[v] + pulp.lpSum(x[k] for k in adyacentes) >= len(adyacentes) - M*x[v]
+
+    #fun obj. minimizar la cant. de vertices a elegir.
+    problem += pulp.lpSum(x[v] for v in vertices)
 
     # ejecuto y conformo el vertex cover
     problem.solve()
-
-    vertex_cover = [v for v in range(len(vertices)) if round(pulp.value(x[v])) == 1]
+    vertex_cover = [v for v in vertices if pulp.value(x[v]) is not None and round(pulp.value(x[v])) == 1]
     #value(x[v]) es parte de la solucion
     return vertex_cover
 
