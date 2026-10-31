@@ -61,5 +61,10 @@ import pulp
 
 def vertex_cover_min(grafo):
     problem = pulp.LpProblem("vertex_cover", pulp.LpMinimize)
+
+    #x = pulp.LpVariable("x_1", cat="Binary")
+    # como los vertices se pueden ser cualquier cosa, quiero guardarlo en un dicc para acceder en O(1).
+    x = {v: pulp.LpVariable(f"x_{v}", cat="Binary") for v in grafo.obtener_vertices()}
+    
     
     return []

@@ -24,7 +24,7 @@ Al tener la opcion de elegir o no elegir el día para trabajar, utilizo variable
 X_{i} E {0, 1}, cada X_{i} representa el día 'i'. Si vale 0, no trabaja. si vale 1, si.
 
 - Inecuaciones:
-Si trabajo en X_{i}, no puedo trabajar en (i-1) y (i+1).
+Si trabajo en X_{i}, no puedo trabajar en (i+1).
 ∀i ∊ {1, 2, ..., n-1}: X_i + X_{i+1} ≤ 1
 
 - Función Objetivo:
@@ -40,5 +40,9 @@ import pulp
 def juan_el_vago(trabajos):
     # devolver un arreglo de los índices de días a trabajar
     problem = pulp.LpProblem("el_vagician", pulp.LpMaximize)
+
+    #x = pulp.LpVariable("x_1", cat="Binary")
+    n = len(trabajos)
+    x = [pulp.LpVariable(f"x_{i}", cat="Binary") for i in range(n)]
     
     return []
