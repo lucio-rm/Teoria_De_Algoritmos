@@ -41,8 +41,18 @@ def juan_el_vago(trabajos):
     # devolver un arreglo de los índices de días a trabajar
     problem = pulp.LpProblem("el_vagician", pulp.LpMaximize)
 
+    # Variables:
     #x = pulp.LpVariable("x_1", cat="Binary")
     n = len(trabajos)
     x = [pulp.LpVariable(f"x_{i}", cat="Binary") for i in range(n)]
+
+    # Restricciones o inecuaciones, se agregan a problem +=
+    problem += [[x[i] + x[i+1] <= 1] for i in range(n)]
+
+
+    # si no tiene comparador, es la Funcion Objetivo
+    problem += pulp.LpAffineExpresion([(x[i], trabajos[i]) for i in range(n)])
+    
+
     
     return []
