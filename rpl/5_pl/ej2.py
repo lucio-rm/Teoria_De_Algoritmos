@@ -38,20 +38,23 @@ max ∑(X_{i} . g_i)
 import pulp
 
 def juan_el_vago(trabajos):
-    # devolver un arreglo de los índices de días a trabajar
+    n = len(trabajos)
+    if n == 0:
+        return []
+    
+    # maximizo ganancia
     problem = pulp.LpProblem("el_vagician", pulp.LpMaximize)
 
     # Variables:
     #x = pulp.LpVariable("x_1", cat="Binary")
-    n = len(trabajos)
     x = [pulp.LpVariable(f"x_{i}", cat="Binary") for i in range(n)]
 
     # Restricciones o inecuaciones, se agregan a problem +=
-    problem += [[x[i] + x[i+1] <= 1] for i in range(n)]
-
+    for i in range(n-1):
+        problem += x[i] + x[i+1] <= 1
 
     # si no tiene comparador, es la Funcion Objetivo
-    problem += pulp.LpAffineExpresion([(x[i], trabajos[i]) for i in range(n)])
+    problem += pulp.lpSum(trabajos[i] * x[i] for i in range(n))
     
 
     problem.solve()
