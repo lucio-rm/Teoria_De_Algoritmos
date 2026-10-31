@@ -54,5 +54,9 @@ def juan_el_vago(trabajos):
     problem += pulp.LpAffineExpresion([(x[i], trabajos[i]) for i in range(n)])
     
 
+    problem.solve()
+
+    #problema de punto flotante en Python: Los solvers resuelven matrices en punto flotante, una variable binaria a veces devuelve 1.0 o 0.99999999 en vez del 1. Para filtrar qué variables quedaron en 1 sin errores de redondeo, compará con round(pulp.value(x[i])) == 1 o pulp.value(x[i]) > 0.5
     
-    return []
+    trabajovich = [i for i in range(n) if round(pulp.value(x[i])) == 1]
+    return trabajovich
