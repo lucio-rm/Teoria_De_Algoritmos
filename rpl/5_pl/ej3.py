@@ -60,11 +60,29 @@ min ∑(X_{v})
 import pulp
 
 def vertex_cover_min(grafo):
+    if not grafo:
+        return []
+    vertices = grafo.obtener_vertices()
+    if not vertices:
+        return []
+    
     problem = pulp.LpProblem("vertex_cover", pulp.LpMinimize)
 
     #x = pulp.LpVariable("x_1", cat="Binary")
     # como los vertices se pueden ser cualquier cosa, quiero guardarlo en un dicc para acceder en O(1).
-    x = {v: pulp.LpVariable(f"x_{v}", cat="Binary") for v in grafo.obtener_vertices()}
-    
-    
-    return []
+    x = {v: pulp.LpVariable(f"x_{v}", cat="Binary") for v in vertices}
+
+    M = len(vertices) + 1 # la big_M
+
+    #inecuaciones
+    for v in vertices:
+        adyacentes = grafo.adyacentes(v)
+        problem += x[v] + pulp.lpSum(x[k] for k in adyacentes) >= len(adyacentes) - M*x[v]
+
+    # ejecuto y conformo el vertex cover
+    problem.solve()
+
+    vertex_cover = [v for v in range(len(vertices)) if round(pulp.value(x[v])) == 1]
+    #value(x[v]) es parte de la solucion
+    return vertex_cover
+
