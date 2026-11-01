@@ -24,7 +24,7 @@ Al tener la opcion de elegir o no elegir el día para trabajar, utilizo variable
 X_{i} E {0, 1}, cada X_{i} representa el día 'i'. Si vale 0, no trabaja. si vale 1, si.
 
 - Inecuaciones:
-Si trabajo en X_{i}, no puedo trabajar en (i-1) y (i+1).
+Si trabajo en X_{i}, no puedo trabajar en (i+1).
 ∀i ∊ {1, 2, ..., n-1}: X_i + X_{i+1} ≤ 1
 
 - Función Objetivo:
@@ -38,5 +38,28 @@ max ∑(X_{i} . g_i)
 import pulp
 
 def juan_el_vago(trabajos):
-    # devolver un arreglo de los índices de días a trabajar
-    return []
+    n = len(trabajos)
+    if n == 0:
+        return []
+    
+    # maximizo ganancia
+    problem = pulp.LpProblem("el_vagician", pulp.LpMaximize)
+
+    # Variables:
+    #x = pulp.LpVariable("x_1", cat="Binary")
+    x = [pulp.LpVariable(f"x_{i}", cat="Binary") for i in range(n)]
+
+    # Restricciones o inecuaciones, se agregan a problem +=
+    for i in range(n-1):
+        problem += x[i] + x[i+1] <= 1
+
+    # si no tiene comparador, es la Funcion Objetivo
+    problem += pulp.lpSum(trabajos[i] * x[i] for i in range(n))
+    
+
+    problem.solve()
+
+    #problema de punto flotante en Python: Los solvers resuelven matrices en punto flotante, una variable binaria a veces devuelve 1.0 o 0.99999999 en vez del 1. Para filtrar qué variables quedaron en 1 sin errores de redondeo, compará con round(pulp.value(x[i])) == 1 o pulp.value(x[i]) > 0.5
+    
+    trabajovich = [i for i in range(n) if round(pulp.value(x[i])) == 1]
+    return trabajovich
