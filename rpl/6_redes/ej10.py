@@ -81,8 +81,9 @@ def disjuntos(grafo, s, t):
     return caminos
 
 
-def crear_red(grafo, s, t):
-    red = Grafo(dirigido=Ture, vertices_init=grafo.obtener_vertices())
+def _crear_red(grafo, s, t):
+    vertices = grafo.obtener_vertices()
+    red = Grafo(True, vertices)
     ficticios = {}
     
     for v in grafo.obtener_vertices():
