@@ -21,20 +21,21 @@ Nota sobre RPL: no hay forma de evaluar un seguimiento por esta plataforma, así
 def obtener_flujo():
     flujo = {}
     vertices = "super_fuente", "S", "T", "U", "V", "W", "X", "Z"
-    flujo[("super_fuente", "S")] = 0 # completar
-    flujo[("super_fuente", "X")] = 0 # completar
-    flujo[("S", "V")] = 0 # completar
-    flujo[("S", "U")] = 0 # completar
-    flujo[("V", "T")] = 0 # completar
-    flujo[("V", "W")] = 0 # completar
-    flujo[("W", "T")] = 0 # completar
-    flujo[("U", "W")] = 0 # completar
-    flujo[("X", "Z")] = 0 # completar
-    flujo[("Z", "W")] = 0 # completar
-    flujo[("Z", "U")] = 0 # completar
+    flujo[("super_fuente", "S")] = 7 # completar
+    flujo[("super_fuente", "X")] = 2 # completar
+    flujo[("S", "V")] = 4 # completar
+    flujo[("S", "U")] = 3 # completar
+    flujo[("V", "T")] = 3 # completar
+    flujo[("V", "W")] = 1 # completar
+    flujo[("W", "T")] = 6 # completar
+    flujo[("U", "W")] = 4 # completar
+    flujo[("X", "Z")] = 2 # completar
+    flujo[("Z", "W")] = 1 # completar
+    flujo[("Z", "U")] = 1 # completar
     flujo[("U", "Z")] = 0 # completar
 
-    conjunto_super_fuente = [] # completar
-    conjunto_sumidero = [] # completar
+    conjunto_super_fuente = ['super_fuente', 'S', 'U', 'V', 'W', 'X', 'Z'] # completar
+    conjunto_sumidero = ["T"] # completar
 
     return flujo, conjunto_super_fuente, conjunto_sumidero
+
