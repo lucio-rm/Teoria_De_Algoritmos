@@ -18,5 +18,27 @@ El análisis de la complejidad debe ser completo.
 
 """
 planteo:
+ergonomico:
+maneje una sola luz , y que sea visible desde esa luz between luz-interruptor
+
+
+pienso en poner ady. a cada coso que sea visible.
+
+bastante sencillo.
+
+Conversion a red de flujo:
+
+Grafo de forma bipartito
+Fuente S -> conectada  a cada Luz (capa 1)
+cada luz -> conectada a cada interruptor que pueda ver
+Interruptor (capa 2) -> conectados c/u al Sumidero T
+
+Todo con cap. 1.
+
+Si al sumidero le llegan 3 de flujo, significa que se usaron los 3 interruptores. y de la unica forma que suceda eso es que le llegue a cada uno 1 de flujo de cada luz. Y que estén conectados significa que son visibles entre sí. --> piso ergonómico.
 
 """
+
+
+
+
