@@ -39,19 +39,64 @@ tengo que tener SKJC
 
 """
 0. ok
-
+"""
+"""
 1. 
 Un problema está en NP si, dada una solución (certificado) del problema, puedo verificar si es correcta en tiempo polinomial mediante un validador (certificador).
+"""
+def validador(grafo, solucion, k, j):
+    # la solucion va a ser representada con una lista de vértices que representarían una solución candidata del problema. en tiempo polinomial tengo que verificar si es correcta dada el grafo original, y los enteros K y J.
+    vertices = grafo.obtener_vertices()
 
+    #check 1: cantidad de vértices de la solución es mayor a la cantidad de vértices generales del grafo
+    if len(solucion) > len(vertices):
+        return False
 
+    #check 2: que todos los vértices de la solución, estén en el grafo original.
+    for vertice in solucion:
+        if vertice not in vertices:
+            return False
+
+    """
+    check 3: verifico propiedades SKJC
+    1. que la cantidad de vertices sea menor igual a K
+    2. que todos los vertices de la solución tengan como adyacentes a lo sumo J vértices, que TAMBIEN pertenezcan a la solucion (que no sean ajenos al subgrafo)
+    """
+    if len(solucion) > k:
+        return False
+
+    for v in solucion:
+        adyacentes = grafo.obtener_adyacentes(v)
+        if len(adyacentes) < j or len(adyacentes) > k:
+            return False
+        for w in adyacentes:
+            if w not in solucion:
+                return False
+
+    # si pasó todos los chequeos, significa que es una solución correcta del problema SKJC
+    return True
+"""
+Complejidad del certificador:
+1. obtengo vertices del grafo -> O(V)
+2. recorro los vertices de la solucion -> O(K) (a lo sumo van a ser K)
+3. recorro todos los vertices de la solucion y por cada uno, obtengo y recorro sus adyacentes. en el peor de los casos, J == K y la mayor cantidad de adyacentes que puede tener cada vértice (sin romper la propiedad del problema) es igual a la cantidad de vértices del subgrafo, lo cual lo hace un subgrafo completo, lo cual chequearlo termina teniendo un costo de O(K.K) = O(K²)
+
+En el peor de los casos, K va a ser la cantidad de vértices totales del grafo original, lo cual V = K.
+
+Complejidad temporal final: O(V) + O(V) + O(V²) = O(V² + 2V) (como V² > 2V) = O(V²)
+Validador en tiempo polinomial.
+"""
+
+"""
 2. 
 caracteristicas entre K-Clique y SKJC
 el clique:
 es un subgrafo COMPLETO de un grafo G
 es una instancia del SKJC donde J == K
 entonces yo sé que si encuentro un subgrafo completo de a lo sumo K vértices, un K-Clique, sé que voy a tener un SKJC de al menos J (siempre y cuando J <= K, pero si J > K no tiene sentido, sería absurdo.).
+"""
 
-
+"""
 3. 
 
 
