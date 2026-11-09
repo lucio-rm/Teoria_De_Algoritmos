@@ -49,3 +49,50 @@ Como se ha dicho anteriormente, minimizar la cantidad de contenedores a utilizar
 min ∑ C_{j}, ∀ j ∈ N⁺
 
 """
+
+
+
+
+"""
+Leí slack:
+
+1. Constantes:
+- p_i = peso del elemento i
+- M = cap. maxima de un bin
+- N = cantidad de elementos
+
+2. Variables:
+- Y_{i}{j} variable tipo binaria, representa si el elemento i pertenece a la bolsa j
+- X_{j} variable tipo binaria, representa si la bolsa j se usa.
+
+3. Funcion objetivo:
+    N
+min ∑ X_{j}
+   j=1
+minimiza la cantidad de bolsas que se usan.
+
+4. Restricciones:
+1)
+garantiza que cada elemento i este en un único bin
+    N
+    ∑ Y_{i}{j} = 1 , ∀i  
+   j=1
+
+2)
+si el bin j se toma, la suma de posibles elementos debe ser ≤ M
+si el bin j no se toma, la suma de elementos debe ser 0.
+    N
+    ∑ p_{i} . Y_{i}{j} ≤ M. X_{j} ∀j
+   i=1
+
+
+3)
+No más de un bin por elemento
+    N
+    ∑ X_{j} ≤ N
+   j=1
+
+
+
+cantidad de restricciones: 2N + 1
+"""
