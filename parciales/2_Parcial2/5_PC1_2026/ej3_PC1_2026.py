@@ -69,6 +69,8 @@ def validador(grafo, solucion, k, j):
         adyacentes = grafo.obtener_adyacentes(v)
         if len(adyacentes) < j or len(adyacentes) > k:
             return False
+
+        # no me sirve solo con chequear que sea a lo sumo J. tengo que verificar que los adyacentes ∈ al subgrafo de la solución.
         for w in adyacentes:
             if w not in solucion:
                 return False
@@ -94,13 +96,65 @@ el clique:
 es un subgrafo COMPLETO de un grafo G
 es una instancia del SKJC donde J == K
 entonces yo sé que si encuentro un subgrafo completo de a lo sumo K vértices, un K-Clique, sé que voy a tener un SKJC de al menos J (siempre y cuando J <= K, pero si J > K no tiene sentido, sería absurdo.).
+
+
+
+Entonces, sé que teniendoc cualquier instancia / solución de un K-Clique, voy a tener una solución de un SKJC. Ya que, en SKJC, cada vértice del subgrafo tiene una cantidad de adyacentes ∈ [J, K]. Al menos, va a tener J vértices adyacentes ∈ subgrafo, eso significa que a lo sumo puede tener permitido K adyacentes.
+
+
+
+
+Relación entre K-Clique y SKJC:
+Si tengo una instancia del K-Clique <----> Tengo una instancia del SKJC ∀ K, J ∈ R.
+
+Relación entre SKJC y K-Clicque:
+Si tengo una instancia del SKJC, donde J == K ----> tengo una instancia del K-Clique
+(#nota: si J < K, puedo forzar a los vértices a que tengan más ady. hasta llegar a K?)
 """
 
 """
 3. 
+Demostración por Método Directo:
+Hipótesis ==> Tesis
+A -  Si Tengo un K-Clique en g ==> Tengo un SKJC en g
+
+Y para el Si y sólo Si:
+B -  Si Tengo un SKJC en g' ==> Tengo un K-Clique en g'
 
 
 
+A.
+La definición de un K-Clique es, que dado un valor numérico K, un K-Clique es un subgrafo COMPLETO de G, que tiene K vértices.
+Un subgrafo completo, significa que cada vértice tiene como adyacente a todos los vértices del subgrafo.
+
+La relación con el SKJC, es que, sabiendo que tengo un K-Clique, si o si voy a tener una instancia del SKJC (siempre y cuando la K sea la misma entre los dos problemas).
+
+(#nota: en el cuaderno voy a hacer un grafico. en el vsStudio ta complicado dibujar bien. pero es sencillo. el dibujo va a ser una instancia del K-Clique y colorear los adyacentes, dando significado a J, etc etc.)
+
+En el problema del SKJC, un J significa que cada vértice del subgrafo se conecte con AL MENOS J vértices. entonces como máximo J puede ser igual a K, y si no lo es, la propiedad permite que cada vértice se conecte con A LO SUMO K vértices, si tengo un K-Clique, cada vértice se esta conectando con a lo sumo K vértices. Por lo que tengo un SKJC.
+
+
+B.
+Ahora, si tengo una instancia del problema SKJC, la transformación que le hago a cualquier solución del problema SKJC, es que a cada vértice, con sus respectivos adyacentes (pueden variar la cantidad), los voy a aumentar hasta llegar a K adyacentes a cada uno.
+La razón de esta decisión es que, con una instancia del SKJC, cada vértice va a tener a lo sumo J adyacentes.
+Lo cual que si a cada vértice le AUMENTO la cantidad de adyacentes que tiene, sin sobrepasarme de K y llegando HASTA K, cada vértice va a seguir cumpliendo con la propiedad del SKCJ y sigue siendo parte de la solución. Sólo que ahora, con esta nueva instancia creada polinomialmente*, tengo una instancia del K-Clique.
+
+(#nota: acá hago otro dibujo, con una instanciade SKJC que no sea un subgrafo completo, y que lo voy a llevar a éste en tiempo polinomial).
+
+
+*polinomialmente, me refiero a que la transformación se puede realizar recorriendo cada vértice 'i' de la solución (O(V)) y que por cada vértice, recorro otra vez cada vértice 'j' de la solución, creando la arista (i, j) si no estaba creada. Creando a lo sumo (K-J) aristas en tiempo O(V²).
+
+
+Concluyendo la demostración,
+
+Para la ida:
+Si tengo Cualquier instancia del K-Clique ---> Tengo una instancia del SKJC, sin importar el J propuesto, cumple con la propiedad del problema.
+
+
+Para la vuelta:
+Si tengo Cualquier instancia del SKJC, realizo una transformación de la solución/subgrafo, para cualquier K/J, aumento los adyacentes de cada vértice hasta tener un subgrafo completo*         ----------> Tengo una instancia del K-Clique.
+
+*Tener un subgrafo compelto, mantiene con la propiedad del SKJC.
 """
 
 
