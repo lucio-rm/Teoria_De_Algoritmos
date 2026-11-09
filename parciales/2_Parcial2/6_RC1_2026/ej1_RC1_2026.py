@@ -96,3 +96,21 @@ No más de un bin por elemento
 
 cantidad de restricciones: 2N + 1
 """
+
+
+"""
+# nota: tan distinto , no lo hizo. idk. El tema es que, la consigna dice:
+
+Implementar un modelo de programación lineal que permita determinar en qué contenedor va cada elemento...
+
+Lo que habré hecho mal fue el no poder resolver en qué elemento va cada elemento. pero es posible?
+
+
+Tuve que haber pensado de ahí, el decir: Tengo que saber qué elemento i va a un bin j.
+
+
+El chabon que resolvió, hizo maso menos lo mismo (sumo una sumatoria de no mas de un bin por elemento, que siento que es innecesaria. porque teóricamente si cada p_{i} es menor igual a M, no va a pasarse de ahí.).
+Pero no sé cómo, en su forma de resolverse, le indica a la variable en qué contenedor va.
+
+
+"""
