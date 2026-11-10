@@ -94,8 +94,22 @@ Para poder demostrar que el problema de la mochila con bolsillos es un problema 
 
 Primero, tengo que hacer la reducción, fijarme la transformación (si es necesaria) polinomial que necesito para poder reducir un problema al otro.
 
+El Knapsack problem 0/1 (KP), consiste en elegir los elementos que la suma maximice el valor, y que no sobrepase una capacidad W.
+
+caracteristicas 
+KP
+. elementos (peso, valor)
+. maximizar valor
+. no sobrepasar capacidad W de la mochila
+
+McB
+. elementos (peso, valor)
+. obtener una suma de valor ≥ V
+. guardar los elementos en contenedores (total k), cada uno con una capacidad W_{j}
 
 
+
+KP es una instancia particular del McB, del cual k = 1, con cap. W
 
 """
 
@@ -104,5 +118,17 @@ Primero, tengo que hacer la reducción, fijarme la transformación (si es necesa
 
 """
 3. Demostracion si y solo sí.
+
+Tengo una instancia del KP <----> Tengo una instancia particular del McB
+
+Por método directo, demuestro la reducción.
+
+Tengo una instancia del Knapsack Problem 0/1, Sé que sin transformación necesaria, tengo una instancia del problema de la mochila con bolsillos. Del cual tiene 1 solo bolsillo, con capacidad W, y el valor V = valor obtenido óptimo en KP.
+
+Asumiendo que tengo una instancia del KP, voy a tener una del McB. Si no lo tuviera, no tendría una solución válida del KP. Cualquier solución válida que no sobrepase el W del KP, va a cumplir con ese V obtenido al McB, de 1 solo bolsillo con Cap.W
+
+Y la vuelta, asumo que tengo una instancia particular del McB, con 1 solo bolsillo, con cap. W, y sumando al menos un valor V.
+
+Voy a tener una solución del KP, no va a ser tal vez la óptima, pero va a ser una instancia del Knapsack Problem. Si no lo tuviera, significa que no tengo tampoco una instancia del problema de la mochila con bolsillos. Si no tengo una solucion del KP, no voy a tener una solución del McB con 1 bolsillo y cap. W.
 
 """
