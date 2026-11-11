@@ -102,3 +102,84 @@ O((n + n/2 + n² + n)(n + 1))
 
 Complejidad espacial: O(V + E) = O(n + n/2 + n + n²) = O(n²)
 """
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Corrección:
+
+from collections import deque
+
+def marcar_jugadores(goleadores, pases, arquero):
+    S = arquero
+    T = "ARCO_PROPIO"
+    
+    # 1. Construir la red de flujo
+    red = Grafo(dirigido=True)
+    red.agregar_vertice(S)
+    red.agregar_vertice(T)
+    
+    # Desdoblar cada jugador de campo
+    jugadores_campo = [j for j in pases.keys() if j != arquero]
+    for jugador in jugadores_campo:
+        red.agregar_vertice(f"{jugador}_in")
+        red.agregar_vertice(f"{jugador}_out")
+        # Capacidad 1: marcar al jugador cuesta 1
+        red.agregar_arista(f"{jugador}_in", f"{jugador}_out", 1)
+        
+    # Aristas desde el arquero
+    for receptor in pases.get(arquero, []):
+        if receptor != arquero:
+            red.agregar_arista(S, f"{receptor}_in", float('inf'))
+            
+    # Aristas de pases entre jugadores
+    for origen, destinos in pases.items():
+        if origen == arquero:
+            continue
+        for destino in destinos:
+            if destino != arquero:
+                red.agregar_arista(f"{origen}_out", f"{destino}_in", float('inf'))
+                
+    # Aristas hacia el arco (goles)
+    for tirador in goleadores:
+        if tirador != arquero:
+            red.agregar_arista(f"{tirador}_out", T, float('inf'))
+            
+    # 2. Calcular flujo máximo y obtener red residual
+    _, red_residual = flujo(red, S, T)
+    
+    # 3. BFS en red residual para encontrar vértices alcanzables desde S
+    alcanzables = set()
+    cola = deque([S])
+    alcanzables.add(S)
+    
+    while cola:
+        actual = cola.popleft()
+        for vecino in red_residual.adyacentes(actual):
+            # En la red residual solo avanzamos si hay capacidad residual > 0
+            if red_residual.peso(actual, vecino) > 0 and vecino not in alcanzables:
+                alcanzables.add(vecino)
+                cola.append(vecino)
+                
+    # 4. Los jugadores marcados son los que tienen u_in alcanzable y u_out no alcanzable
+    a_marcar = []
+    for jugador in jugadores_campo:
+        u_in = f"{jugador}_in"
+        u_out = f"{jugador}_out"
+        if u_in in alcanzables and u_out not in alcanzables:
+            a_marcar.append(jugador)
+            
+    return a_marcar
