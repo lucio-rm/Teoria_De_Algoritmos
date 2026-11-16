@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+import sys
+from utils.leer_archivo import leer_archivos
+
+def algoritmo(ruta): # tendría que recibir una ruta a tablero.txt
+    # parser
+    # y backtracking / PL
+    return True
+
+
+
+
+def main():
+    if len(sys.argv) < 2:
+        print("Falta pasar un archivo")
+        sys.exit(1)
+        
+    monedas = leer_archivos(sys.argv[1])
+    return juego(monedas)
+    
+if __name__ == "__main__":
+    main()

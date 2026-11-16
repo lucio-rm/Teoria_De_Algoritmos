@@ -1,0 +1,21 @@
+# Tablero de n filas y m columnas. Cada línea es una fila: '.' es una celda vacía, 'V' una piedra verde y 'C' una piedra celeste
+..V...CC....VV.
+.CCV.......VC..
+.V..........C.C
+.V..VC.........
+......C.......V
+V.C..VV.....V..
+C..............
+..C.........VC.
+....VCC........
+.V.......CV....
+V........C.C.C.
+.C.......C..C..
+.V..V.C.VVV.V..
+V.V.V......C...
+...C.V.......C.
+...C.C...VCCC..
+C.C.V.........V
+....V..VC...C..
+...C.......C..V
+.......CV...C.V
