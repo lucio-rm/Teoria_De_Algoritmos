@@ -216,7 +216,34 @@ Ahora en base a eso quiero resolver el ejercicio de rpl.
 
 
 Datos:
+    . hacer un algoritmo randomizado que permita estimar el valor de π (pi).
+    . Recomiendan recordar:
+        . el área de un cuadrado de lado 2 es 4.
+        . el área de un círculo de diámetro 2 es, casualmente, π.
+    . va a recibir la cantidad de iteraciones a utilizar para aproximar
+        . a más iteraciones, que aproxime mejor.
+.
 
+1. Representación (Cromosoma e Individuo): Cómo codificás una solución candidata.
+
+.que se yo
+
+
+2. Función de Aptitud (Fitness): Una función objetivo que te dice "qué tan bueno" es un individuo.
+
+.
+
+
+3. Selección: Te quedás con un porcentaje de los mejores individuos de la población actual para que sean padres 
+(prime tip: usa heapq.nlargest o nsmallest para agarrar el top 30%, más un pequeño porcentaje de elitismo que pasa intacto para no perder la mejor solución histórica).
+
+.
+
+
+4. Cruce (Crossover / Recombinación): Agarrás dos padres seleccionados y mezclás sus genes para crear un hijo nuevo, esperando combinar buenas características de ambos (por ejemplo, elegir gen a gen al azar de ind1 o ind2).
+
+
+5. Mutación: Con una probabilidad baja (PROB_MUTACION), alterás aleatoriamente un gen del hijo (por ejemplo, haciendo un swap de dos posiciones). Como bien anotaste en tus apuntes del MIT, esto evita que la población se estanque en un máximo local y mantiene la diversidad.
 
 
 """
