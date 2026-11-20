@@ -62,6 +62,166 @@ Función de aptitud (fitness), que sería muy similar a lo que vimos de función
         Agarramos un valor umbral entre 0 y 1, y si se llega al valor umbral se modifica el valor (o ubicación) de un gen.
 
 """
+
+
+
+
+
+
+
+"""
+planteo TEORÍA MIT:
+
+
+GENETIC ALGORITHMS.
+~ Naive Evolution
+~ mimicking ^
+~ choices abound
+~ fitness space
+~ examples.
+
+Attemps of naive reproduction.
+
+Célula                          ---> CelulaNuc.2.1 (MITOSIS)
+Núcleo (con dni de papi y mami) ---> Celulanuc.2.1
+
+Consiguen los cromosomas de las células padres, y se van combinando un poco con los cromosomas de los abuelos también, y así.
+
+Genetic Algorithms -> Nature -> Options of evolutive
+
+ACTG.
+Los cromosomas son binarios en el sistema que vamos a construir.
+
+Va a haber una población ~~~> Aplicamos Mutation ~~~> hacemos el crossover, agarramos la parte delantera de uno, trasera de otro y creamos una nueva combinación.
+
+Creamos una nueva población, cada uno tiene un Fitness (e.g, 88, 77, etc.) va a haber una función que el Fitness consigue una probabilidad de cuánto va a sobrevivir en la generación que sigue.
+--> Selection, agarra con esa probabilidad de cada uno los que sobrevien
+
+Y asi es el bucle de cada uno.
+
+1 - P_{i} = f_{i} / ∑ f_{i}
+                    i
+la medición de la probabilidad.
+(#nota: fitness no tiene negatividad).
+
+
+~ muestra un ejemplo de aplicación de genetic algorithms,
+f(x,y) = (sin co x)² (sin co y)² e^((x+y)/θ)
+entonces, si van a la esquina es lo ideal.
+
+Selection by fitness; no crossover --> problemas. no llegan al óptimo. (tests de 100 generations)
+Selection by fitness; x-y crossover -> same problem
+
+Cómo conseguir un mejor mecanismo para un mejor Fitness
+
+-> Candidatos. 
+Mecanismo2: Rank Space
+
+P_{1} = P_{c}
+P_{2} = (1-P_{c}).P_{c}
+P_{n-1} = (1-p_{c})^(n-2) .P_{c}
+P_{n} = (1-p_{c})^(n-1)
+
+La probabilidad de "x" es la probabilidad de que no hayan elegido a ninguno de los anteriores antes que ese mismo. (tenes que multiplicarlo con la prob. de elegirlo 
+(menos el último, porque no hay otro para elegir je))
+
+
+~ ej:
+Selection by fitness rank; x-y crossover
+    . problema: se queda en un máximo local,  y no se fija en uno mejor.
+    . solución: diversity
+.
+
+
+Mecanismo3: 
+
+^ Diversity
+|------------------X
+|              (
+|               (
+|                (
+|                  (
+|   (  (  (   ( ( (
++-------------------|-->
+                    Fitness
+Qué individuo querrías quedarte?
+
+Querés quedarte con los que
+
+
+
+Selection by fitness and diversity rank; x-y crossover
+
+La exposición deja explorando a todos.
+
+Una vez alcanzado el máximo, cambias el selection method a fitness rank y listo.
+
+
+
+
+
+--- El problema es que es naive nature.
+Es horrible , es tonto. queremos una teoría real de la biología, pero nadie sabe un carajo. No tenemos mucha buena idea de cómo funciona, porque los cromosomas estan conectados a un contexto que nadie sabe bien cómo funciona.
+
+El Genetic Algorithm, con esa "naive" idea, llega a lograr una buena solución.
+
+
+
+
+
+ * Diversity Good
+ * Ask where the credit lies
+.
+
+
+Practical Applications:
+
+En qué tipo de problema, agarrar una mala parte con una buena, puede llevar a una mejor solución?
+
+----
+
+
+
+Podés sistematizar cierto tipos de reglas
+
+IF X
+   Y
+IF L
+   M
+If {X' M} ---> then ~~~
+
+
+Entonces aplicas cierto tipo de reglas reales en problemas aplicables, gratificando orecompensando lo bueno cuando "cumplen" las reglas, y creas cierto tipo de combinación.
+
+
+----
+Evolved Virtual Creatures. by Karl Sims.
+----
+"""
+
+
+
+############################################################
+
+
+
+
+
+
+"""
+planteo:
+
+
+Ahora en base a eso quiero resolver el ejercicio de rpl.
+
+
+Datos:
+
+
+
+"""
+
+
 import random
 
 def estimar_pi(iteraciones):
