@@ -1,6 +1,6 @@
 """
 Enunciado:
-Implementar un algoritmo randomizado que permita estimar el valor de π (pi).
+Implementar un algoritmo randomizado que permita estimar el valor de π (𝜋).
 Para esto, recomendamos recordar que el área de un cuadrado de lado 2 es 4, mientras que
 el área de un círculo de diámetro 2 es, casualmente, π.
 
@@ -216,7 +216,7 @@ Ahora en base a eso quiero resolver el ejercicio de rpl.
 
 
 Datos:
-    . hacer un algoritmo randomizado que permita estimar el valor de π (pi).
+    . hacer un algoritmo randomizado que permita estimar el valor de π (𝜋).
     . Recomiendan recordar:
         . el área de un cuadrado de lado 2 es 4.
         . el área de un círculo de diámetro 2 es, casualmente, π.
@@ -230,14 +230,14 @@ Número flotante, que empieza con un valor default 3.14 y sigue con un 3.14x en 
 la idea es que en cada iteración se quede sólo con los padres que acertaron, y crear hijos que ya empezaron correctamente.
 el hijo ya va a ir por 3.141 si el padre acertó. se queda con la idea del número aagregado correctamente, los genes correctos.
 si hay otro que quedó "cerca", con un 3.142, también va a tener hijos. depende esa del Fitness.
-La idea es que cuanto más cerca estén del valor de PI, es mejor. 
+La idea es que cuanto más cerca estén del valor de 𝜋, es mejor. 
 
-IDEA: + iteraciones ====> + generaciones ====> + cercano a pi va a ser.
+IDEA: + iteraciones ====> + generaciones ====> + cercano a 𝜋 va a ser.
 
 
     2. Función de Aptitud (Fitness): Una función objetivo que te dice "qué tan bueno" es un individuo.
 .
-f(num) = |num - pi| ===> me da qué tan alejado de pi está. si quedó muy alejado ===> lo MATO. nashe.
+f(num) = |num - 𝜋| ===> me da qué tan alejado de 𝜋 está. si quedó muy alejado ===> lo MATO. nashe.
 
     3. Selección: Te quedás con un porcentaje de los mejores individuos de la población actual para que sean padres 
 (prime tip: usa heapq.nlargest o nsmallest para agarrar el top 30%, más un pequeño porcentaje de elitismo que pasa intacto para no perder la mejor solución histórica).
@@ -265,19 +265,19 @@ aproach 2:
 no habia entendido nada.
 reset.
 ------------------------
-el algoritmo tiene que descubrir pi optimizando algo geométrico sin saber nunca cuánto vale pi .
+el algoritmo tiene que descubrir 𝜋 optimizando algo geométrico sin saber nunca cuánto vale 𝜋 .
 .
 Qué hay que optimizar? :
-Un circulo de diametro 1 tiene un perimetro exacto de 2.pi.r = 2.pi.0.5 = pi
+Un circulo de diametro 1 tiene un perimetro exacto de 2.𝜋.r = 2.𝜋.0.5 = 𝜋
 Si meto K puntos adentro o sobre el borde de ese circulo uniendolos
---> el perimetro máximo posible que pueden alcanzar esos puntos cuando se acomodan perfecto es : pi (je)
+--> el perimetro máximo posible que pueden alcanzar esos puntos cuando se acomodan perfecto es : 𝜋 (je)
 .
 
 
 1. Representación (individuo y Cromosoma):
 Un solo pj va a ser una lista de K puntos (no se, ej: 60 ¿?) que viven en la circunferencia de radio r = 0.5
     -> tip(IA):
-Para no usar cos/sen que usan radiantes y pi: genero un vector cualquiera (x, y) ∈ [-1, 1] y normalizo a longitud 0.5
+Para no usar cos/sen que usan radiantes y 𝜋: genero un vector cualquiera (x, y) ∈ [-1, 1] y normalizo a longitud 0.5
 Algebra lineal : 
 norma = raiz(x² + y²) ==> (0.5 . x , 0.5 . y)
                              /norma   /norma
@@ -289,7 +289,7 @@ fitness(individuo) es calcular el perímetro del polígono
 . la suma de las distancias euclidianas entre el punto 0 y 1, 1 y 2, y cerrando el k-1 al 0.
     . idea:
     cuando los puntos estan amontonados o mal distribuidos, el perimetro va a dar chico.
-    cuando los hijos hereden puntos mejor espaciados, el perimetro va  crecer acercandose a pi como máximo global.
+    cuando los hijos hereden puntos mejor espaciados, el perimetro va  crecer acercandose a 𝜋 como máximo global.
 
 """
 
@@ -302,7 +302,18 @@ CANTIDAD_VERTICES = 80 # a mas vertices , el poligono se puede pegar mas al circ
 ELITISTA = 3
 SELECCION = 10
 PROB_MUTACION = 0.2
-LONGITUD = 0.5
+
+LONGITUD = 2 #radio 2 en el primer cuadrante -> el arco mide exactamente 𝜋
+
+
+def normalizar(x, y):
+    norma = math.hypot(x, y) # === sqrt(x**2 + y**2), I guess it's more clean?
+
+    if norma == 0:
+        return (LONGITUD, 0.0)
+
+    return (LONGITUD * x / norma, LONGITUD * y / norma)
+
 
 def crear_individuo():
     # TODO: Generar CANTIDAD_VERTICES puntos sobre el círculo de radio 0.5
@@ -382,11 +393,3 @@ def estimar_pi(iteraciones):
 
     mejor_individuo = max(poblacion, key=fitness)
     return fitness(mejor_individuo)
-
-
-
-def normalizar(x, y):
-    norma = math.sqrt(x**2 + y**2)
-    nuevo_x = (LONGITUD * x) // norma
-    nuevo_y = (LONGITUD * y) // norma
-    return nuevo_x, nuevo_y
