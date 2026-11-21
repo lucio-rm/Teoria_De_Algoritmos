@@ -335,22 +335,12 @@ def crear_individuo():
 
 def fitness(individuo):
     # con math.dist() se calcula la distancai euclidiana (esta bien eso¿?)
-    n = len(individuo)
-    indice = 0
-    fitnes = 0.0
-    
-    while indice < n:
-        if indice == n-1:
-            p = individuo[indice]
-            q = individuo[0]
-            fitnes += math.dist(p, q)
-            break
+    perimetro_arco = 0.0
 
-        p = individuo[indice]
-        q = individuo[indice+1]
-        fitnes += math.dist(p, q)
-    
-    return fitnes
+    for i in range(len(individuo) - 1):
+        perimetro_arco += math.dist(individuo[i], individuo[i+1])
+
+    return perimetro_arco
 
 def crossover(padre1, padre2):
     # TODO: Combinar genes de padre1 y padre2 para armar un hijo de largo CANTIDAD_VERTICES
