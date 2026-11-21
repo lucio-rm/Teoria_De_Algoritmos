@@ -22,7 +22,7 @@ Estuve también meta IA para poder entender bien. entendí en total un 70%, pero
 """
 
 import random
-import math
+#import math
 
 CANTIDAD_POBLACION = 30
 ELITISTA = 3
@@ -35,7 +35,8 @@ PC = 0.15  # prob. base del mejor individuo ( para Rank Selection (leer apunte M
 
 
 def normalizar(x, y):
-    norma = math.hypot(x, y) # === sqrt(x**2 + y**2), I guess it's more clean?
+    #norma = math.hypot(x, y) # === sqrt(x**2 + y**2), I guess it's more clean?
+    norma = (x * x + y * y) ** 0.5
     if norma == 0:
         return (LONGITUD, 0.0)
 
@@ -62,7 +63,10 @@ def fitness(individuo):
     perimetro_arco = 0.0
 
     for i in range(len(individuo) - 1):
-        perimetro_arco += math.dist(individuo[i], individuo[i+1])
+        #perimetro_arco += math.dist(individuo[i], individuo[i+1])
+        x1, y1 = individuo[i]
+        x2, y2 = individuo[i+1]
+        perimetro_arco += ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
 
     return perimetro_arco
 
@@ -70,7 +74,7 @@ def fitness(individuo):
 def crossover(padre1, padre2):
     # mezclar el adn de mami y papi
     # una combinacion convexa (un promedio ponderado con alpha ∈ [0, 1]) te da un punto intermedio en el segmento que los une
-    hijo = [(0.0), (2.0)] # extremo izq
+    hijo = [(0.0, 2.0)] # extremo izq
     # mezclo los puntos internos (del 1 al CANTIDAD_VERTICES - 2)
     alpha = random.uniform(0.3, 0.7)  # peso aleatorio cerca del punto medio (0.5)
     
@@ -106,9 +110,15 @@ def mutar(individuo):
 
 
 def estimar_pi(iteraciones):
+    if iteraciones <= 0:
+        return 0.0
     # armo los vertices y generaciones en base a las iteraciones (sino se me va todo al pingo)
-    cantidad_vertices = min(250, max(30, int(math.sqrt(iteraciones))))
-    generaciones = max(5, iteraciones // CANTIDAD_POBLACION * 10) 
+    
+    # correccion por timeout:
+    # pocas iteraciones -> pocos vertices y pocas generaciones
+    # muchas iteraciones -> hasta 180 vertices y mas generacioens
+    cantidad_vertices = min(180, max(4, int(iteraciones ** 0.5) + 3))
+    generaciones = min(60, max(1, int(iteraciones ** 0.4)))
     
     poblacion = [crear_individuo(cantidad_vertices) for _ in range(CANTIDAD_POBLACION)]
     
