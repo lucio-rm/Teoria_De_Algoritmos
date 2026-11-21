@@ -22,110 +22,40 @@ Estuve también meta IA para poder entender bien. entendí en total un 70%, pero
 """
 
 import random
-#import math
+#import math , dejo de usarlo para que no me fallen los tests (creo que igual no fallaba por esto pero bueno)
 
-CANTIDAD_POBLACION = 30
-ELITISTA = 3
+CANTIDAD_POBLACION = 8
+ELITISTA = 2
 PROB_MUTACION = 0.3
-LONGITUD = 2 #radio 2 en el primer cuadrante -> el arco mide exactamente 𝜋
-PC = 0.15  # prob. base del mejor individuo ( para Rank Selection (leer apunte MIT))
+PC = 0.25  # prob. base del mejor individuo ( para Rank Selection (leer apunte MIT))
 
+#LONGITUD = 2 #radio 2 en el primer cuadrante -> el arco mide exactamente 𝜋
 #CANTIDAD_VERTICES = 80 # a mas vertices , el poligono se puede pegar mas al circulo real
 #SELECCION = 10 # esto es para la seleccion tipo ELITISMO, se puede borrar (no la usamos)
 
-
-def normalizar(x, y):
-    #norma = math.hypot(x, y) # === sqrt(x**2 + y**2), I guess it's more clean?
-    norma = (x * x + y * y) ** 0.5
-    if norma == 0:
-        return (LONGITUD, 0.0)
-
-    return (LONGITUD * x / norma, LONGITUD * y / norma)
-
-
-def crear_individuo(cantidad_vertices):
-    puntos_internos = []
-    # genreo cant_veritces - 2 puntoso internos en el 1er cuadrante
-    for _ in range(cantidad_vertices - 2):
-        x = random.uniform(0.001, 1.0)
-        y = random.uniform(0.001, 1.0)
-        puntos_internos.append(normalizar(x, y))
-
-    # le clavo los dos extremos del arco de radio 2: (0,2) arriba y (2,0) abajo
-    individuo = [(0.0, 2.0)] + puntos_internos + [(2.0, 0.0)]
-    individuo.sort(key=lambda punto: punto[0]) #ordeno por x asi no se cruza nada
-
-    return individuo
-
-
-def fitness(individuo):
-    # con math.dist() se calcula la distancai euclidiana 
-    perimetro_arco = 0.0
-
-    for i in range(len(individuo) - 1):
-        #perimetro_arco += math.dist(individuo[i], individuo[i+1])
-        x1, y1 = individuo[i]
-        x2, y2 = individuo[i+1]
-        perimetro_arco += ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
-
-    return perimetro_arco
-
-
-def crossover(padre1, padre2):
-    # mezclar el adn de mami y papi
-    # una combinacion convexa (un promedio ponderado con alpha ∈ [0, 1]) te da un punto intermedio en el segmento que los une
-    hijo = [(0.0, 2.0)] # extremo izq
-    # mezclo los puntos internos (del 1 al CANTIDAD_VERTICES - 2)
-    alpha = random.uniform(0.3, 0.7)  # peso aleatorio cerca del punto medio (0.5)
-    
-    for i in range(1, len(padre1) - 1):
-        x1, y1 = padre1[i]
-        x2, y2 = padre2[i]
-
-        # hago el cruce
-        promedio_x = alpha * x1 + (1.0 - alpha) * x2
-        promedio_y = alpha * y1 + (1.0 - alpha) * y2
-
-        # y lo empujo de vuelta al borde del circulo de radio 2
-        hijo.append(normalizar(promedio_x, promedio_y))
-
-    hijo.append((2.0, 0.0)) #extremo derecho fijo
-    hijo.sort(key=lambda punto: punto[0]) #garantiza que sigan ordenados por x
-    return hijo
-
-def mutar(individuo):
-    # del hijo recien creado, modificarlo in-place algun gen del hijo al azar
-    # (es mover un poco un vertice para probar suerte)
-    if random.random() < PROB_MUTACION:
-        # elijo un indice interno al azar (sin tocar el 0 ni el ultimo) y despues le hago un empujon aleatorio
-        indice = random.randint(1, len(individuo) - 2)
-        x, y = individuo[indice]
-
-        nuevo_x = max(0.0, x + random.gauss(0, 0.05))
-        nuevo_y = max(0.0, y + random.gauss(0, 0.05))
-
-        # y devuelta lo mando al arco del radio y reordeno por las dudas
-        individuo[indice] = normalizar(nuevo_x, nuevo_y)
-        individuo.sort(key=lambda punto: punto[0])
+# precalculo los pesos una sola vez
+PESOS_RANK = [((1 - PC) ** i) * PC for i in range(CANTIDAD_POBLACION - 1)]
+PESOS_RANK.append((1 - PC) ** (CANTIDAD_POBLACION - 1)) # si no elijo a los anteriores, si o si me queda el ultimo
+# leer el RANK SELECTION de los apuntes del MIT.
 
 
 def estimar_pi(iteraciones):
     if iteraciones <= 0:
         return 0.0
-    # armo los vertices y generaciones en base a las iteraciones (sino se me va todo al pingo)
-    
-    # correccion por timeout:
-    # pocas iteraciones -> pocos vertices y pocas generaciones
-    # muchas iteraciones -> hasta 180 vertices y mas generacioens
-    cantidad_vertices = min(180, max(4, int(iteraciones ** 0.5) + 3))
-    generaciones = min(60, max(1, int(iteraciones ** 0.4)))
+    """
+    armo los vertices y generaciones en base a las iteraciones (sino se me va todo al pingo)
+    . correccion por timeout:
+    pocas iteraciones -> pocos vertices y pocas generaciones
+    muchas iteraciones -> hasta 180 vertices y mas generacioens
+    . correccion por timeout2:
+    uso escala logaticmica O(log²(iteraciones))
+    tendría que correr más rapido (saqué sorts, el uso de normalizar constantemente, etc etc.)
+    """
+    bits = iteraciones.bit_length()
+    cantidad_vertices = min(80, max(3, int(bits * 2.5)))
+    generaciones = min(12, max(1, bits // 2))
     
     poblacion = [crear_individuo(cantidad_vertices) for _ in range(CANTIDAD_POBLACION)]
-    
-    # precalculo los pesos una sola vez
-    PESOS_RANK = [((1 - PC) ** i) * PC for i in range(CANTIDAD_POBLACION - 1)]
-    PESOS_RANK.append((1 - PC) ** (CANTIDAD_POBLACION - 1)) # si no elijo a los anteriores, si o si me queda el ultimo
-    # leer el RANK SELECTION de los apuntes del MIT.
     
 
     for _ in range(generaciones):
@@ -149,6 +79,78 @@ def estimar_pi(iteraciones):
 
     mejor_individuo = max(poblacion, key=fitness)
     return fitness(mejor_individuo)
+
+
+
+def punto_en_arco(x):
+    # ecuacion del circulo de radio 2 en el 1er cuadrante: x² + y² = 4 == y = raiz(4 - x²)
+    return (x, (4.0 - x * x) ** 0.5)
+
+# def normalizar(x, y):
+#     #norma = math.hypot(x, y) # === sqrt(x**2 + y**2), I guess it's more clean?
+#     norma = (x * x + y * y) ** 0.5
+#     if norma == 0:
+#         return (LONGITUD, 0.0)
+
+#     return (LONGITUD * x / norma, LONGITUD * y / norma)
+
+
+def crear_individuo(cantidad_vertices):
+    puntos_internos = [random.uniform(0.001) for _ in range(cantidad_vertices - 2)]
+    # genreo cant_veritces - 2 puntoso internos en el 1er cuadrante
+    # le clavo los dos extremos del arco de radio 2: (0,2) arriba y (2,0) abajo
+    individuo = [(0.0, 2.0)] + [punto_en_arco(x) for x in puntos_internos] + [(2.0, 0.0)]
+    return individuo
+
+
+def fitness(individuo):
+    # con math.dist() se calcula la distancai euclidiana 
+    perimetro_arco = 0.0
+
+    for i in range(len(individuo) - 1):
+        #perimetro_arco += math.dist(individuo[i], individuo[i+1])
+        x1, y1 = individuo[i]
+        x2, y2 = individuo[i+1]
+        dist_x = x2 - x1
+        dist_y = y2 - y1
+        perimetro_arco += (dist_x*dist_x + dist_y*dist_y) ** 0.5
+
+    return perimetro_arco
+
+
+def crossover(padre1, padre2):
+    # mezclar el adn de mami y papi
+    # una combinacion convexa (un promedio ponderado con alpha ∈ [0, 1]) te da un punto intermedio en el segmento que los une
+    # como las dos listas ya estano ordenadas, la resultante del hijo  también
+    hijo = [(0.0, 2.0)] # extremo izq
+    # mezclo los puntos internos (del 1 al CANTIDAD_VERTICES - 2)
+    alpha = random.uniform(0.3, 0.7)  # peso aleatorio cerca del punto medio (0.5)
+    beta = 1.0 - alpha
+    
+    for i in range(1, len(padre1) - 1):
+        promedio_x = alpha * padre1[i][0] + beta * padre2[i][0]
+        hijo.append(punto_en_arco(promedio_x))
+
+    hijo.append((2.0, 0.0)) #extremo derecho fijo
+    return hijo
+
+def mutar(individuo):
+    # del hijo recien creado, modificarlo in-place algun gen del hijo al azar
+    # (es mover un poco un vertice para probar suerte)
+    if random.random() < PROB_MUTACION:
+        # elijo un indice interno al azar (sin tocar el 0 ni el ultimo) y despues le hago un empujon aleatorio
+        indice = random.randint(1, len(individuo) - 2)
+
+        nuevo_x = individuo[indice][0] + random.gauss(0.00, 0.05)
+
+        if nuevo_x < 0.001:
+            nuevo_x = 0.001
+        elif nuevo_x > 1.999:
+            nuevo_x = 1.999
+
+        individuo[indice] = punto_en_arco(nuevo_x)
+        individuo.sort()
+
 
 
 """
