@@ -260,13 +260,41 @@ la idea es que tengan esos genes que funcionaron, asi para la próxima iteració
 Bueno, eso. aplico una probabilidad baja (de 0.2 quiero probar) para que de esos hijos ganadores ir alterandolos un poco en cómo van a seguir creciendo.
 
 """
+"""
+aproach 2:
+no habia entendido nada.
+reset.
+------------------------
+el algoritmo tiene que descubrir pi optimizando algo geométrico sin saber nunca cuánto vale pi .
+.
+Qué hay que optimizar? :
+Un circulo de diametro 1 tiene un perimetro exacto de 2.pi.r = 2.pi.0.5 = pi
+Si meto K puntos adentro o sobre el borde de ese circulo uniendolos
+--> el perimetro máximo posible que pueden alcanzar esos puntos cuando se acomodan perfecto es : pi (je)
+.
+
+
+1. Representación (individuo y Cromosoma):
+Un solo pj va a ser una lista de K puntos (no se, ej: 60 ¿?) que viven en la circunferencia de radio r = 0.5
+    -> tip(IA):
+Para no usar cos/sen que usan radiantes y pi: genero un vector cualquiera (x, y) ∈ [-1, 1] y normalizo a longitud 0.5
+Algebra lineal : 
+norma = raiz(x² + y²) ==> (0.5 . x , 0.5 . y)
+                             /norma   /norma
+. para que no se crucen las lineas, un individuo es una lista ordenada de esos K puntos recorriendo el círculo.
+
+
+2. Fitness
+fitness(individuo) es calcular el perímetro del polígono
+. la suma de las distancias euclidianas entre el punto 0 y 1, 1 y 2, y cerrando el k-1 al 0.
+    . idea:
+    cuando los puntos estan amontonados o mal distribuidos, el perimetro va a dar chico.
+    cuando los hijos hereden puntos mejor espaciados, el perimetro va  crecer acercandose a pi como máximo global.
+
+"""
+
+
 import random
-
-PROB_MUTACION = 0.2
-VALOR_DEFAULT = 3.14
-CANTIDAD_POBLACION = 20
-VALOR_PI = 3.14151235353535353533543 # no se que poner aca
-
 
 def estimar_pi(iteraciones):
     genetics = genetic_algorithm(iteraciones)
@@ -276,29 +304,4 @@ def estimar_pi(iteraciones):
     
 
 def genetic_algorithm(iteraciones):
-    poblacion = [3.14] * CANTIDAD_POBLACION # creo 20 padres.
-    generacion = creo_poblacion(iteraciones, poblacion)
-
-    ordenados = sorted(generacion, lambda x: x[1], reverse=True) # lo ordeno de mayor a menor en base a su fitness
-
-    # y aca haria la seleccion y la creacion de los hijos.
-    # yl o del crossover
-
-
-
-def creo_poblacion(iteraciones, poblacion):
-    asignacion = {}
-    for padre in poblacion:
-        fit = fitness(padre)
-        asignacion[padre] = fit
-
-    for father, valor in asignacion:
-        if random.PROB_MUTACION():
-            if valor == "es una mierda":
-                padre.eliminar
-    
-    return asignacion
-
-
-def fitness(valor):
-    return abs(valor - VALOR_PI)
+    return True
