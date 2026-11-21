@@ -224,32 +224,81 @@ Datos:
         . a más iteraciones, que aproxime mejor.
 .
 
-1. Representación (Cromosoma e Individuo): Cómo codificás una solución candidata.
-
-.que se yo
-
-
-2. Función de Aptitud (Fitness): Una función objetivo que te dice "qué tan bueno" es un individuo.
-
+    1. Representación (Cromosoma e Individuo): Cómo codificás una solución candidata.
 .
+Número flotante, que empieza con un valor default 3.14 y sigue con un 3.14x en una iteración. en 2 iteraciones : 3.14xx, y asi.
+la idea es que en cada iteración se quede sólo con los padres que acertaron, y crear hijos que ya empezaron correctamente.
+el hijo ya va a ir por 3.141 si el padre acertó. se queda con la idea del número aagregado correctamente, los genes correctos.
+si hay otro que quedó "cerca", con un 3.142, también va a tener hijos. depende esa del Fitness.
+La idea es que cuanto más cerca estén del valor de PI, es mejor. 
+
+IDEA: + iteraciones ====> + generaciones ====> + cercano a pi va a ser.
 
 
-3. Selección: Te quedás con un porcentaje de los mejores individuos de la población actual para que sean padres 
+    2. Función de Aptitud (Fitness): Una función objetivo que te dice "qué tan bueno" es un individuo.
+.
+f(num) = |num - pi| ===> me da qué tan alejado de pi está. si quedó muy alejado ===> lo MATO. nashe.
+
+    3. Selección: Te quedás con un porcentaje de los mejores individuos de la población actual para que sean padres 
 (prime tip: usa heapq.nlargest o nsmallest para agarrar el top 30%, más un pequeño porcentaje de elitismo que pasa intacto para no perder la mejor solución histórica).
-
 .
+de ésto no tengo idea.
+por iteración cuántas generaciones corro? cómo me doy cuenta que se "generan", si por cada iteracion i genero 100 generaciones, estoy rompiendo la complejidad temporal al carajovich, o no? al ser un numero fijo, no?
+
+Qué selección uso ¿?, supongo que algo del fitness rank que habia dicho el del MIT.
+
+y dependiendo de las generaciones cque cree, tambien se me va al carajo la complejidad espacial. o no?
 
 
-4. Cruce (Crossover / Recombinación): Agarrás dos padres seleccionados y mezclás sus genes para crear un hijo nuevo, esperando combinar buenas características de ambos (por ejemplo, elegir gen a gen al azar de ind1 o ind2).
+    4. Cruce (Crossover / Recombinación): Agarrás dos padres seleccionados y mezclás sus genes para crear un hijo nuevo, esperando combinar buenas características de ambos (por ejemplo, elegir gen a gen al azar de ind1 o ind2).
+.
+de toda la población que creé, agarro los que mejor fitnes tuvieron, y creo hijos en parte a eso.
+la idea es que tengan esos genes que funcionaron, asi para la próxima iteración siguen avanzando.
 
-
-5. Mutación: Con una probabilidad baja (PROB_MUTACION), alterás aleatoriamente un gen del hijo (por ejemplo, haciendo un swap de dos posiciones). Como bien anotaste en tus apuntes del MIT, esto evita que la población se estanque en un máximo local y mantiene la diversidad.
-
+    5. Mutación: Con una probabilidad baja (PROB_MUTACION), alterás aleatoriamente un gen del hijo (por ejemplo, haciendo un swap de dos posiciones). Evita que la población se estanque en un máximo local y mantiene la diversidad.
+.
+Bueno, eso. aplico una probabilidad baja (de 0.2 quiero probar) para que de esos hijos ganadores ir alterandolos un poco en cómo van a seguir creciendo.
 
 """
-
-
 import random
 
+PROB_MUTACION = 0.2
+VALOR_DEFAULT = 3.14
+CANTIDAD_POBLACION = 20
+VALOR_PI = 3.14151235353535353533543 # no se que poner aca
+
+
 def estimar_pi(iteraciones):
-    return 0
+    genetics = genetic_algorithm(iteraciones)
+
+    el_mejor = max(genetics)
+    return el_mejor
+    
+
+def genetic_algorithm(iteraciones):
+    poblacion = [3.14] * CANTIDAD_POBLACION # creo 20 padres.
+    generacion = creo_poblacion(iteraciones, poblacion)
+
+    ordenados = sorted(generacion, lambda x: x[1], reverse=True) # lo ordeno de mayor a menor en base a su fitness
+
+    # y aca haria la seleccion y la creacion de los hijos.
+    # yl o del crossover
+
+
+
+def creo_poblacion(iteraciones, poblacion):
+    asignacion = {}
+    for padre in poblacion:
+        fit = fitness(padre)
+        asignacion[padre] = fit
+
+    for father, valor in asignacion:
+        if random.PROB_MUTACION():
+            if valor == "es una mierda":
+                padre.eliminar
+    
+    return asignacion
+
+
+def fitness(valor):
+    return abs(valor - VALOR_PI)
