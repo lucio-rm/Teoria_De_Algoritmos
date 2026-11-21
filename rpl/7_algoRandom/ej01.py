@@ -365,16 +365,21 @@ def crossover(padre1, padre2):
     return hijo
 
 def mutar(individuo):
-    # Mutación NO es "eliminar al padre si es malo" (eso ya lo hizo Selección al descartarlo).
-    # Mutación es alterar levemente un gen de un HIJO nuevo para explorar nuevas posiciones:
-    
     # del hijo recien creado, modificarlo in-place algun gen del hijo al azar
     # (es mover un poco un vertice para probar suerte)
-    
-    
     if random.random() < PROB_MUTACION:
-        # TODO: Elegir un punto al azar del individuo, moverlo un poquito y re-normalizarlo a radio 0.5
-        pass
+            # elijo un indice interno al azar (sin tocar el 0 ni el ultimo) y despues le hago un empujon aleatorio
+            indice = random.randint(1, len(individuo) - 2)
+            x, y = individuo[indice]
+
+            nuevo_x = max(0.0, x + random.gauss(0, 0.05))
+            nuevo_y = max(0.0, y + random.gauss(0, 0.05))
+
+            # y devuelta lo mando al arco del radio y reordeno por las dudas
+            individuo[indice] = normalizar(nuevo_x, nuevo_y)
+            individuo.sort(key=lambda punto: punto[0])
+
+
 
 def estimar_pi(iteraciones):
     poblacion = [crear_individuo() for _ in range(CANTIDAD_POBLACION)]
