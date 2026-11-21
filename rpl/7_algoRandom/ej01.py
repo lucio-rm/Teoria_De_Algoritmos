@@ -295,13 +295,66 @@ fitness(individuo) es calcular el perímetro del polígono
 
 
 import random
+import math
+
+CANTIDAD_POBLACION = 30
+CANTIDAD_VERTICES = 80 # a mas vertices , el poligono se puede pegar mas al circulo real
+ELITISTA = 3
+SELECCION = 10
+PROB_MUTACION = 0.2
+
+
+def crear_individuo():
+    # TODO: Generar CANTIDAD_VERTICES puntos sobre el círculo de radio 0.5
+    # Pista: que queden ordenados alrededor del círculo para que el polígono no se auto-cruce
+    
+    pass
+
+def fitness(individuo):
+    # TODO: Sumar la distancia euclidiana entre puntos consecutivos (incluyendo el último con el primero)
+    # Cero referencias a math.pi!
+    
+    
+    
+    pass
+
+def cruzar(padre1, padre2):
+    # TODO: Combinar genes de padre1 y padre2 para armar un hijo de largo CANTIDAD_VERTICES
+    
+    
+    
+    pass
+
+def mutar(individuo):
+    # Mutación NO es "eliminar al padre si es malo" (eso ya lo hizo Selección al descartarlo).
+    # Mutación es alterar levemente un gen de un HIJO nuevo para explorar nuevas posiciones:
+    
+    
+    
+    if random.random() < PROB_MUTACION:
+        # TODO: Elegir un punto al azar del individuo, moverlo un poquito y re-normalizarlo a radio 0.5
+        pass
 
 def estimar_pi(iteraciones):
-    genetics = genetic_algorithm(iteraciones)
+    poblacion = [crear_individuo() for _ in range(CANTIDAD_POBLACION)]
+    generaciones = max(5, iteraciones // CANTIDAD_POBLACION)
 
-    el_mejor = max(genetics)
-    return el_mejor
-    
+    for _ in range(generaciones):
+        # 1. evaluar y ordenar de mayor a menor fitness
+        ordenados = sorted(poblacion, key=fitness, reverse=True)
+        
+        # 2. elitismo
+        nueva_poblacion = [ind[:] for ind in ordenados[:ELITISTA]]
+        padres = ordenados[:SELECCION]
+        
+        # 3. crossover y mutacion hasta llenar CANTIDAD_POBLACION
+        while len(nueva_poblacion) < CANTIDAD_POBLACION:
+            p1, p2 = random.sample(padres, 2)
+            hijo = cruzar(p1, p2)
+            mutar(hijo)
+            nueva_poblacion.append(hijo)
+            
+        poblacion = nueva_poblacion
 
-def genetic_algorithm(iteraciones):
-    return True
+    mejor_individuo = max(poblacion, key=fitness)
+    return fitness(mejor_individuo)
