@@ -316,22 +316,22 @@ def normalizar(x, y):
 
 
 def crear_individuo():
-    # TODO: Generar CANTIDAD_VERTICES puntos sobre el círculo de radio 0.5
-    # Pista: que queden ordenados alrededor del círculo para que el polígono no se auto-cruce
+    # la idea es generar la cantidad_vertices puntos sobre el circulo de radio 0.5
+    puntos_internos = []
+    # genreo cant_veritces - 2 puntoso internos en el 1er cuadrante
     
-    ind = [(0, 0)] * CANTIDAD_VERTICES
+    for _ in range(CANTIDAD_VERTICES - 2):
+        x = random.uniform(0.001, 1.0)
+        y = random.uniform(0.001, 1.0)
 
-    for x, y in ind:
-        x = random.uniform(-1, 1)
-        y = random.uniform(-1, 1)
-        # una probabilidad con distribucion uniforme para asignarle una posicion (x,y) en la circunferencia
+        puntos_internos.append(normalizar(x, y))
 
-        # y ahora tengo que normalizar
-        x, y = normalizar(x, y)
-    
-    ordenado = sorted(ind, lambda x: x[0], reverse=False) # de menor a mayor en base a su corrdenada x
-    
-    return ordenado
+    # le clavo los dos extremos del arco de radio 2: (0,2) arriba y (2,0) abajo
+    individuo = [(0.0, 2.0)] + puntos_internos + [(2.0, 0.0)]
+    individuo.sort(key=lambda punto: punto[0]) #ordeno por x asi no se cruza nada
+
+    return individuo
+
 
 def fitness(individuo):
     # con math.dist() se calcula la distancai euclidiana (esta bien eso¿?)
