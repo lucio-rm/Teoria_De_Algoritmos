@@ -1,6 +1,6 @@
 """
 Enunciado:
-Implementar un algoritmo randomizado que permita estimar el valor de π (pi).
+Implementar un algoritmo randomizado que permita estimar el valor de π (𝜋).
 Para esto, recomendamos recordar que el área de un cuadrado de lado 2 es 4, mientras que
 el área de un círculo de diámetro 2 es, casualmente, π.
 
@@ -9,6 +9,143 @@ El algoritmo recibirá la cantidad de iteraciones a utilizar para aproximar, y s
 Si el algoritmo no se trata de un algoritmo aleatorizado (de verdad), se penalizará fuertemente.
 
 """
+"""
+PREVIO AVISO (no se si esto lo lee alguien o no)
+
+sé que se puede hacer por monte carlo, mas sencillo y no usar una bomba atomica para resolver esto.
+use un Genetic Algorithm para esto, abajo del algoritmo pongo toda la teoría que necesité + los 2 aproaches que mande.
+clases: (Algoritmos de Randomización II) + (MIT:    13. Learning: Genetic Algorithms)
+siendo éste ultimo: https://www.youtube.com/watch?v=kHyNqSnzP8Y&t=2630s
+
+Estuve también meta IA para poder entender bien. entendí en total un 70%, pero las bases en cómo representarlo + selección + mutación + fitness + crossover (que serían las bases de este tipo de algoritmos) lo entendí un 85%.
+
+"""
+import random
+import math
+
+CANTIDAD_POBLACION = 8
+ELITISTA = 2
+PROB_MUTACION = 0.3
+PC = 0.25  # prob. base del mejor individuo ( para Rank Selection (leer apunte MIT))
+
+#LONGITUD = 2 #radio 2 en el primer cuadrante -> el arco mide exactamente 𝜋
+#CANTIDAD_VERTICES = 80 # a mas vertices , el poligono se puede pegar mas al circulo real
+#SELECCION = 10 # esto es para la seleccion tipo ELITISMO, se puede borrar (no la usamos)
+
+# precalculo los pesos una sola vez
+PESOS_RANK = [((1 - PC) ** i) * PC for i in range(CANTIDAD_POBLACION - 1)]
+PESOS_RANK.append((1 - PC) ** (CANTIDAD_POBLACION - 1)) # si no elijo a los anteriores, si o si me queda el ultimo
+# leer el RANK SELECTION de los apuntes del MIT.
+
+
+def estimar_pi(iteraciones):
+    if iteraciones <= 0:
+        return 0.0
+    """
+    armo los vertices y generaciones en base a las iteraciones (sino se me va todo al pingo)
+    . correccion por timeout:
+    pocas iteraciones -> pocos vertices y pocas generaciones
+    muchas iteraciones -> hasta 180 vertices y mas generacioens
+    . correccion por timeout2:
+    uso escala logaticmica O(log²(iteraciones))
+    tendría que correr más rapido (saqué sorts, el uso de normalizar constantemente, etc etc.)
+    """
+    bits = iteraciones.bit_length()
+    cantidad_vertices = min(80, max(3, int(bits * 2.5)))
+    generaciones = min(12, max(1, bits // 2))
+    
+    poblacion = [crear_individuo(cantidad_vertices) for _ in range(CANTIDAD_POBLACION)]
+    
+
+    for _ in range(generaciones):
+        # 1. evaluar y ordenar de mayor a menor fitness
+        ordenados = sorted(poblacion, key=fitness, reverse=True)
+        # 2. elitismo
+        nueva_poblacion = [ind[:] for ind in ordenados[:ELITISTA]]
+        
+        #padres = ordenados[:SELECCION]
+        # el boliche VIP donde los mas facheros (los de mejor ranking) tienen mas chances de levantar
+        
+        # 3. crossover y mutacion hasta llenar CANTIDAD_POBLACION
+        while len(nueva_poblacion) < CANTIDAD_POBLACION:
+            p1, p2 = random.choices(ordenados, weights=PESOS_RANK, k=2)
+            # p1, p2 = random.sample(padres, 2)
+            hijo = crossover(p1, p2)
+            mutar(hijo)
+            nueva_poblacion.append(hijo)
+            
+        poblacion = nueva_poblacion
+
+    mejor_individuo = max(poblacion, key=fitness)
+    return fitness(mejor_individuo)
+
+
+def punto_en_arco(x):
+    # ecuacion del circulo de radio 2 en el 1er cuadrante: x² + y² = 4 == y = raiz(4 - x²)
+    return (x, math.sqrt(4.0 - x * x))
+
+# def normalizar(x, y):
+#     #norma = math.hypot(x, y) # === sqrt(x**2 + y**2), I guess it's more clean?
+#     norma = (x * x + y * y) ** 0.5
+#     if norma == 0:
+#         return (LONGITUD, 0.0)
+
+#     return (LONGITUD * x / norma, LONGITUD * y / norma)
+
+
+def crear_individuo(cantidad_vertices):
+    puntos_internos = [random.uniform(0.001, 1.999) for _ in range(cantidad_vertices - 2)]
+    puntos_internos.sort()
+    # genreo cant_veritces - 2 puntoso internos en el 1er cuadrante
+    # le clavo los dos extremos del arco de radio 2: (0,2) arriba y (2,0) abajo
+    individuo = [(0.0, 2.0)] + [punto_en_arco(x) for x in puntos_internos] + [(2.0, 0.0)]
+    return individuo
+
+
+def fitness(individuo):
+    # con math.dist() se calcula la distancai euclidiana 
+    perimetro_arco = 0.0
+
+    for i in range(len(individuo) - 1):
+        perimetro_arco += math.dist(individuo[i], individuo[i + 1])
+
+    return perimetro_arco
+
+
+def crossover(padre1, padre2):
+    # mezclar el adn de mami y papi
+    # una combinacion convexa (un promedio ponderado con alpha ∈ [0, 1]) te da un punto intermedio en el segmento que los une
+    # como las dos listas ya estano ordenadas, la resultante del hijo  también
+    hijo = [(0.0, 2.0)] # extremo izq
+    # mezclo los puntos internos (del 1 al CANTIDAD_VERTICES - 2)
+    alpha = random.uniform(0.3, 0.7)  # peso aleatorio cerca del punto medio (0.5)
+    beta = 1.0 - alpha
+    
+    for i in range(1, len(padre1) - 1):
+        promedio_x = alpha * padre1[i][0] + beta * padre2[i][0]
+        hijo.append(punto_en_arco(promedio_x))
+
+    hijo.append((2.0, 0.0)) #extremo derecho fijo
+    return hijo
+
+
+def mutar(individuo):
+    # del hijo recien creado, modificarlo in-place algun gen del hijo al azar
+    # (es mover un poco un vertice para probar suerte)
+    if random.random() < PROB_MUTACION:
+        # elijo un indice interno al azar (sin tocar el 0 ni el ultimo) y despues le hago un empujon aleatorio
+        indice = random.randint(1, len(individuo) - 2)
+
+        nuevo_x = individuo[indice][0] + random.gauss(0.00, 0.05)
+
+        if nuevo_x < 0.001:
+            nuevo_x = 0.001
+        elif nuevo_x > 1.999:
+            nuevo_x = 1.999
+
+        individuo[indice] = punto_en_arco(nuevo_x)
+        individuo.sort()
+
 
 """
 planteo TEORÍA:
@@ -198,25 +335,16 @@ Entonces aplicas cierto tipo de reglas reales en problemas aplicables, gratifica
 Evolved Virtual Creatures. by Karl Sims.
 ----
 """
-
-
-
 ############################################################
-
-
-
-
-
-
 """
-planteo:
+aproach 1:
 
 
 Ahora en base a eso quiero resolver el ejercicio de rpl.
 
 
 Datos:
-    . hacer un algoritmo randomizado que permita estimar el valor de π (pi).
+    . hacer un algoritmo randomizado que permita estimar el valor de π (𝜋).
     . Recomiendan recordar:
         . el área de un cuadrado de lado 2 es 4.
         . el área de un círculo de diámetro 2 es, casualmente, π.
@@ -224,32 +352,73 @@ Datos:
         . a más iteraciones, que aproxime mejor.
 .
 
-1. Representación (Cromosoma e Individuo): Cómo codificás una solución candidata.
-
-.que se yo
-
-
-2. Función de Aptitud (Fitness): Una función objetivo que te dice "qué tan bueno" es un individuo.
-
+    1. Representación (Cromosoma e Individuo): Cómo codificás una solución candidata.
 .
+Número flotante, que empieza con un valor default 3.14 y sigue con un 3.14x en una iteración. en 2 iteraciones : 3.14xx, y asi.
+la idea es que en cada iteración se quede sólo con los padres que acertaron, y crear hijos que ya empezaron correctamente.
+el hijo ya va a ir por 3.141 si el padre acertó. se queda con la idea del número aagregado correctamente, los genes correctos.
+si hay otro que quedó "cerca", con un 3.142, también va a tener hijos. depende esa del Fitness.
+La idea es que cuanto más cerca estén del valor de 𝜋, es mejor. 
+
+IDEA: + iteraciones ====> + generaciones ====> + cercano a 𝜋 va a ser.
 
 
-3. Selección: Te quedás con un porcentaje de los mejores individuos de la población actual para que sean padres 
+    2. Función de Aptitud (Fitness): Una función objetivo que te dice "qué tan bueno" es un individuo.
+.
+f(num) = |num - 𝜋| ===> me da qué tan alejado de 𝜋 está. si quedó muy alejado ===> lo MATO. nashe.
+
+    3. Selección: Te quedás con un porcentaje de los mejores individuos de la población actual para que sean padres 
 (prime tip: usa heapq.nlargest o nsmallest para agarrar el top 30%, más un pequeño porcentaje de elitismo que pasa intacto para no perder la mejor solución histórica).
+.
+de ésto no tengo idea.
+por iteración cuántas generaciones corro? cómo me doy cuenta que se "generan", si por cada iteracion i genero 100 generaciones, estoy rompiendo la complejidad temporal al carajovich, o no? al ser un numero fijo, no?
 
+Qué selección uso ¿?, supongo que algo del fitness rank que habia dicho el del MIT.
+
+y dependiendo de las generaciones cque cree, tambien se me va al carajo la complejidad espacial. o no?
+
+
+    4. Cruce (Crossover / Recombinación): Agarrás dos padres seleccionados y mezclás sus genes para crear un hijo nuevo, esperando combinar buenas características de ambos (por ejemplo, elegir gen a gen al azar de ind1 o ind2).
+.
+de toda la población que creé, agarro los que mejor fitnes tuvieron, y creo hijos en parte a eso.
+la idea es que tengan esos genes que funcionaron, asi para la próxima iteración siguen avanzando.
+
+    5. Mutación: Con una probabilidad baja (PROB_MUTACION), alterás aleatoriamente un gen del hijo (por ejemplo, haciendo un swap de dos posiciones). Evita que la población se estanque en un máximo local y mantiene la diversidad.
+.
+Bueno, eso. aplico una probabilidad baja (de 0.2 quiero probar) para que de esos hijos ganadores ir alterandolos un poco en cómo van a seguir creciendo.
+
+"""
+"""
+aproach 2:
+no habia entendido nada.
+reset.
+------------------------
+el algoritmo tiene que descubrir 𝜋 optimizando algo geométrico sin saber nunca cuánto vale 𝜋 .
+.
+Qué hay que optimizar? :
+Un circulo de diametro 1 tiene un perimetro exacto de 2.𝜋.r = 2.𝜋.0.5 = 𝜋
+Si meto K puntos adentro o sobre el borde de ese circulo uniendolos
+--> el perimetro máximo posible que pueden alcanzar esos puntos cuando se acomodan perfecto es : 𝜋 (je)
 .
 
 
-4. Cruce (Crossover / Recombinación): Agarrás dos padres seleccionados y mezclás sus genes para crear un hijo nuevo, esperando combinar buenas características de ambos (por ejemplo, elegir gen a gen al azar de ind1 o ind2).
+1. Representación (individuo y Cromosoma):
+Un solo pj va a ser una lista de K puntos (no se, ej: 60 ¿?) que viven en la circunferencia de radio r = 0.5
+    -> tip(IA):
+Para no usar cos/sen que usan radiantes y 𝜋: genero un vector cualquiera (x, y) ∈ [-1, 1] y normalizo a longitud 0.5
+Algebra lineal : 
+norma = raiz(x² + y²) ==> (0.5 . x , 0.5 . y)
+                             /norma   /norma
+. para que no se crucen las lineas, un individuo es una lista ordenada de esos K puntos recorriendo el círculo.
 
 
-5. Mutación: Con una probabilidad baja (PROB_MUTACION), alterás aleatoriamente un gen del hijo (por ejemplo, haciendo un swap de dos posiciones). Como bien anotaste en tus apuntes del MIT, esto evita que la población se estanque en un máximo local y mantiene la diversidad.
-
+2. Fitness
+fitness(individuo) es calcular el perímetro del polígono
+. la suma de las distancias euclidianas entre el punto 0 y 1, 1 y 2, y cerrando el k-1 al 0.
+    . idea:
+    cuando los puntos estan amontonados o mal distribuidos, el perimetro va a dar chico.
+    cuando los hijos hereden puntos mejor espaciados, el perimetro va  crecer acercandose a 𝜋 como máximo global.
 
 """
 
-
-import random
-
-def estimar_pi(iteraciones):
-    return 0
+#durisimo.
