@@ -343,9 +343,26 @@ def fitness(individuo):
 
 def crossover(padre1, padre2):
     # mezclar el adn de mami y papi
+    # una combinacion convexa (un promedio ponderado con alpha ∈ [0, 1]) te da un punto intermedio en el segmento que los une
+    hijo = [(0.0), (2.0)] # extremo izq
+    # mezclo los puntos internos (del 1 al CANTIDAD_VERTICES - 2)
+    alpha = random.uniform(0.3, 0.7)  # peso aleatorio cerca del punto medio (0.5)
     
-    
-    pass
+    for i in range(1, len(padre1) - 1):
+        x1, y1 = padre1[i]
+        x2, y2 = padre2[i]
+
+        # hago el cruce
+        promedio_x = alpha * x1 + (1.0 - alpha) * x2
+        promedio_y = alpha * y1 + (1.0 - alpha) * y2
+
+        # y lo empujo de vuelta al borde del circulo de radio 2
+        hijo.append(normalizar(promedio_x, promedio_y))
+
+    hijo.append((2.0, 0.0)) #extremo derecho fijo
+
+    hijo.sort(key=lambda punto: punto[0]) #garantiza que sigan ordenados por x
+    return hijo
 
 def mutar(individuo):
     # Mutación NO es "eliminar al padre si es malo" (eso ya lo hizo Selección al descartarlo).
