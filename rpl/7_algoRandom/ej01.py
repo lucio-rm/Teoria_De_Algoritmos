@@ -9,6 +9,137 @@ El algoritmo recibirá la cantidad de iteraciones a utilizar para aproximar, y s
 Si el algoritmo no se trata de un algoritmo aleatorizado (de verdad), se penalizará fuertemente.
 
 """
+"""
+PREVIO AVISO (no se si esto lo lee alguien o no)
+
+sé que se puede hacer por monte carlo, mas sencillo y no usar una bomba atomica para resolver esto.
+use un Genetic Algorithm para esto, abajo del algoritmo pongo toda la teoría que necesité + los 2 aproaches que mande.
+clases: (Algoritmos de Randomización II) + (MIT:    13. Learning: Genetic Algorithms)
+siendo éste ultimo: https://www.youtube.com/watch?v=kHyNqSnzP8Y&t=2630s
+
+Estuve también meta IA para poder entender bien. entendí en total un 70%, pero las bases en cómo representarlo + selección + mutación + fitness + crossover (que serían las bases de este tipo de algoritmos) lo entendí un 85%.
+
+"""
+
+import random
+import math
+
+CANTIDAD_POBLACION = 30
+ELITISTA = 3
+PROB_MUTACION = 0.3
+LONGITUD = 2 #radio 2 en el primer cuadrante -> el arco mide exactamente 𝜋
+PC = 0.15  # prob. base del mejor individuo ( para Rank Selection (leer apunte MIT))
+
+#CANTIDAD_VERTICES = 80 # a mas vertices , el poligono se puede pegar mas al circulo real
+#SELECCION = 10 # esto es para la seleccion tipo ELITISMO, se puede borrar (no la usamos)
+
+
+def normalizar(x, y):
+    norma = math.hypot(x, y) # === sqrt(x**2 + y**2), I guess it's more clean?
+    if norma == 0:
+        return (LONGITUD, 0.0)
+
+    return (LONGITUD * x / norma, LONGITUD * y / norma)
+
+
+def crear_individuo(cantidad_vertices):
+    puntos_internos = []
+    # genreo cant_veritces - 2 puntoso internos en el 1er cuadrante
+    for _ in range(cantidad_vertices - 2):
+        x = random.uniform(0.001, 1.0)
+        y = random.uniform(0.001, 1.0)
+        puntos_internos.append(normalizar(x, y))
+
+    # le clavo los dos extremos del arco de radio 2: (0,2) arriba y (2,0) abajo
+    individuo = [(0.0, 2.0)] + puntos_internos + [(2.0, 0.0)]
+    individuo.sort(key=lambda punto: punto[0]) #ordeno por x asi no se cruza nada
+
+    return individuo
+
+
+def fitness(individuo):
+    # con math.dist() se calcula la distancai euclidiana 
+    perimetro_arco = 0.0
+
+    for i in range(len(individuo) - 1):
+        perimetro_arco += math.dist(individuo[i], individuo[i+1])
+
+    return perimetro_arco
+
+
+def crossover(padre1, padre2):
+    # mezclar el adn de mami y papi
+    # una combinacion convexa (un promedio ponderado con alpha ∈ [0, 1]) te da un punto intermedio en el segmento que los une
+    hijo = [(0.0), (2.0)] # extremo izq
+    # mezclo los puntos internos (del 1 al CANTIDAD_VERTICES - 2)
+    alpha = random.uniform(0.3, 0.7)  # peso aleatorio cerca del punto medio (0.5)
+    
+    for i in range(1, len(padre1) - 1):
+        x1, y1 = padre1[i]
+        x2, y2 = padre2[i]
+
+        # hago el cruce
+        promedio_x = alpha * x1 + (1.0 - alpha) * x2
+        promedio_y = alpha * y1 + (1.0 - alpha) * y2
+
+        # y lo empujo de vuelta al borde del circulo de radio 2
+        hijo.append(normalizar(promedio_x, promedio_y))
+
+    hijo.append((2.0, 0.0)) #extremo derecho fijo
+    hijo.sort(key=lambda punto: punto[0]) #garantiza que sigan ordenados por x
+    return hijo
+
+def mutar(individuo):
+    # del hijo recien creado, modificarlo in-place algun gen del hijo al azar
+    # (es mover un poco un vertice para probar suerte)
+    if random.random() < PROB_MUTACION:
+        # elijo un indice interno al azar (sin tocar el 0 ni el ultimo) y despues le hago un empujon aleatorio
+        indice = random.randint(1, len(individuo) - 2)
+        x, y = individuo[indice]
+
+        nuevo_x = max(0.0, x + random.gauss(0, 0.05))
+        nuevo_y = max(0.0, y + random.gauss(0, 0.05))
+
+        # y devuelta lo mando al arco del radio y reordeno por las dudas
+        individuo[indice] = normalizar(nuevo_x, nuevo_y)
+        individuo.sort(key=lambda punto: punto[0])
+
+
+def estimar_pi(iteraciones):
+    # armo los vertices y generaciones en base a las iteraciones (sino se me va todo al pingo)
+    cantidad_vertices = min(250, max(30, int(math.sqrt(iteraciones))))
+    generaciones = max(5, iteraciones // CANTIDAD_POBLACION * 10) 
+    
+    poblacion = [crear_individuo(cantidad_vertices) for _ in range(CANTIDAD_POBLACION)]
+    
+    # precalculo los pesos una sola vez
+    PESOS_RANK = [((1 - PC) ** i) * PC for i in range(CANTIDAD_POBLACION - 1)]
+    PESOS_RANK.append((1 - PC) ** (CANTIDAD_POBLACION - 1)) # si no elijo a los anteriores, si o si me queda el ultimo
+    # leer el RANK SELECTION de los apuntes del MIT.
+    
+
+    for _ in range(generaciones):
+        # 1. evaluar y ordenar de mayor a menor fitness
+        ordenados = sorted(poblacion, key=fitness, reverse=True)
+        # 2. elitismo
+        nueva_poblacion = [ind[:] for ind in ordenados[:ELITISTA]]
+        
+        #padres = ordenados[:SELECCION]
+        # el boliche VIP donde los mas facheros (los de mejor ranking) tienen mas chances de levantar
+        
+        # 3. crossover y mutacion hasta llenar CANTIDAD_POBLACION
+        while len(nueva_poblacion) < CANTIDAD_POBLACION:
+            p1, p2 = random.choices(ordenados, weights=PESOS_RANK, k=2)
+            # p1, p2 = random.sample(padres, 2)
+            hijo = crossover(p1, p2)
+            mutar(hijo)
+            nueva_poblacion.append(hijo)
+            
+        poblacion = nueva_poblacion
+
+    mejor_individuo = max(poblacion, key=fitness)
+    return fitness(mejor_individuo)
+
 
 """
 planteo TEORÍA:
@@ -198,18 +329,9 @@ Entonces aplicas cierto tipo de reglas reales en problemas aplicables, gratifica
 Evolved Virtual Creatures. by Karl Sims.
 ----
 """
-
-
-
 ############################################################
-
-
-
-
-
-
 """
-planteo:
+aproach 1:
 
 
 Ahora en base a eso quiero resolver el ejercicio de rpl.
@@ -292,126 +414,5 @@ fitness(individuo) es calcular el perímetro del polígono
     cuando los hijos hereden puntos mejor espaciados, el perimetro va  crecer acercandose a 𝜋 como máximo global.
 
 """
-
-
-import random
-import math
-
-CANTIDAD_POBLACION = 30
-ELITISTA = 3
-PROB_MUTACION = 0.3
-LONGITUD = 2 #radio 2 en el primer cuadrante -> el arco mide exactamente 𝜋
-PC = 0.15  # prob. base del mejor individuo ( para Rank Selection (leer apunte MIT))
-
-#CANTIDAD_VERTICES = 80 # a mas vertices , el poligono se puede pegar mas al circulo real
-#SELECCION = 10 # esto es para la seleccion tipo ELITISMO, se puede borrar (no la usamos)
-
-
-def normalizar(x, y):
-    norma = math.hypot(x, y) # === sqrt(x**2 + y**2), I guess it's more clean?
-    if norma == 0:
-        return (LONGITUD, 0.0)
-
-    return (LONGITUD * x / norma, LONGITUD * y / norma)
-
-
-def crear_individuo(cantidad_vertices):
-    puntos_internos = []
-    # genreo cant_veritces - 2 puntoso internos en el 1er cuadrante
-    for _ in range(cantidad_vertices - 2):
-        x = random.uniform(0.001, 1.0)
-        y = random.uniform(0.001, 1.0)
-        puntos_internos.append(normalizar(x, y))
-
-    # le clavo los dos extremos del arco de radio 2: (0,2) arriba y (2,0) abajo
-    individuo = [(0.0, 2.0)] + puntos_internos + [(2.0, 0.0)]
-    individuo.sort(key=lambda punto: punto[0]) #ordeno por x asi no se cruza nada
-
-    return individuo
-
-
-def fitness(individuo):
-    # con math.dist() se calcula la distancai euclidiana 
-    perimetro_arco = 0.0
-
-    for i in range(len(individuo) - 1):
-        perimetro_arco += math.dist(individuo[i], individuo[i+1])
-
-    return perimetro_arco
-
-
-def crossover(padre1, padre2):
-    # mezclar el adn de mami y papi
-    # una combinacion convexa (un promedio ponderado con alpha ∈ [0, 1]) te da un punto intermedio en el segmento que los une
-    hijo = [(0.0), (2.0)] # extremo izq
-    # mezclo los puntos internos (del 1 al CANTIDAD_VERTICES - 2)
-    alpha = random.uniform(0.3, 0.7)  # peso aleatorio cerca del punto medio (0.5)
-    
-    for i in range(1, len(padre1) - 1):
-        x1, y1 = padre1[i]
-        x2, y2 = padre2[i]
-
-        # hago el cruce
-        promedio_x = alpha * x1 + (1.0 - alpha) * x2
-        promedio_y = alpha * y1 + (1.0 - alpha) * y2
-
-        # y lo empujo de vuelta al borde del circulo de radio 2
-        hijo.append(normalizar(promedio_x, promedio_y))
-
-    hijo.append((2.0, 0.0)) #extremo derecho fijo
-    hijo.sort(key=lambda punto: punto[0]) #garantiza que sigan ordenados por x
-    return hijo
-
-def mutar(individuo):
-    # del hijo recien creado, modificarlo in-place algun gen del hijo al azar
-    # (es mover un poco un vertice para probar suerte)
-    if random.random() < PROB_MUTACION:
-        # elijo un indice interno al azar (sin tocar el 0 ni el ultimo) y despues le hago un empujon aleatorio
-        indice = random.randint(1, len(individuo) - 2)
-        x, y = individuo[indice]
-
-        nuevo_x = max(0.0, x + random.gauss(0, 0.05))
-        nuevo_y = max(0.0, y + random.gauss(0, 0.05))
-
-        # y devuelta lo mando al arco del radio y reordeno por las dudas
-        individuo[indice] = normalizar(nuevo_x, nuevo_y)
-        individuo.sort(key=lambda punto: punto[0])
-
-
-def estimar_pi(iteraciones):
-    # armo los vertices y generaciones en base a las iteraciones (sino se me va todo al pingo)
-    cantidad_vertices = min(250, max(30, int(math.sqrt(iteraciones))))
-    generaciones = max(5, iteraciones // CANTIDAD_POBLACION * 10) 
-    
-    poblacion = [crear_individuo(cantidad_vertices) for _ in range(CANTIDAD_POBLACION)]
-    
-    # precalculo los pesos una sola vez
-    PESOS_RANK = [((1 - PC) ** i) * PC for i in range(CANTIDAD_POBLACION - 1)]
-    PESOS_RANK.append((1 - PC) ** (CANTIDAD_POBLACION - 1)) # si no elijo a los anteriores, si o si me queda el ultimo
-    # leer el RANK SELECTION de los apuntes del MIT.
-    
-
-    for _ in range(generaciones):
-        # 1. evaluar y ordenar de mayor a menor fitness
-        ordenados = sorted(poblacion, key=fitness, reverse=True)
-        # 2. elitismo
-        nueva_poblacion = [ind[:] for ind in ordenados[:ELITISTA]]
-        
-        #padres = ordenados[:SELECCION]
-        # el boliche VIP donde los mas facheros (los de mejor ranking) tienen mas chances de levantar
-        
-        # 3. crossover y mutacion hasta llenar CANTIDAD_POBLACION
-        while len(nueva_poblacion) < CANTIDAD_POBLACION:
-            p1, p2 = random.choices(ordenados, weights=PESOS_RANK, k=2)
-            # p1, p2 = random.sample(padres, 2)
-            hijo = crossover(p1, p2)
-            mutar(hijo)
-            nueva_poblacion.append(hijo)
-            
-        poblacion = nueva_poblacion
-
-    mejor_individuo = max(poblacion, key=fitness)
-    return fitness(mejor_individuo)
-
 
 #durisimo.
