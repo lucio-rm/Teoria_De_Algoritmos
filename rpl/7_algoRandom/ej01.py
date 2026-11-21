@@ -302,9 +302,8 @@ CANTIDAD_VERTICES = 80 # a mas vertices , el poligono se puede pegar mas al circ
 ELITISTA = 3
 SELECCION = 10
 PROB_MUTACION = 0.2
-
 LONGITUD = 2 #radio 2 en el primer cuadrante -> el arco mide exactamente 𝜋
-
+PC = 0.15  # prob. base del mejor individuo 
 
 def normalizar(x, y):
     norma = math.hypot(x, y) # === sqrt(x**2 + y**2), I guess it's more clean?
@@ -343,9 +342,7 @@ def fitness(individuo):
     return perimetro_arco
 
 def crossover(padre1, padre2):
-    # TODO: Combinar genes de padre1 y padre2 para armar un hijo de largo CANTIDAD_VERTICES
-    
-    # aca tengo que hacer el selection bien. quiero hacer el rank selection
+    # mezclar el adn de mami y papi
     
     
     pass
@@ -354,6 +351,8 @@ def mutar(individuo):
     # Mutación NO es "eliminar al padre si es malo" (eso ya lo hizo Selección al descartarlo).
     # Mutación es alterar levemente un gen de un HIJO nuevo para explorar nuevas posiciones:
     
+    # del hijo recien creado, modificarlo in-place algun gen del hijo al azar
+    # (es mover un poco un vertice para probar suerte)
     
     
     if random.random() < PROB_MUTACION:
@@ -364,6 +363,13 @@ def estimar_pi(iteraciones):
     poblacion = [crear_individuo() for _ in range(CANTIDAD_POBLACION)]
     generaciones = max(5, iteraciones // CANTIDAD_POBLACION) # esto es para que no se me vaya al pingo el timeLimit de rpl
 
+    # precalculo los pesos una sola vez
+    PESOS_RANK = [((1 - PC) ** i) * PC for i in range(CANTIDAD_POBLACION - 1)]
+    PESOS_RANK.append((1 - PC) ** (CANTIDAD_POBLACION - 1))  
+    # leer el RANK SELECTION de los apuntes del MIT.
+    
+
+
     for _ in range(generaciones):
         # 1. evaluar y ordenar de mayor a menor fitness
         ordenados = sorted(poblacion, key=fitness, reverse=True)
@@ -371,10 +377,14 @@ def estimar_pi(iteraciones):
         # 2. elitismo
         nueva_poblacion = [ind[:] for ind in ordenados[:ELITISTA]]
         padres = ordenados[:SELECCION]
+        # el boliche VIP donde los mas facheros (los de mejor ranking) tienen mas chances de levantar
+        p1, p2 = random.choices(ordenados, weights=PESOS_RANK, k=2)
+
         
         # 3. crossover y mutacion hasta llenar CANTIDAD_POBLACION
         while len(nueva_poblacion) < CANTIDAD_POBLACION:
-            p1, p2 = random.sample(padres, 2)
+            p1, p2 = random.choices(ordenados, weights=PESOS_RANK, k=2)
+            # p1, p2 = random.sample(padres, 2)
             hijo = crossover(p1, p2)
             mutar(hijo)
             nueva_poblacion.append(hijo)
