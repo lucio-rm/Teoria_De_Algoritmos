@@ -330,12 +330,23 @@ def crear_individuo():
     return ordenado
 
 def fitness(individuo):
-    # TODO: Sumar la distancia euclidiana entre puntos consecutivos (incluyendo el último con el primero)
+    # con math.dist() se calcula la distancai euclidiana (esta bien eso¿?)
+    n = len(individuo)
+    indice = 0
+    fitnes = 0.0
+    
+    while indice < n:
+        if indice == n-1:
+            p = individuo[indice]
+            q = individuo[0]
+            fitnes += math.dist(p, q)
+            break
 
+        p = individuo[indice]
+        q = individuo[indice+1]
+        fitnes += math.dist(p, q)
     
-    
-    
-    pass
+    return fitnes
 
 def cruzar(padre1, padre2):
     # TODO: Combinar genes de padre1 y padre2 para armar un hijo de largo CANTIDAD_VERTICES
