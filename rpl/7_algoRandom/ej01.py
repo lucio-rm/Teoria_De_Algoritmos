@@ -20,9 +20,8 @@ siendo éste ultimo: https://www.youtube.com/watch?v=kHyNqSnzP8Y&t=2630s
 Estuve también meta IA para poder entender bien. entendí en total un 70%, pero las bases en cómo representarlo + selección + mutación + fitness + crossover (que serían las bases de este tipo de algoritmos) lo entendí un 85%.
 
 """
-
 import random
-#import math , dejo de usarlo para que no me fallen los tests (creo que igual no fallaba por esto pero bueno)
+import math
 
 CANTIDAD_POBLACION = 8
 ELITISTA = 2
@@ -81,10 +80,9 @@ def estimar_pi(iteraciones):
     return fitness(mejor_individuo)
 
 
-
 def punto_en_arco(x):
     # ecuacion del circulo de radio 2 en el 1er cuadrante: x² + y² = 4 == y = raiz(4 - x²)
-    return (x, (4.0 - x * x) ** 0.5)
+    return (x, math.sqrt(4.0 - x * x))
 
 # def normalizar(x, y):
 #     #norma = math.hypot(x, y) # === sqrt(x**2 + y**2), I guess it's more clean?
@@ -96,7 +94,8 @@ def punto_en_arco(x):
 
 
 def crear_individuo(cantidad_vertices):
-    puntos_internos = [random.uniform(0.001) for _ in range(cantidad_vertices - 2)]
+    puntos_internos = [random.uniform(0.001, 1.999) for _ in range(cantidad_vertices - 2)]
+    puntos_internos.sort()
     # genreo cant_veritces - 2 puntoso internos en el 1er cuadrante
     # le clavo los dos extremos del arco de radio 2: (0,2) arriba y (2,0) abajo
     individuo = [(0.0, 2.0)] + [punto_en_arco(x) for x in puntos_internos] + [(2.0, 0.0)]
@@ -108,12 +107,7 @@ def fitness(individuo):
     perimetro_arco = 0.0
 
     for i in range(len(individuo) - 1):
-        #perimetro_arco += math.dist(individuo[i], individuo[i+1])
-        x1, y1 = individuo[i]
-        x2, y2 = individuo[i+1]
-        dist_x = x2 - x1
-        dist_y = y2 - y1
-        perimetro_arco += (dist_x*dist_x + dist_y*dist_y) ** 0.5
+        perimetro_arco += math.dist(individuo[i], individuo[i + 1])
 
     return perimetro_arco
 
@@ -134,6 +128,7 @@ def crossover(padre1, padre2):
     hijo.append((2.0, 0.0)) #extremo derecho fijo
     return hijo
 
+
 def mutar(individuo):
     # del hijo recien creado, modificarlo in-place algun gen del hijo al azar
     # (es mover un poco un vertice para probar suerte)
@@ -150,7 +145,6 @@ def mutar(individuo):
 
         individuo[indice] = punto_en_arco(nuevo_x)
         individuo.sort()
-
 
 
 """
