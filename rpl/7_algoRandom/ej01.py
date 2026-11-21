@@ -302,17 +302,36 @@ CANTIDAD_VERTICES = 80 # a mas vertices , el poligono se puede pegar mas al circ
 ELITISTA = 3
 SELECCION = 10
 PROB_MUTACION = 0.2
-
+LONGITUD = 0.5
 
 def crear_individuo():
     # TODO: Generar CANTIDAD_VERTICES puntos sobre el círculo de radio 0.5
     # Pista: que queden ordenados alrededor del círculo para que el polígono no se auto-cruce
     
-    pass
+    ind = [(0, 0)] * CANTIDAD_VERTICES
+
+    for x, y in ind:
+        x = random.uniform(-1, 1)
+        y = random.uniform(-1, 1)
+        # una probabilidad con distribucion uniforme para asignarle una posicion (x,y) en la circunferencia
+
+        # y ahora tengo que normalizar
+        norma = math.sqrt(x**2 + y**2)
+        nuevo_x = (LONGITUD * x) // norma
+        nuevo_y = (LONGITUD * y) // norma
+
+        x = nuevo_x
+        y = nuevo_y
+    
+    
+    
+    ordenado = sorted(ind, reverse=False) # de menor a mayor.   
+    
+    return ordenado
 
 def fitness(individuo):
     # TODO: Sumar la distancia euclidiana entre puntos consecutivos (incluyendo el último con el primero)
-    # Cero referencias a math.pi!
+
     
     
     
