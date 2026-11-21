@@ -316,16 +316,9 @@ def crear_individuo():
         # una probabilidad con distribucion uniforme para asignarle una posicion (x,y) en la circunferencia
 
         # y ahora tengo que normalizar
-        norma = math.sqrt(x**2 + y**2)
-        nuevo_x = (LONGITUD * x) // norma
-        nuevo_y = (LONGITUD * y) // norma
-
-        x = nuevo_x
-        y = nuevo_y
+        x, y = normalizar(x, y)
     
-    
-    
-    ordenado = sorted(ind, reverse=False) # de menor a mayor.   
+    ordenado = sorted(ind, lambda x: x[0], reverse=False) # de menor a mayor en base a su corrdenada x
     
     return ordenado
 
@@ -348,9 +341,10 @@ def fitness(individuo):
     
     return fitnes
 
-def cruzar(padre1, padre2):
+def crossover(padre1, padre2):
     # TODO: Combinar genes de padre1 y padre2 para armar un hijo de largo CANTIDAD_VERTICES
     
+    # aca tengo que hacer el selection bien. quiero hacer el rank selection
     
     
     pass
@@ -367,7 +361,7 @@ def mutar(individuo):
 
 def estimar_pi(iteraciones):
     poblacion = [crear_individuo() for _ in range(CANTIDAD_POBLACION)]
-    generaciones = max(5, iteraciones // CANTIDAD_POBLACION)
+    generaciones = max(5, iteraciones // CANTIDAD_POBLACION) # esto es para que no se me vaya al pingo el timeLimit de rpl
 
     for _ in range(generaciones):
         # 1. evaluar y ordenar de mayor a menor fitness
@@ -380,7 +374,7 @@ def estimar_pi(iteraciones):
         # 3. crossover y mutacion hasta llenar CANTIDAD_POBLACION
         while len(nueva_poblacion) < CANTIDAD_POBLACION:
             p1, p2 = random.sample(padres, 2)
-            hijo = cruzar(p1, p2)
+            hijo = crossover(p1, p2)
             mutar(hijo)
             nueva_poblacion.append(hijo)
             
@@ -388,3 +382,11 @@ def estimar_pi(iteraciones):
 
     mejor_individuo = max(poblacion, key=fitness)
     return fitness(mejor_individuo)
+
+
+
+def normalizar(x, y):
+    norma = math.sqrt(x**2 + y**2)
+    nuevo_x = (LONGITUD * x) // norma
+    nuevo_y = (LONGITUD * y) // norma
+    return nuevo_x, nuevo_y
