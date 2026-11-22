@@ -26,9 +26,9 @@ mis_notas = {
     "Greedy": "R",
     "Backtracking": "R",
     "Programación Dinámica": "B=",
-    "Programación Lineal": "R",
+    "Programación Lineal": "M",
     "Flujo": "B",
-    "Reducciones": "M"
+    "Reducciones": "R"
 }
 
 # 1. Analizar estado actual
