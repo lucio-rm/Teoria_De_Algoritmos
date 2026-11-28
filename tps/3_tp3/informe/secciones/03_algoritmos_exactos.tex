@@ -1,25 +1,170 @@
 \section{Búsqueda de la Exactitud: Backtracking y PLE}
+%Posible frases ganadores 
+% 1:
+%``Avancé en el tiempo para ver futuros alternativos... Vi 14.000.605. ¿En cuántos ganamos? Uno''. - Doctor Strange (Avengers: Infinity War, 2018).
+% 2: 
+``Si algo sale mal, retrocedes y buscas otro camino. No te quedas ahí parado''. - Buzz Lightyear (Toy Story 2, 1999).
 
-je
+Una vez demostrado que el Juego de las Piedras es NP-Completo, sabemos que como $\mathcal{P} \neq \mathcal{NP}$ no existe un algoritmo de tiempo polinomial que pueda siempre dar la solución óptima. Para resolver exactamente la versión de optimización (minimizar la cantidad de filas vacías), vamos a tener que explorar el espacio combinatorio con \textbf{Backtracking} y \textbf{Programación Lineal Entera (PLE)}.
 
+\subsection{Teoría de Backtracking y Podas}
 
-\subsection{Teoría Backtracking y Podas}
+La técnica de Fuerza Bruta consiste en enumerar todas las configuraciones posibles del problema y evaluar cada una al final (demasiado trabajo). En nuestro modelado por columnas, como existen $m$ columnas y para cada una debemos decidir entre quedarnos con sus piedras Verdes (\texttt{V}) o sus piedras Celestes (\texttt{C}), el árbol de decisiones tiene $2^m$ hojas.
 
+El \textbf{Backtracking} (en español: vuelta atrás) mejora muchisimo este recorrido construyendo la solución paso a paso y aplicando \textbf{podas}. Cuando nos encontramos frente a un problema de optimización, esta estrategia se conoce como \textit{Branch and Bound} (Ramificación y Poda): nos quedamos con la mejor solución encontrada hasta el momento ($Z_{\text{mejor}}$, la menor cantidad de filas vacías alcanzada) y, antes de explorar una sub-rama, calculamos como una cota optimista de lo que esa rama puede lograr. Si encima con el mejor escenario posible futuro la rama actual no puede superar a $Z_{\text{mejor}}$, se corta la recursión al toque y retrocede (va para atrás, back tracking).
 
-\subsection{Diseño e Implementación del Backtracking}
-        . lógica, podas,
-        . codigo 
-        . analisis complejidad (temporal y espacial)
+\subsection{Diseño e Implementación del algoritmo de Backtracking}
 
+El algoritmo recibe el tablero a resolver. Para ello, primero realiza un preprocesamiento donde se usa una lista de diccionarios con las piedras de color verde o celeste que hay en determinada columna, ya que el procesamiento en sí del algoritmo se basa en analizar las columnas para que no haya piedras de los dos colores en una misma columna. Luego hace un recuento de las filas vacías para establecer primero una cota mínima: de esta manera, $k$ va a valer inicialmente la cantidad de filas vacías que ya haya. Esto provoca que se ahorren varias pasadas de $k$ que no iban a resultar nunca porque el tablero tenía más filas vacías de las permitidas. Además, tiene otra utilidad, que es pasar la cantidad de filas vacías al backtracking para tenerla siempre a mano y no recalcularla constantemente. Finalmente, se arma un bucle hasta que el algoritmo retorne el óptimo, aumentando el número de $k$ por cada iteración.
 
-\label{rec:codigo} % para llamarlo después. en el analisis de la complejidad.
+Luego, el backtracking tiene un caso base donde se verifica si el índice de columna en el que está es igual a la cantidad de columnas que hay; si lo es, significa que se alcanzó una solución válida. En caso de no llegar al caso base, se separan, según el índice de la columna, los colores presentes en ella. Primero se revisa si esa columna no tiene piedras: si es así, simplemente se aumenta el índice y se vuelve a llamar, modificando el arreglo solución. En caso de que haya únicamente un color en esa columna, se hace lo mismo: otra llamada aumentando el índice. Si hay dos colores, primero se prueba sacando las verdes de esa columna para abrir la primera rama; para ello, se comprueba si al quitar las verdes la cantidad de filas vacías es menor o igual al máximo permitido. Si lo supera, se reinsertan las piedras; si no, se hace una llamada con el color que quedó para ver si es finalmente el correcto. En ambos casos, se reinsertan las piedras usadas y se vuelve a llamar considerando el color verde, para ver si esa rama eventualmente devuelve el óptimo.
 
+\label{rec:codigo}
 \begin{lstlisting}[mathescape=true, language=Python]
-def
+def juego_bt(tablero [Matriz n x m]):
+    filas = len(tablero)
+    cols = len(tablero[0]) if filas > 0 else 0
 
+    # Preprocesamiento: por cada columna guardo en que filas hay piedras de cada color
+    columnas = []
+    for j in range(cols):
+        piedras = {VERDE: [], CELESTE: []}
+        for i in range(filas):
+            color = tablero[i][j]
+            if color != VACIO: # Vacio == "."
+                piedras[color].append(i)
+        columnas.append(piedras)
+
+    # Cuento cuantas piedras iniciales tiene cada fila
+    piedras_fila = [0] * filas
+    for i in range(filas):
+        for j in range(cols):
+            if tablero[i][j] != VACIO:
+                piedras_fila[i] += 1
+
+    # Cuento filas que ya arrancan vacias (cota inferior inicial para k)
+    k = 0
+    for elem in piedras_fila:
+        if elem == 0:
+            k += 1
+
+    filas_vacias = k
+    lista_colores = ["-"] * cols
+
+    # Pruebo soluciones permitiendo como maximo k filas vacias (de menor a mayor)
+    while k <= filas:
+        colores = resolver_juego(columnas, piedras_fila, lista_colores, 0, k, filas_vacias)
+        if colores != None:
+            Devuelvo colores
+        k += 1
+
+    Devuelvo lista_colores
+
+
+def resolver_juego(columnas [Lista de dicts], piedras_fila [Arreglo de n enteros], colores, j, k, vacias):
+    # Caso base: ya se decidio el color de todas las columnas
+    if j == len(columnas):
+        Devuelvo copia(colores)
+
+    verdes = columnas[j][VERDE]
+    celestes = columnas[j][CELESTE]
+
+    # Poda 1: columna sin piedras, no afecta a ninguna fila
+    if esta_vacia(verdes) and esta_vacia(celestes):
+        colores[j] = "-"
+        Devuelvo resolver_juego(columnas, piedras_fila, colores, j + 1, k, vacias)
+
+    # Poda 2: columna de un solo color, conviene conservarlo (no elimina piedras)
+    if esta_vacia(verdes) or esta_vacia(celestes):
+        colores[j] = CELESTE if esta_vacia(verdes) else VERDE
+        Devuelvo resolver_juego(columnas, piedras_fila, colores, j + 1, k, vacias)
+
+    # Caso general: primero intento conservar CELESTE (sacando las verdes)
+    res = intentar(columnas, piedras_fila, colores, j, k, vacias, CELESTE, verdes)
+    if res != None:
+        Devuelvo res
+
+    # Si no funciono, intento conservar VERDE (sacando las celestes)
+    Devuelvo intentar(columnas, piedras_fila, colores, j, k, vacias, VERDE, celestes)
+
+
+def intentar(columnas, piedras_fila, colores, j, k, vacias, color, a_sacar):
+    # Aplico el movimiento y cuento cuantas filas nuevas quedan vacias
+    nuevas = sacar_piedras(a_sacar, piedras_fila)
+    res = None
+
+    # Poda por cota: solo continuo si no supero el limite k de filas vacias
+    if vacias + nuevas <= k:
+        colores[j] = color
+        res = resolver_juego(columnas, piedras_fila, colores, j + 1, k, vacias + nuevas)
+
+    # Backtracking: restauro las piedras sacadas antes de volver
+    devolver_piedras(a_sacar, piedras_fila)
+    Devuelvo res
+
+
+def sacar_piedras(filas [Indices afectados], piedras_fila):
+    nuevas = 0
+    for i in filas:
+        piedras_fila[i] -= 1
+        if piedras_fila[i] == 0:
+            nuevas += 1
+    Devuelvo nuevas
+
+
+def devolver_piedras(filas [Indices afectados], piedras_fila):
+    for i in filas:
+        piedras_fila[i] += 1
 \end{lstlisting}
 
+\textbf{Análisis de Complejidad del Backtracking:}
+\begin{itemize}
+    \item \textbf{Complejidad Temporal:} El preprocesamiento para poder hacer uso del backtracking tiene una complejidad de $\mathcal{O}(n \cdot m)$. Luego, ya dentro de la resolución del juego, podemos decir que tenemos una complejidad de $\mathcal{O}(n \cdot 2^m)$, ya que el backtracking de por sí tiene $\mathcal{O}(2^m)$ y en la mayoría de las llamadas se deben revisar hasta $n$ filas; por lo tanto, en un caso común puede llegar a ser $\mathcal{O}(n \cdot 2^m)$. En el peor de todos los casos (un caso muy específico), se puede analizar que $k$ sería igual a $n$, por lo que quedaría una complejidad de $\mathcal{O}(n^2 \cdot 2^m)$, siendo este el peor caso posible.
+    \item \textbf{Complejidad Espacial:} El preprocesamiento para poder armar las estructuras auxiliares tiene una complejidad de $\mathcal{O}(n \cdot m)$, ya que \texttt{columnas} almacena como máximo todos los índices de celdas con piedra ($\mathcal{O}(n \cdot m)$), \texttt{piedras\_fila} ocupa $\mathcal{O}(n)$ y \texttt{lista\_colores} junto con la copia final ocupan $\mathcal{O}(m)$. Luego, ya dentro de la resolución del juego, la recursión alcanza una profundidad máxima de $m$ columnas (alternando entre ambas funciones auxiliares, es decir, a lo sumo $2m + 1$ frames en la pila de llamadas). Como estas estructuras se pasan por referencia y se modifican in-place restaurándose al retroceder, cada frame consume $\mathcal{O}(1)$ y el stack aporta $\mathcal{O}(m)$. Sumando todo, queda una complejidad espacial auxiliar de $\mathcal{O}(n \cdot m)$ en el peor caso, del mismo orden que el tablero de entrada.
+\end{itemize}
 
-\subsection{Modelo de Programación Lineal Entera}
-. concepto PL + PLC/PLE y por que el PLE
-. definicion variables + constantes/datos + funcion objetivo + restricciones y total de inecuaciones
+\subsection{Modelo de Programación Lineal}
+
+La \textbf{Programación Lineal (PL)} es una técnica de modelado matemático que busca optimizar (maximizar o minimizar) una función objetivo lineal restringida a un sistema de ecuaciones e inecuaciones lineales. Cuando restringimos el dominio de las variables para que solo puedan tomar valores enteros y en particular valores binarios $\{0, 1\}$ para representar decisiones, tenemos un modelo de \textbf{Programación Lineal Entera (PLE)}, el cual internamente se resuelve con algoritmos como \textit{Simplex} combinado con \textit{Branch and Bound}.
+
+Para formular el Juego de las Piedras como un modelo de PLE, definimos sus componentes:
+
+\textbf{1. Constantes y Datos:}
+\begin{itemize}
+    \item Sea $N = \{0, 1, \dots, n-1\}$ el conjunto de filas y $M = \{0, 1, \dots, m-1\}$ el conjunto de columnas del tablero.
+    \item Para cada fila $i \in N$, ponemos dos subconjuntos constantes de columnas conocidos a partir del tablero inicial:
+    \begin{itemize}
+        \item $ ColV_i \subseteq M $: conjunto de columnas $j$ donde la fila $i$ tiene una piedra \textbf{Verde}.
+        \item $ ColC_i \subseteq M $: conjunto de columnas $j$ donde la fila $i$ tiene una piedra \textbf{Celeste}.
+    \end{itemize}
+\end{itemize}
+
+\textbf{2. Variables (todas Binarias):}
+\begin{itemize}
+    \item $V_j \in \{0, 1\} \quad \forall j \in M$: Variable binaria que vale $1$ si en la columna $j$ decidimos quedarnos con las piedras \textbf{Verdes}, y $0$ en caso contrario.
+    \item $C_j \in \{0, 1\} \quad \forall j \in M$: Variable binaria que vale $1$ si en la columna $j$ decidimos quedarnos con las piedras \textbf{Celestes}, y $0$ en caso contrario.
+    \item $E_i \in \{0, 1\} \quad \forall i \in N$: Variable binaria que vale $1$ si la fila $i$ queda \textbf{vacía} en el tablero que queda, y $0$ si logra conservar al menos una piedra.
+\end{itemize}
+\textit{(Total de variables del modelo: $2m + n$ variables binarias).}
+
+\textbf{3. Restricciones:}
+\begin{itemize}
+    \item \textbf{Exclusión de colores por columna ($m$ inecuaciones):} Ninguna columna puede quedarnos con piedras de los dos colores. Entonces con cada columna elige quedarnos con o las verdes o las celestes (nunca va sumar 2):
+    \[ \forall j \in M: \quad V_j + C_j \le 1 \]
+    \item \textbf{Condición de fila vacía ($n$ inecuaciones):} Una fila $i$ debe marcarse como vacia ($E_i = 1$) si ninguna de las columnas donde tenía piedras verdes eligió verde ($\sum_{j \in ColV_i} V_j = 0$) y ninguna de las columnas donde tenía piedras celestes eligió celeste ($\sum_{j \in ColC_i} C_j = 0$). Si la suma de piedras conservadas en la fila $i$ es $0$, la inecuación va a forzar a que $E_i$ valga $1$:
+    \[ \forall i \in N: \quad E_i + \sum_{j \in ColV_i} V_j + \sum_{j \in ColC_i} C_j \ge 1 \]
+\end{itemize}
+\textit{(Cantidad total de inecuaciones del modelo: $m + n$ restricciones).}
+
+\textbf{4. Función Objetivo:} \\
+Buscamos minimizar la cantidad total de filas que quedan vacías en el tablero:
+\[ \min Z = \sum_{i=0}^{n-1} E_i \]
+
+
+
+
+
+
+
+
+

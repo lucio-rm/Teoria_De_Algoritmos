@@ -1,0 +1,72 @@
+% sin solucion en decision -> optimo en relajacion
+\begin{tikzpicture}[
+    scale=0.85,
+    transform shape,
+    celda/.style={draw=gray!60, fill=gray!10, line width=0.6pt},
+    verde/.style={circle, fill=green!60!black, draw=green!40!black, minimum size=0.65cm, inner sep=0pt},
+    celeste/.style={circle, fill=cyan!75!blue!80, draw=cyan!50!black, minimum size=0.65cm, inner sep=0pt},
+    tachado/.style={circle, draw=red!80!black, line width=1.3pt, densely dashed, minimum size=0.7cm, inner sep=0pt}
+]
+
+\newcommand{\cruz}[2]{
+    \node[tachado] at (#1, #2) {};
+    \draw[red!80!black, line width=1.4pt] (#1-0.21, #2-0.21) -- (#1+0.21, #2+0.21);
+    \draw[red!80!black, line width=1.4pt] (#1-0.21, #2+0.21) -- (#1+0.21, #2-0.21);
+}
+
+% INSTANCIA INFACTIBLE EN DECISIÓN 
+\begin{scope}[shift={(0,0)}]
+    \draw[celda] (0,0) rectangle (3,4);
+    \draw[celda] (0,0) grid (3,4);
+    
+    % Fila 1 (y=3.5): Verde en col 1, Celeste en col 2
+    \node[verde] at (0.5, 3.5) {};
+    \node[celeste] at (1.5, 3.5) {};
+    % Fila 2 (y=2.5): Solo Celeste en col 1
+    \node[celeste] at (0.5, 2.5) {};
+    % Fila 3 (y=1.5): Solo Verde en col 2
+    \node[verde] at (1.5, 1.5) {};
+    % Fila 4 (y=0.5): Verde en col 3
+    \node[verde] at (2.5, 0.5) {};
+    
+    \node[font=\footnotesize\sffamily] at (1.5, -0.45) {Tablero original};
+\end{scope}
+
+%  Seleccion de piedras removidas ÓPTIMA
+\begin{scope}[shift={(4.2,0)}]
+    \draw[celda] (0,0) rectangle (3,4);
+    \draw[celda] (0,0) grid (3,4);
+    
+    % Fila 1 (queda vacía para salvar filas 2 y 3)
+    \node[verde] at (0.5, 3.5) {}; \cruz{0.5}{3.5}
+    \node[celeste] at (1.5, 3.5) {}; \cruz{1.5}{3.5}
+    % Fila 2
+    \node[celeste] at (0.5, 2.5) {};
+    % Fila 3
+    \node[verde] at (1.5, 1.5) {};
+    % Fila 4
+    \node[verde] at (2.5, 0.5) {};
+    
+    \node[font=\footnotesize\sffamily] at (1.5, -0.45) {Removidas óptimas};
+\end{scope}
+
+% SOLUCIÓN RELAJADA (3/4 FILAS
+\begin{scope}[shift={(8.4,0)}]
+    \draw[celda] (0,0) rectangle (3,4);
+    \draw[celda] (0,0) grid (3,4);
+    
+    % Fila 1 vacía (y=3.5) - resaltada suavemente en rojo
+    \draw[fill=red!8, draw=red!40, dashed] (0,3) rectangle (3,4);
+    
+    % Fila 2
+    \node[celeste] at (0.5, 2.5) {};
+    % Fila 3
+    \node[verde] at (1.5, 1.5) {};
+    % Fila 4
+    \node[verde] at (2.5, 0.5) {};
+    
+    \node[font=\footnotesize\sffamily] at (1.5, -0.45) {Óptimo ($3$ de $4$ filas)};
+\end{scope}
+
+\end{tikzpicture}
+

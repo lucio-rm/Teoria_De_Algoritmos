@@ -1,2 +1,8 @@
 \section{Conclusión}
 
+El desarrollo de este Trabajo Práctico nos permitio recorrer de punta a punta el ciclo de vida de un problema \textbf{NP-Completo}. A través de la reducción polinomial desde \textit{3-SAT}, demostramos formalmente por qué el problema que parecia sencillo, el juego de las piedras de Sophia esconde en sus reglas la misma dificultad que los problemas mas difíciles de la informática.
+
+Al proponer su resolución exacta por \textbf{Backtracking} y \textbf{Programación Lineal}, comprobamos el valor de un buen modelado matemático: transformar la pregunta de ``qué piedras individuales borrar en una grilla de $n \times m$'' en ``qué color asignar a cada una de las $m$ columnas'' redujo drásticamente el espacio de búsqueda y permitió formular un modelo lineal limpio de $m + n$ restricciones. Igualmente, las mediciones confirmaron que el precio de exigir la perfección es el crecimiento exponencial del tiempo de la computadora.
+
+Finalmente, el estudio de los \textbf{Algoritmos de Aproximación} demostró cómo es posible romper esa barrera exponencial ejecutando en tiempo lineal $\mathcal{O}(n \cdot m)$. Mientras que la estrategia aleatoria de ``El Gringo Hinz'' nos permitió demostrar analíticamente cómo incluso una moneda al aire garantiza una cota matemática sobre el valor esperado, el diseño de nuestra heurística \textbf{Greedy por Pricing Method} dejó una enseñanza fundamental: cuando combinamos la velocidad polinomial de una estrategia bien avariciosa con una medida inteligente de prioridad sobre las restricciones más frágiles, llegamos a lograr soluciones prácticamente optimas en milisegundos para volúmenes de datos que un algoritmo exacto tardaría siglos en resolver.
+

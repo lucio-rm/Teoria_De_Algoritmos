@@ -1,12 +1,93 @@
 \section{El Problema}
+Los hermanos siguieron creciendo. Mateo también aprendió sobre programación dinámica, y cada uno aplicaba la lógica sabiendo que el otro también lo hacía. El juego de las monedas se tornó aburrido en cuanto notaron que siempre ganaba quien empezara, o según la suerte. Los años pasaron, llegó la adolescencia y empezaron a tener gustos diferentes. En general, jugaban a juegos individuales. En particular, Sophia estaba muy enganchada con el siguiente juego de tipo \textit{puzzle}: El juego consiste de una grilla de $n \times m$ celdas. Cada celda puede estar vacía, estar ocupada por una piedra verde, o estar ocupada por una piedra celeste. El objetivo original del juego es remover algunas de las piedras de tal forma que las piedras que quedan cumplan las siguientes condiciones:
 
-consigna
+\begin{enumerate}
+    \item Cada fila tiene al menos una piedra.
+    \item Ninguna columna tiene piedras de ambos colores.
+\end{enumerate}
 
+A Sophia le interesa tanto esta versión, como también aquella que \textbf{relaja} la primera restricción, obteniendo una solución que maximice la cantidad de fila que cumplen la restricción (manteniendo siempre la segunda restricción). Es decir, minimizar la cantidad de filas que quedan vacías.
+
+
+Para transformar esta situación en un problema algorítmico concreto, el desafío es el siguiente:
+Hacer un análisis del problema, y cumplir varios puntos (después explicados) del problema:
+Dado un tablero de $n \times m$ celdas, donde cada celda está vacía u ocupada con una piedra verde o celeste (solo puede estar ocupada por 1 como mucho), ¿es posible remover piedras de tal forma que cada fila tenga al menos una piedra y cada columna no tenga piedras de ambos colores?
+
+Los puntos a resolver son:
+\begin{itemize}
+    \item Demostrar que el Problema del juego de las Piedras se encuentra en NP, y es un problema \textit{NP-Completo}.
+    \item Escribir para obtener la solución óptima al problema en su versión de optimización: un algoritmo de backtracking y un modelo de programación lineal
+    \item Analizar el famoso algoritmo de aproximación de ``El Gringo Hinz'' (\ref{sec:hinz})
+    \item Implementar un algoritmo de aproximación para el problema.
+\end{itemize}
 \subsection{Introducción}
 
+Tranquilamente se pueden observar varios puntos a realizar. Lo ideal, como primera instancia, hay que tener en cuenta que existen tableros \textbf{sin} solución, los cuales no se pueden cumplir las dos condiciones iniciales del problema. A eso sumémosle que si se demuestra que este problema es NP-Completo, estamos frente a un problema \textit{muy difícil} de resolver.
+Nos podemos preguntar:
+\begin{itemize}
+    \item ¿Es realmente posible encontrar una solución óptima? Si tanto se habla de que es muy difícil, ¿\textit{cuánto tardaría}?
+    \item ¿Cuáles son las diferencias entre un algoritmo de Backtracking y Programación Lineal? ¿Distan mucho de los algoritmos de Aproximación? ¿Todos me aseguran optimalidad?
+    \item ¿Cuánto me beneficia el Problema del Juego de las Piedras en su \textit{versión de Relajación}?
+\end{itemize}
+
+Una vez propuesto eso, sigamos pensando para ahora empezar con el planteo.
 
 \subsection{Planteamiento y Modelado del problema}
 
+Para cualquier tablero que se nos presente, nuestro objetivo va a ser ganar siempre que podamos.
+En la Figura \ref{fig:con_solucion} se observa una instancia válida para el problema de optimización
+
+\begin{figure}[H]
+    \centering
+    \input{images/fig_con_solucion.tex}
+    \renewcommand{\thefigure}{1}
+    \caption{Ejemplo de tablero $3 \times 3$ con solución en la versión de decision.}
+    \label{fig:con_solucion}
+\end{figure}
+
+Por otro lado, la Figura \ref{fig:sin_solucion} muestra una configuración donde resulta imposible cubrir todas las filas sin generar conflictos de color en las columnas.
+
+\begin{figure}[H]
+    \centering
+    \input{images/fig_sin_solucion.tex}
+    \renewcommand{\thefigure}{1.1}
+    \caption{Ejemplo de tablero $3 \times 3$ sin solución para el problema.}
+    \label{fig:sin_solucion}
+\end{figure}
+
+Finalmente, al relajar la primera restricción (Figura~\ref{fig:relajacion}), una instancia que no admite solución exacta logra maximizar la cantidad de filas cubiertas dejando únicamente una fila vacía.
+
+\begin{figure}[H]
+    \centering
+    \input{images/fig_relajacion_optima.tex}
+    \renewcommand{\thefigure}{1.2}
+    \caption{Resolución óptima de una instancia del problema en la versión relajada.}
+    \label{fig:relajacion}
+\end{figure}
+Habiendo encontrado un contraejemplo para que si o si tenemos que dejar al menos una fila vacía, surge la pregunta clave para modelar el problema:
+¿cómo tomamos las decisiones sin perdernos en las $n \times m$ celdas?
+
+Si analizamos la segunda regla (\textit{ninguna columna puede tener piedras de ambos colores}), notamos que: una vez que decidimos que en una columna $j$ no va a haber piedras celestes, nunca nos va a convenir eliminar ninguna piedra verde de esa misma columna, porque conservar todas las piedras verdes disponibles nunca rompe la restriccion vertical y al mismo tiempo esta maximizando nuestras chances de cubrir filas horizontales.
+Por lo tanto, el problema de elegir qué piedras sacar es matemáticamente igual a agarrar exactamente \textbf{$m$ decisiones binarias} (una por cada columna $j \in \{0, \dots, m-1\}$): o la columna $j$ sigue solo con sus piedras verdes (\texttt{V}), o deja solo sus piedras celestes (\texttt{C}).
+
+Por último, es muy importante diferenciar entre las dos variantes del problema:
+\begin{itemize}
+    \item \textbf{Versión de Decisión:} Dado un tablero de $n \times m$ celdas, ¿es posible remover piedras de forma tal que ninguna columna tenga piedras de ambos colores y todas las filas tengan \textbf{al menos} una piedra ($0$ filas vacías)? (¿es posible dejar a lo sumo $k$ filas vacías?).
+    \item \textbf{Versión de Optimización (Relajada):} Dado un tablero de $n \times m$ celdas, encontrar una asignación válida de colores por columna que \textbf{minimice la cantidad de filas que quedan vacías} (o equivalentemente, que maximice la cantidad de filas cubiertas).
+\end{itemize}
 
 \subsection{Consecuencias de la optimalidad}
+
+Si se logra pensar y crear estrategias para las cuales siempre que se pueda ganar lo logremos de forma eficaz, eso significa que:
+\begin{itemize}
+    \item Las indicaciones propuestas fueron óptimas.
+    \item Si pasamos las instrucciones a un algoritmo, ese mismo es óptimo.
+    \item Si la estrategia no devuelve siempre el óptimo, sino una solucion \textit{cercana} a la óptima, la solución se considera una \textit{aproximada}.
+    \item Si logramos resolverlo polinomialmente, el algoritmo se considera rápido y muy eficaz si nos devuelve siempre la solución óptima. En cambio, si logramos resolverlo exponencialmente habría que considerar \textit{sacrificar} cierta optimalidad para que, con tableros de gran magnitud, no tardemos semanas en resolverlo.
+\end{itemize}
+
+Las pruebas a realizar de todo esto y mucho más se va a realizar en la lectura que sigue. Se recomienda leer detenidamente cada paso, y si no se entiende, releerlo. 
+A eso sumarle el \textbf{pensamiento} de lograr la optimalidad, hasta acá se dijo sutilmente como es éste y su gran significado en las Ciencias de la Computación. A continuación, se explica exáctamente eso: en dónde se encasillan los \textbf{algoritmos polinomiales}, si es posible \textbf{verificar} una posible solución del problema en tiempo polinomial, y la relación de todo esto con los algoritmos no polinomiales. 
+
+¿Es posible resolver el Problema del Juego de las Piedras, si yo \textbf{sé} resolver otro problema \textit{muy parecido} a éste?
 
