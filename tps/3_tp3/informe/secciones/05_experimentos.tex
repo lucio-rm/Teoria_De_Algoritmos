@@ -1,14 +1,73 @@
 \section{Experimentos y Mediciones}
 
-. el por qué
+Con el objetivo de contrastar la teoría demostrada en las secciones anteriores contra el comportamiento empírico real, se diseñaron experimentos orientados a evaluar tres aspectos: la \textbf{correctitud} de los algoritmos exactos, la \textbf{evolución de los tiempos de ejecución} de todos los metodos implementados, y la \textbf{calidad de aproximación} respecto al óptimo y a la cota $r(A)$.
 
-\subsection{Generación de sets de datos}
-. cómo se armaron los tableros de prueba (variando n, m, y densidad)
+\subsection{Generación de Sets de Datos y Validación}
 
+En primer lugar, tanto el algoritmo de Backtracking como el modelo de Programación Lineal Entera (implementado con \texttt{PuLP}) fueron ejecutados sobre el conjunto completo de pruebas provisto por la cátedra (\texttt{tp3\_test/catedra/}), que incluye instancias con y sin solución exacta desde tableros de $3 \times 3$ hasta $200 \times 45$. En todos los casos ambos algoritmos coincidieron justo con la cantidad optima de filas vacías esperada y aprobaron la verificación de validez estructural.
 
-\subsection{Tiempos de ejecución}
-. BT vs PL vs APROXIMACIONES
+Para las mediciones de rendimiento y escalabilidad se utilizó un generador propio de tableros aleatorios (\texttt{generador\_sets.py}) y las pruebas \texttt{mediciones.ipynb}, construyendo dos conjuntos de datos:
+\begin{enumerate}
+    \item \textbf{Volumenes manejables ($m \in [4, 35]$ con $n = 3m$):} Tableros de entre $12 \times 4$ y $105 \times 35$ celdas, promediando múltiples instancias por cada valor de $m$. En este rango tanto Backtracking como PLE logran hallar la solución exacta $z(I)$, lo que permite observar el crecimiento exponencial y contrastar directamente la calidad de las aproximaciones contra el óptimo.
+    \item \textbf{Volúmenes masivos ($n \cdot m$ hasta $4 \times 10^6$, con $m$ hasta $2000$):} Instancias completamente inmanejables para los algoritmos exactos (hasta $2^{2000}$ combinaciones de columnas), utilizadas para corroborar por Cuadrados Minimos la complejidad lineal de las aproximaciones implementadas.
+\end{enumerate}
 
+\subsection{Tiempos de Ejecución: Backtracking, PLE y Aproximaciones}
 
-\subsection{Corroboración de la Cota r(A) y Calidad}
-. Graficos comparando calidad del óptimo vs Gringo Hinz vs Greedy propio
+En la Figura \ref{fig:backtracking} se analiza en detalle el tiempo de ejecución promedio del algoritmo de Backtracking en los sets manejables ($m \in [4, 35]$, $n = 3m$), contrastando un ajuste exponencial ($c_1 \cdot b^m + c_2$) frente a un ajuste polinomial cúbico ($c_1 \cdot m^3 + c_2$).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{images/backtracking.png}
+    \caption{Tiempo de ejecución promedio del algoritmo de Backtracking en función de $m$ ($n = 3m$) junto con los ajustes exponencial y polinomial cúbico y sus errores absolutos.}
+    \label{fig:backtracking}
+\end{figure}
+
+El ajuste exponencial muestra una base efectiva $b \approx 1.374$ con un error cuadrático total menor ($3.56$) que el ajuste cúbico ($4.37$). El hecho de que la base sea menor a $2$ nos muestra el impacto real de las podas implementadas (columnas vacías,corte por cota $k$, etc). A su vez, el pico marcado en $m = 34$ ($\approx 2.54\text{ s}$) refleja una propiedad característica del Backtracking: su tiempo real no depende únicamente del tamaño del tablero, sino de la estructura de conflictos interna de la instancia, pudiendo dispararse muchisimo cuando las podas tardan en activarse.
+
+En la Figura \ref{fig:all_algorithms} se comparan al mismo tiempo los tiempos de los cinco algoritmos implementados sobre el mismo conjunto manejable, tanto en escala lineal como en escala logarítmica.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{images/all_algorithms.png}
+    \caption{Comparación de tiempos de ejecución de los cinco algoritmos (Backtracking, PLE, Greedy, Pricing Method y Gringo-Hinz) en escala lineal (izquierda) y logarítmica (derecha).}
+    \label{fig:all_algorithms}
+\end{figure}
+
+La escala logarítmica de la Figura \ref{fig:all_algorithms} nos permite ver tres conclusiones:
+\begin{itemize}
+    \item \textbf{Backtracking vs. Programación Lineal:} Para instancias chicas ($m < 23$), Backtracking es mas rapido que PLE por el costo fijo inicial de construir el modelo y mandar el solver lineal ($\sim 10^{-2}\text{ s}$). Pero alrededor de $m \approx 24$ las dos curvas se cruzan: Backtracking se dispara exponencialmente mientras que PL se mantiene estable alrededor de $0.04\text{ s}$ a $0.06\text{ s}$ gracias a sus técnicas internas de relajación lineal y planos de corte.
+    \item \textbf{Brecha con las Aproximaciones:} Greedy y Pricing Method se ejecutan entre dos y tres ordenes de magnitud más rápido que PLE ($\sim 10^{-4}\text{ s}$ a $10^{-3}\text{ s}$). Por su parte, la decisión aleatoria de Gringo-Hinz se mantiene en el orden de los \textit{microsegundos} ($\sim 10^{-6}\text{ s}$).
+\end{itemize}
+
+Para comprobar la escalabilidad de las aproximaciones en instancias imposibles para Backtracking y PLE, se midieron sus tiempos en los volúmenes masivos (hasta $4 \times 10^6$ celdas y $2000$ columnas) y se ajustaron rectas mediante Cuadrados Mínimos (Figura \ref{fig:masivos_tiempos}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{images/optimalidad_aprox.png}
+    \caption{Tiempos de ejecución y errores de ajuste lineal por Cuadrados Mínimos para las aproximaciones Greedy, Pricing Method y Gringo-Hinz en volumenes masivos.}
+    \label{fig:masivos_tiempos}
+\end{figure}
+
+Los resultados confirman con precisión la complejidad demostrada en la sección anterior:
+\begin{itemize}
+    \item \textbf{Aproximación Greedy y Pricing Method:} Las dos se ajustan a una recta en función de la cantidad total de celdas $n \cdot m$, confirmando su complejidad $\mathcal{O}(n \cdot m)$. Para tableros de $4.000.000$ de celdas ($2000 \times 2000$), Greedy tarda menos de $0.9\text{ s}$ ($c_1 = 2.25 \times 10^{-7}$, error cuadrático total $1.49 \times 10^{-2}$) y Pricing Method cerca de $1.15\text{ s}$ ($c_1 = 2.82 \times 10^{-7}$, error cuadrático total $8.15 \times 10^{-2}$). La poca diferencia en la constante es por el cálculo de los pesos exponenciales $2^{-k_i}$ en Pricing Method.
+    \item \textbf{Aproximación del Gringo Hinz:} Al medir solo la función de decisión de colores por columna (sin reconstruir la matriz resultante), se verifica un ajuste lineal exacto respecto de $m$ ($c_1 = 1.04 \times 10^{-7}$, error cuadrático total $1.99 \times 10^{-8}$), demorando apenas $0.22\text{ ms}$ para $2000$ columnas y corroborando su costo $\mathcal{O}(m)$ de decisión (pasando a $\mathcal{O}(n \cdot m)$ al reconstruir el tablero final).
+\end{itemize}
+
+\subsection{Calidad de las Aproximaciones y Verificación de $r(A)$}
+
+En la Figura \ref{fig:calidad_aprox} se contrasta la calidad de solución medida como la cantidad promedio de filas vacías obtenida por el algoritmo exacto (PLE) frente a las tres aproximaciones sobre los tableros manejables ($m \in [4, 35]$, $n = 3m$).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\textwidth]{images/aprox_hinz_mias.png}
+    \caption{Comparación de calidad de solución (cantidad promedio de filas vacías) entre el Óptimo Exacto, Pricing Method, Greedy de Cobertura y Gringo-Hinz.}
+    \label{fig:calidad_aprox}
+\end{figure}
+
+El análisis de la Figura~\ref{fig:calidad_aprox} revela dos hallazgos fundamentales:
+\begin{enumerate}
+    \item \textbf{Comportamiento de Gringo-Hinz y cota $r(A)$:} La cantidad de filas vacías de Gringo-Hinz crece de manera pronunciada con el tamaño del tablero, pasando de $\sim 4$ filas vacías en $m = 4$ ($n = 12$) a entre $33$ y $51$ filas vacías para $m \in [30, 35]$ ($n \in [90, 105]$). Expresado en términos de filas cubiertas respecto al óptimo, por ejemplo en $m = 35$ ($n = 105$), el óptimo cubre $\approx 100$ filas mientras que Gringo-Hinz cubre $\approx 64$, obteniendo una relación empírica $\frac{A_{\text{cubiertas}}}{z_{\text{cubiertas}}} \approx 0.64 \ge 0.50$, consistente con la 2-aproximacion que esperabamos demostrada. Al mismo tiempo, se confirma por qué la métrica de filas vacías no admite cota constante: frente a $\sim 5$ filas vacías del óptimo, el algoritmo aleatorio llega a dejar más de $8$ veces esa cantidad.
+    \item \textbf{Superioridad de las propuestas Greedy:} Tanto la aproximación Greedy de Cobertura como la basada en Pricing Method superan al Gringo-Hinz y producen curvas prácticamente superpuestas a la del óptimo exacto en todo el rango evaluado, manteniendo su complejidad lineal $\mathcal{O}(n \cdot m)$. En particular, priorizar las filas no cubiertas evita esas decisiones ciegas (que no le importa al Gringo) y logra soluciones casi indistinguibles del óptimo global sin pagar el costo exponencial.
+\end{enumerate}

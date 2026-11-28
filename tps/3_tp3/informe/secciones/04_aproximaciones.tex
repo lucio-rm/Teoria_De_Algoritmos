@@ -1,27 +1,122 @@
 \section{Aproximaciones}
+% Posibles frases ganadoras:
+% 1:
+% ``Lo perfecto es enemigo de lo bueno''. - Voltaire.
+% 2:
+% ``Un buen plan ejecutado hoy mismo es mejor que un plan perfecto ejecutado la semana que viene''. - George S. Patton.
+% 3:
+``Hazlo o no lo hagas, pero no lo intentes''. - Yoda (Star Wars: El Imperio Contraataca, 1980).
+% 4: creo que tengo que dejar esta pero bueno. YODA >>>> el boludo de simon
+%``El hombre administrativo busca lo suficientemente bueno, no lo óptimo absoluto; porque en un mundo complejo, el óptimo es una ficción inalcanzable''. - Herbert A. Simon (Premio Nobel de Economía y Premio Turing).
+\subsection{Teoría de los Algoritmos de Aproximación}
 
-jeje
+Cuando estamos con problemas NP-Hard con muchos datos de entrada (ej., tableros con cientos o miles de columnas), los algoritmos exactos como Backtracking o PL chocan contra la pared del tiempo exponencial (como se mostró en el cuadro \label{ref:tabla1}). Los \textbf{Algoritmos de Aproximación} cambian el pensamiento que estuvimos teniendo hasta ahora: renuncian a el poder de encontrar el óptimo exacto a cambio de ejecutarse en \textbf{tiempo polinomial} y garantizar que la solución entregada va a estar siempre acotada dentro de un margen conocido respecto al óptimo.
 
-\subsection{Teoría}
-. trade-off entre tiempo polinomial y optimalidad garantizada (elk r(A))
+Para evaluar que tan buena es una aproximacion $A$ sobre cualquier instancia posible $I$, comparamos el valor obtenido $A(I)$ contra el valor de la solución óptima $z(I)$ por la cota de aproximación $r(A)$.
 
+\subsection{Análisis de la Aproximación de ``El Gringo Hinz''}
+\label{sec:hinz}
 
-\subsection{Análisis del Algoritmo del Gringo Hinz}
-. Demostración de validez, complejidad O(N.M)
-. demostracion matemática de la cota r(A)
+El Gringo Hinz propone el siguiente algoritmo para la versión de optimización del Juego de las Piedras:
+\begin{lstlisting}[mathescape=true]
+para cada columna j de forma independiente:
+    mantener las piedras verdes con probabilidad 1/2, sino mantener las celestes
+\end{lstlisting}
 
+\subsubsection{Demostración de Validez y Complejidad}
 
-\subsubsection{Propuesta de Aproximación Propia}
-. el por qué greedy + diseño determinístico
-. pseudocodigo
-. justificacion de la complejidad
+\noindent\textbf{Validez de la solución:} En la versión de optimización del problema, la primera regla del juego original (que ninguna fila quede vacía) se relaja para transformarse en la función objetivo, manteniendo como única restriccion obligatoria la segunda regla: \textit{ninguna columna puede contener piedras de ambos colores}. Y como el algoritmo del Gringo hace una partición excluyente en cada columna $j$ (o elimina todas las piedras celestes dejando solo las verdes, o elimina todas las verdes dejando solo las celestes), es imposible que en alguna columna hayan piedras verdes y celestes. Por lo tanto, \textbf{el algoritmo devuelve una solución válida}.
 
+\textbf{Complejidad Algorítmica:} Lanzar una moneda aleatoria por cada una de las $m$ columnas toma tiempo $\mathcal{O}(m)$\footnote{Lanzar una moneda equilibrada, que salga $C$ tiene una probabilidad de 1/2, y que salga $C$ negada, también.}. Despues, recorrer el tablero de $n \times m$ celdas para sacar las piedras que su color no coincida con el elegido en su respectiva columna y contabilizar las filas vacías requiere inspeccionar cada celda en $\mathcal{O}(1)$. En consecuencia, la complejidad temporal del algoritmo es $\mathcal{O}(n \cdot m)$, siendo polinomial y óptima para leer el tablero.
+
+\subsubsection{Cálculo y Demostración de la Cota de Aproximación}
+
+Para analizar la calidad de aproximación del algoritmo estudiamos el valor esperado de su solución. Conviene analizar primero el problema desde la perspectiva de las \textbf{filas cubiertas} (maximización, como pide el problema al buscar \textit{``una solución que maximice la cantidad de filas que cumplen la restricción''}) y luego contrastarlo con las \textbf{filas vacías} (minimización).
+
+\textbf{1. Análisis sobre la cantidad de filas cubiertas (Maximización):} \\
+Sea $I$ una instancia cualquiera con $n$ filas. Consideremos una fila $i$ que en el tablero original contiene $k_i$ piedras en total (ubicadas en $k_i$ columnas distintas).
+\begin{itemize}
+    \item Si $k_i = 0$ (la fila ya vino vacia en el tablero de entrada), ni el algoritmo aproximado ni el algoritmo óptimo van a poder cubrirla.
+    \item Si $k_i \ge 1$, para cada una de las $k_i$ piedras que tenga la fila $i$, la columna correspondiente $j$ elige quedarse con el color de esa piedra con probabilidad $1/2$, o eliminarla con probabilidad $1/2$.
+\end{itemize}
+Como el algoritmo hace la decisión de cada columna de forma \textbf{independiente}, la probabilidad de que la fila $i$ pierda absolutamente todas sus $k_i$ piedras (y quede vacía) es el producto de las probabilidades de fallar en cada una de esas $k_i$ columnas:
+\[ \mathbb{P}(\text{fila } i \text{ quede vacía}) = \left(\frac{1}{2}\right)^{k_i} \]
+
+Por complemento, la probabilidad de que la fila $i$ cumpla la restricción (quede cubierta por al menos una piedra) es:
+\[ \mathbb{P}(\text{fila } i \text{ quede cubierta}) = 1 - \left(\frac{1}{2}\right)^{k_i} \]
+
+Dado que toda fila capaz de ser cubierta en la solución óptima debe tener al menos una piedra en el tablero original ($k_i \ge 1$), el peor caso ocurre cuando $k_i = 1$:
+\[ k_i \ge 1 \implies \left(\frac{1}{2}\right)^{k_i} \le \frac{1}{2} \implies 1 - \left(\frac{1}{2}\right)^{k_i} \ge \frac{1}{2} \]
+
+Definiendo una variable aleatoria $X_i \in \{0, 1\}$ que vale $1$ si la fila $i$ queda cubierta y $0$ sino, por linealidad de la esperanza\footnote{La linealidad de la esperanza hace que el valor esperado de la suma de variables aleatorias es igual a la suma de sus valores esperados individuales ($\mathbb{E}[\sum X_i] = \sum \mathbb{E}[X_i]$). Significa que el promedio total de filas cubiertas es igual a la suma de las probabilidades de cubrir cada fila individual.} sobre el conjunto $N^+$ de filas no vacías inicialmente (que sabemos que el óptimo $z_{\text{cubiertas}}(I) \le |N^+|$), tenemos:
+\[ \mathbb{E}[A_{\text{cubiertas}}(I)] = \sum_{i \in N^+} \mathbb{P}(\text{fila } i \text{ cubierta}) = \sum_{i \in N^+} \left(1 - \frac{1}{2^{k_i}}\right) \ge \frac{1}{2} |N^+| \ge \frac{1}{2} z_{\text{cubiertas}}(I) \]
+El algoritmo del Gringo Hinz garantiza cubrir al menos la mitad de las filas del óptimo (una \textbf{2-aproximación} para maximización). Y encima, en los juegos donde cada fila tiene al menos $2$ piedras ($k_i \ge 2$), garantiza cubrir al menos $\frac{3}{4} z_{\text{cubiertas}}(I)$.
+
+\textbf{2. Observación sobre el $\frac{A(I)}{z(I)} \le r(A)$ midiendo filas vacías (Minimización):} \\
+Si se evalúa la función objetivo midiendo directamente la cantidad de filas vacías $z_{\text{vacías}}(I)$, puede pasar que el óptimo valga cero:
+\begin{itemize}
+    \item En cualquier tablero que sí tenga solución exacta en la versión de decisión, el óptimo deja $z(I) = 0$ filas vacías. El algoritmo del Gringo Hinz tiene una probabilidad positiva de dejar $A(I) \ge 1$ filas vacías, haciendo que el cociente $\frac{A(I)}{0}$ tienda a $\infty$ (no esté acotado por una constante).
+    \item Encima restringiéndonos a instancias sin solución exacta con $z(I) \ge 1$, vamos a poder construir un tablero de $n$ filas donde cada fila tiene una única piedra verde en la columna $1$, menos una fila que tiene una sola piedra celeste en la columna $1$. El óptimo elige verde en la columna $1$ dejando solo $z(I) = 1$ fila vacía. Pero con probabilidad $1/2$ Hinz elige celeste, dejando $A(I) = n - 1$ filas vacías y llevando la relación peor caso a $\frac{A(I)}{z(I)} = n - 1 = \mathcal{O}(n)$ (y en valor esperado $\frac{n}{2}$).
+\end{itemize}
+Por esta razón, la cota constante garantizada de Hinz tiene que ser sobre la cantidad de filas cubiertas ($\ge \frac{1}{2} OPT$) o teniendo que acotar las filas vacias respecto a $n$.
+
+\subsection{Propuestas de Aproximación}
+
+El gran problema del algoritmo del Gringo Hinz es que esta ciego ante los datos: decide con una moneda al aire sin mirar cuantas piedras de cada color hay en la columna ni qué filas están en peligro de quedar vacías. Para superarlo manteniendo un tiempo polinomial rápido, diseñamos e implementamos dos algoritmos Greedy:
+
+\textbf{1. Aproximación Greedy normal:} \\
+Recorre las columnas de $j = 0$ a $m - 1$. En cada columna $j$, cuenta cuántas filas \textit{que todavía no fueron cubiertas} tienen una piedra Verde en la columna $j$, y cuántas tienen una piedra Celeste. Elige de manera avariciosa el color que salve la mayor cantidad de filas descubiertas en ese paso y marca esas filas como cubiertas.
+
+\textbf{2. Aproximación Greedy por Pricing Method:} \\
+El Greedy simple trata a todas las filas descubiertas con el mismo valor (ej, $1$ punto). Pero una fila a la que solo le queda \textbf{una última piedra posible} en todo el resto del tablero es importantisima: si no elegimos su color ahora, va a morir. En cambio, una fila que todavía tiene $5$ piedras en columnas futuras puede esperar. 
+Inspirados en la metodología de \textit{Pricing Method} y el método de probabilidades condicionales (del Gringo), le ponemos a cada fila descubierta $i$ con $k_i$ piedras restantes un \textbf{precio de urgencia} $p_i = 2^{-k_i}$. En cada columna $j$, el algoritmo suma los precios de las filas descubiertas que salvaría el color Verde contra el Celeste, y elige el color que recaude el mayor valor económico. Despues, descuenta en $1$ las piedras restantes de las filas no cubiertas.
+\\
+\begin{lstlisting}[mathescape=true, language=Python]
+def aprox_greedy_precios(tablero):
+    n, m = len(tablero), len(tablero[0])
+    fila_cubierta = [False] * n
+    piedras_restantes = [sum(1 for j in range(m) if tablero[i][j] in ('V', 'C')) for i in range(n)]
+    colores_col = ['-'] * m
+    
+    for j in range(m):
+        precio_v, precio_c = 0.0, 0.0
+        for i in range(n):
+            if not fila_cubierta[i] and tablero[i][j] in ('V', 'C'):
+                peso = 2.0 ** (-piedras_restantes[i])
+            
+                if tablero[i][j] == 'V':
+                    precio_v += peso
+                else:
+                    precio_c += peso
+    
+        elegido = 'V' if precio_v >= precio_c else 'C'
+        colores_col[j] = elegido
+        
+        for i in range(n):
+            if tablero[i][j] in ('V', 'C'):
+                piedras_restantes[i] -= 1
+                if tablero[i][j] == elegido:
+                    fila_cubierta[i] = True
+    
+    
+    return colores_col
+\end{lstlisting}
+
+\noindent\textbf{Justificación de Complejidad:} \\
+Precalcular las piedras iniciales por fila cuesta $\mathcal{O}(n \cdot m)$. Despues, el bucle principal itera sobre las $m$ columnas y, dentro de cada una, realiza dos pasadas lineales sobre las $n$ filas ejecutando operaciones aritméticas en $\mathcal{O}(1)$. Entonces, la complejidad temporal de las dos variantes Greedy es $\mathcal{O}(n \cdot m)$ y su complejidad espacial adicional es $\mathcal{O}(n + m)$.
 
 \subsection{Pensamiento Algorítmico en la Vida Real}
-. Conexión entre los 4 temas (Herbert Simon y la Racionalidad Limitada)
-    . saber cuándo podar un camino con Backtracking y cuándo preferir una aproximación a tiempo frente a la parálisis por análisis).
 
-    
-tengo pensado:
-En la vida cotidiana y en la ingeniería nos topamos con problemas "NP-Completos" (decisiones con miles de variables interconectadas donde buscar la perfección absoluta toma tiempo infinito). 
-Ahí aplicamos los 4 pilares: Reducciones (reconocer que un problema nuevo es en realidad uno viejo disfrazado), Backtracking (explorar caminos pero tener la madurez de podar y retroceder apenas vemos que una rama no supera lo que ya logramos), Programación Lineal (optimizar nuestros objetivos dentro de restricciones rígidas), y Aproximaciones (el principio de Racionalidad Limitada o Satisficing del Premio Nobel y Premio Turing Herbert Simon: cuando encontrar el óptimo exacto es computacionalmente intratable, una buena aproximación a tiempo es infinitamente mejor que la perfección que llega tarde).
+Hasta ahora, desde las Reducciones y el Backtracking hasta la Programación Lineal y las Aproximaciones, si se dan cuenta refleja cómo la mente humana resuelve problemas complejos en la vida real. 
+
+Cuando nos enfrentamos a decisiones con muchisimas variables conectadas (elegir una carrera, gestionar el tiempo de un TP), estamos ante problemas cotidianos ``NP-Completos''. Una persona perfeccionista que intenta aplicar fuerza bruta evaluando todos los escenarios futuros posibles cae en la llamada \textit{parálisis por análisis}: el árbol combinatorio explota y la vida se le pasa antes de tomar una decisión.
+
+Y acá es donde las cuatro herramientas que se vieron se vuelven filosofía práctica:
+\begin{itemize}
+    \item \textbf{Reducciones:} La sabiduría y la experiencia consisten en reconocer patrones. Cuando estamos contra un problema nuevo que nos asusta, reducirlo mentalmente a un problema que ya supimos resolver en el pasado nos ahorra tratar de ``reinventar la rueda''.
+    \item \textbf{Backtracking y Podas:} Seguir en la vida requiere probar caminos, pero la madurez se basa en la capacidad de \textit{podar}. Reconocer a tiempo que una decisión o un proyecto actual ya no puede superar lo que teníamos (superar nuestra cota) y tener la humildad de hacer \textit{backtracking} a tiempo evita el costo hundido.
+    \item \textbf{Aproximaciones:} El científico de la computación y economista Herbert Simon generalizó el concepto de \textit{Racionalidad Limitada} y \textit{Satisficing}: como nuestro tiempo y capacidad de cómputo son finitos, buscar el óptimo matemático absoluto es irracional cuando el costo de calcularlo supera el beneficio. Saber aplicar una buena heurística\footnote{heurística: diseñar un atajo inteligente que resuelva un problema difícil en un tiempo razonable, aunque no garantice el resultado perfecto.} en tiempo polinomial (ejemplo de recien: asignando mayor ``precio de urgencia'' a las prioridades críticas de nuestra vida) nos permite obtener soluciones extraordinariamente cercanas al óptimo en un segundo, ayudandonos a avanzar mientras el algoritmo exacto sigue calculando.
+\end{itemize}
+
+
+

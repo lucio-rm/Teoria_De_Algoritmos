@@ -1,22 +1,43 @@
 #!/usr/bin/env python3
 import sys
-from utils.leer_archivo import leer_archivos
+from utils.leer_archivo import leer_archivo, construir_solucion
+from utils.backtracking import juego_bt
 
-def algoritmo(ruta): # tendría que recibir una ruta a tablero.txt
-    # parser
-    # y backtracking / PL
-    return True
-
-
+def imprimir_resultado(tablero: list[list[str]], colores_elegidos: list[str]):
+    tab_res, colores, removidas, vacias = construir_solucion(tablero, colores_elegidos)
+    
+    print(f"Colores por columna: {' '.join(colores)}")
+    
+    
+    if removidas:
+        str_rem = ", ".join(f"({i}, {j})" for i, j in removidas)
+    else:
+        str_rem = "-"
+        
+    print(f"Piedras removidas: {str_rem}")
+    print("Tablero resultante:")
+    
+    
+    for fila in tab_res:
+        print("".join(fila))
+    if vacias:
+        print(f"Filas vacías: {len(vacias)} -> {vacias}")
+    else:
+        print("Filas vacías: 0")
 
 
 def main():
     if len(sys.argv) < 2:
-        print("Falta pasar un archivo")
+        print("Uso: ./tp3 ruta/a/tablero.txt")
         sys.exit(1)
-        
-    monedas = leer_archivos(sys.argv[1])
-    return juego(monedas)
     
+    ruta = sys.argv[1]
+    tablero = leer_archivo(ruta)
+    colores_optimos = juego_bt(tablero)
+    imprimir_resultado(tablero, colores_optimos)
+
+
+
+
 if __name__ == "__main__":
     main()
